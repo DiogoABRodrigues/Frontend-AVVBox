@@ -6,7 +6,7 @@ import TrainingScreen from "./TrainingScreen";
 import MeasuresScreen from "./MeasurementsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import ProfileScreen from "./ProfileScreen";
-import { styles } from "./styles/AthleteTabs.styles";
+import { styles } from "./styles/Navigator.styles";
 
 const Tab = createBottomTabNavigator();
 
