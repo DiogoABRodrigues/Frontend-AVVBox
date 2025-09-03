@@ -67,7 +67,7 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/users/login', { 
+      const response = await axios.post('http://192.168.1.184:3000/users/login', { 
         login: email.trim(),
         password 
       });
@@ -86,8 +86,8 @@ export default function LoginScreen() {
       }
       // Direciona para tela baseada no role
       const routeName = user.role === 'atleta' || user.role === 'PT' || user.role === 'Admin' 
-        ? 'Home' 
-        : 'Home';
+        ? 'Athlete' 
+        : 'Athlete';
       
       navigation.reset({ 
         index: 0, 
@@ -114,7 +114,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <LinearGradient
-        colors={['#000000ff', '#9ca24bff']}
+        colors={['#000000ff', '#303030ff']}
         style={styles.gradient}
       >
         <KeyboardAvoidingView
