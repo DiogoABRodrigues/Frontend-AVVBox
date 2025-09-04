@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   tabItemFocused: {
-    backgroundColor: "#57575720", // azul com transparência
+    backgroundColor: "#57575720",
     paddingHorizontal: 16,
     paddingVertical: 4,
     borderRadius: 16,

@@ -2,7 +2,7 @@
 import axios from "axios";
 import { User } from "../models/User";
 
-const API_URL = "http://localhost:3000/users";
+const API_URL = "http://192.168.1.184:3000/users";
 
 export const userService = {
   async getAll(): Promise<User[]> {

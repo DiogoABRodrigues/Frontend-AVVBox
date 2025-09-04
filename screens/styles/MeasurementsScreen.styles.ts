@@ -3,7 +3,10 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#f3f3f3' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
-  headerTitle: { fontSize: 24, fontWeight: 'bold' },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
   athleteButton: {
     paddingHorizontal: 12,
     paddingVertical: 8,

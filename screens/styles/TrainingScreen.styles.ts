@@ -4,7 +4,10 @@ export const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f3f3f3', padding: 16 },
 
   header: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
-  headerTitle: { fontSize: 22, fontWeight: 'bold', marginLeft: 10, color: '#333' },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
 
   sectionTitle: { fontSize: 18, fontWeight: '600', marginVertical: 12, color: '#000000ff' },
 
