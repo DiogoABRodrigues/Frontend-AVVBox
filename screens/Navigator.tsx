@@ -44,7 +44,7 @@ export default function AthleteTabs() {
     <Tab.Navigator
       tabBarPosition="bottom"
       screenOptions={({ route }) => ({
-        swipeEnabled: true, // permite swipe entre tabs
+        swipeEnabled: true,
         tabBarShowIcon: true,
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
@@ -70,6 +70,13 @@ export default function AthleteTabs() {
                 size={24}
                 color={focused ? '#000000' : 'gray'}
               />
+
+              {route.name === "Notificações" && unreadCount > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{unreadCount}</Text>
+                </View>
+              )}
+
               <Text style={{ color: focused ? '#000000' : 'gray', fontSize: 12 }}>
                 {route.name}
               </Text>
