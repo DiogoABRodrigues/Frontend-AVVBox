@@ -4,8 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AthleteTabs from './screens/Navigator';
 import { useEffect, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LoginScreen from './screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();

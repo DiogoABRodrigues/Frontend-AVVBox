@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
@@ -8,7 +8,7 @@ import { styles } from './styles/MeasurementsScreen.styles';
 interface Measurement {
   label: string;
   value: number;
-  delta: number; // diferença desde a última medição
+  delta: number;
 }
 
 interface HistoricalMeasurement {
@@ -16,31 +16,83 @@ interface HistoricalMeasurement {
   measurements: Measurement[];
 }
 
-const currentMeasurements: Measurement[] = [
-  { label: 'Altura', value: 180, delta: 0 },
-  { label: 'Peso', value: 75, delta: 1 },
-  { label: 'Massa Gorda', value: 20, delta: -1 },
-  { label: 'Massa Muscular', value: 35, delta: 0.5 },
-  { label: 'Gordura Visceral', value: 10, delta: -0.3 },
+interface Athlete {
+  id: string;
+  name: string;
+  currentMeasurements: Measurement[];
+  historicalMeasurements: HistoricalMeasurement[];
+}
+
+// Mock atletas
+const athletes: Athlete[] = [
+  {
+    id: '1',
+    name: 'João',
+    currentMeasurements: [
+      { label: 'Altura', value: 180, delta: 0 },
+      { label: 'Peso', value: 75, delta: 1 },
+      { label: 'Massa Gorda', value: 20, delta: -1 },
+      { label: 'Massa Muscular', value: 35, delta: 0.5 },
+      { label: 'Gordura Visceral', value: 10, delta: -0.3 },
+    ],
+    historicalMeasurements: [
+      { date: '2025-09-01', measurements: [] },
+      { date: '2025-08-01', measurements: [] },
+    ],
+  },
+  {
+    id: '2',
+    name: 'Maria',
+    currentMeasurements: [
+      { label: 'Altura', value: 165, delta: 0 },
+      { label: 'Peso', value: 60, delta: -0.5 },
+      { label: 'Massa Gorda', value: 22, delta: 0 },
+      { label: 'Massa Muscular', value: 30, delta: 0.2 },
+      { label: 'Gordura Visceral', value: 8, delta: 0 },
+    ],
+    historicalMeasurements: [
+      { date: '2025-09-01', measurements: [] },
+      { date: '2025-08-01', measurements: [] },
+    ],
+  },
 ];
 
-const historicalMeasurements: HistoricalMeasurement[] = [
-  { date: '2025-09-01', measurements: currentMeasurements },
-  { date: '2025-08-01', measurements: currentMeasurements.map(m => ({ ...m, value: m.value - 1 })) },
-];
-
-export default function MeasurementsScreen() {
+export default function MeasurementsScreenPT() {
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(athletes[0].id);
   const [expandedHistory, setExpandedHistory] = useState<string | null>(null);
-  const [selectedInterval, setSelectedInterval] = useState<'7' | '30' | '90'>('30');
+  //const [selectedInterval, setSelectedInterval] = useState<'7' | '30' | '90'>('30');
+
+  const athlete = athletes.find(a => a.id === selectedAthleteId)!;
 
   const screenWidth = Dimensions.get('window').width - 32;
 
   return (
     <ScrollView style={styles.container}>
-      {/* Topo */}
+      {/* Dropdown de atletas */}
+      <FlatList
+        data={athletes}
+        horizontal
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[
+              styles.athleteButton,
+              item.id === selectedAthleteId && styles.athleteSelected,
+            ]}
+            onPress={() => setSelectedAthleteId(item.id)}
+          >
+            <Text style={item.id === selectedAthleteId ? { fontWeight: 'bold' } : {}}>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        )}
+        style={{ marginBottom: 16 }}
+        showsHorizontalScrollIndicator={false}
+      />
+
       {/* Medidas atuais */}
       <View style={styles.currentMeasurements}>
-        {currentMeasurements.map((m, idx) => (
+        {athlete.currentMeasurements.map((m, idx) => (
           <View key={idx} style={styles.measureItem}>
             <Text style={styles.measureLabel}>{m.label}</Text>
             <View style={styles.measureValueContainer}>
@@ -61,8 +113,12 @@ export default function MeasurementsScreen() {
 
       {/* Histórico */}
       <Text style={styles.subTitle}>Histórico</Text>
-      {historicalMeasurements.map(h => (
-        <TouchableOpacity key={h.date} onPress={() => setExpandedHistory(expandedHistory === h.date ? null : h.date)} style={styles.historyItem}>
+      {athlete.historicalMeasurements.map(h => (
+        <TouchableOpacity
+          key={h.date}
+          onPress={() => setExpandedHistory(expandedHistory === h.date ? null : h.date)}
+          style={styles.historyItem}
+        >
           <Text style={styles.historyDate}>{h.date}</Text>
           {expandedHistory === h.date && (
             <View style={styles.historyDetails}>
@@ -78,10 +134,10 @@ export default function MeasurementsScreen() {
       <Text style={styles.subTitle}>Gráficos</Text>
       <LineChart
         data={{
-          labels: historicalMeasurements.map(h => h.date),
+          labels: athlete.historicalMeasurements.map(h => h.date),
           datasets: [
             {
-              data: historicalMeasurements.map(h => h.measurements.find(m => m.label === 'Peso')?.value || 0),
+              data: athlete.historicalMeasurements.map(h => h.measurements.find(m => m.label === 'Peso')?.value || 0),
               color: () => '#1f77b4',
             },
           ],

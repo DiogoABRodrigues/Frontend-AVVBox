@@ -11,6 +11,7 @@ export default function ProfileScreen() {
     { title: 'Editar Perfil', icon: 'person-outline', onPress: () => {} },
     { title: 'Definir Metas', icon: 'flag-outline', onPress: () => {} },
     { title: 'Contactos dos PTs', icon: 'people-outline', onPress: () => {} },
+    { title: 'Notificações', icon: 'notifications-outline', onPress: () => {} },
     { title: 'Logout', icon: 'log-out-outline', onPress: logout, isLogout: true },
   ];
 

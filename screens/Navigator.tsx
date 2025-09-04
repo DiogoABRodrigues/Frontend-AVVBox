@@ -1,47 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import TrainingScreen from "./TrainingScreen";
 import MeasuresScreen from "./MeasurementsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { styles } from "./styles/Navigator.styles";
+import { getUserNotifications } from '../services/notificationService';
+import { useAuth } from '../context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
 export default function AthleteTabs() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [fontError, setFontError] = useState(false);
+  const { user } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    async function loadFonts() {
+    const fetchNotifications = async () => {
       try {
-        // Aguarda um pouco antes de carregar as fontes
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        setFontsLoaded(true);
+        const notifications = await getUserNotifications(user.id);
+        const unread = notifications.filter((n) => !n.read).length;
+        setUnreadCount(unread);
+        console.log("Notificações buscadas:", notifications);
       } catch (error) {
-        console.log('Erro ao carregar fontes:', error);
-        setFontError(true);
-        // Mesmo com erro, continua (os ícones podem funcionar sem carregamento explícito)
-        setFontsLoaded(true);
+        console.error("Erro ao buscar notificações:", error);
       }
-    }
-    
-    loadFonts();
+    };
+
+    fetchNotifications();
   }, []);
-
-  // Loading screen enquanto as fontes carregam
-  if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={{ marginTop: 10 }}>A carregar...</Text>
-      </View>
-    );
-  }
-
+  
   return (
         <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -50,7 +39,7 @@ export default function AthleteTabs() {
             tabBarStyle: styles.tabBar,
             headerTitle: () => {
             let titleIcon = "home-outline";
-            let titleText = route.name;
+            const titleText = route.name;
 
             switch (route.name) {
                 case "Treino":
@@ -67,12 +56,9 @@ export default function AthleteTabs() {
                 break;
             }
 
-            // Mock só para testar
-            const unreadCount = 2;
-
             return (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name={titleIcon as any} size={26} color="#000000ff" />
+                <Ionicons name={titleIcon as keyof typeof Ionicons.glyphMap} size={26} color="#000000ff" />
                 <Text style={{ fontSize: 26, fontWeight: "bold", marginLeft: 8 }}>
                     {titleText}
                 </Text>
@@ -81,7 +67,7 @@ export default function AthleteTabs() {
             },
             tabBarIcon: ({ focused }) => {
                 let iconName: keyof typeof Ionicons.glyphMap = "home";
-                let IconComponent = Ionicons;
+                const IconComponent = Ionicons;
 
                 switch (route.name) {
                     case "Treino":
@@ -97,9 +83,6 @@ export default function AthleteTabs() {
                     iconName = "person-outline";
                     break;
                 }
-
-                // Mock do número de notificações não lidas
-                const unreadCount = 2;
 
                 return (
                     <View style={[styles.tabItem, focused && styles.tabItemFocused]}>
