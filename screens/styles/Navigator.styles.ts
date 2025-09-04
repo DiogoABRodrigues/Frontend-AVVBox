@@ -7,8 +7,8 @@ export const styles = StyleSheet.create({
     height: height * 0.07,
     backgroundColor: "#fff",
     flexDirection: "row",
-    alignItems: "center", // centra ícones e texto na vertical
-    justifyContent: "space-around", // distribui horizontalmente
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   tabItem: {
     paddingHorizontal: 16,
@@ -32,16 +32,16 @@ export const styles = StyleSheet.create({
     color: "#000000ff",
   },
   badge: {
-  position: "absolute",
-  right: -8,
-  top: -5,
-  backgroundColor: "red",
-  borderRadius: 10,
-  minWidth: 18,
-  height: 18,
-  justifyContent: "center",
-  alignItems: "center",
-  paddingHorizontal: 4,
+    position: "absolute",
+    right: 7,
+    top: -2,
+    backgroundColor: "red",
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 4,
   },
   badgeText: {
     color: "white",
