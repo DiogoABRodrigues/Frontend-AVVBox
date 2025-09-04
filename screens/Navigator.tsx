@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Ionicons } from "@expo/vector-icons";
+
 import TrainingScreen from "./TrainingScreen";
 import MeasuresScreen from "./MeasurementsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import ProfileScreen from "./ProfileScreen";
+
 import { styles } from "./styles/Navigator.styles";
-import { getUserNotifications } from "../services/notificationService";
-import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../context/NotificationsContext";
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function AthleteTabs() {
-  const { user } = useAuth();
-  const [unreadCount, setUnreadCount] = useState(0);
+  const { notifications } = useNotifications();
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const notifications = await getUserNotifications(user.id);
-        const unread = notifications.filter((n) => !(n.readBy?.includes(user.id))).length;
-        setUnreadCount(unread);
-      } catch (error) {
-        console.error("Erro ao buscar notificações:", error);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
+  // Badge: quantidade de notificações não lidas
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const renderIcon = (routeName: string) => {
     switch (routeName) {
@@ -55,9 +44,7 @@ export default function AthleteTabs() {
           return (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Ionicons name={titleIcon as keyof typeof Ionicons.glyphMap} size={26} color="#000000ff" />
-              <Text style={{ fontSize: 26, fontWeight: "bold", marginLeft: 8 }}>
-                {route.name}
-              </Text>
+              <Text style={{ fontSize: 26, fontWeight: "bold", marginLeft: 8 }}>{route.name}</Text>
             </View>
           );
         },
@@ -70,16 +57,16 @@ export default function AthleteTabs() {
                 size={24}
                 color={focused ? '#000000' : 'gray'}
               />
+              <Text style={{ color: focused ? '#000000' : 'gray', fontSize: 12 }}>
+                {route.name}
+              </Text>
 
+              {/* Badge apenas na aba de notificações */}
               {route.name === "Notificações" && unreadCount > 0 && (
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>{unreadCount}</Text>
                 </View>
               )}
-
-              <Text style={{ color: focused ? '#000000' : 'gray', fontSize: 12 }}>
-                {route.name}
-              </Text>
             </View>
           );
         },
