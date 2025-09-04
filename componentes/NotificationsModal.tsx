@@ -66,6 +66,16 @@ export default function NotificationModal({
     });
   };
 
+  const resetNotification = () => {
+    setNotification({
+      title: "",
+      body: "",
+      target: [],
+    });
+    setRecipientOption("all");
+  };
+
+
   return (
     <Modal visible={visible} transparent>
       <View style={styles.modalOverlay}>
@@ -144,7 +154,7 @@ export default function NotificationModal({
 
           <View style={styles.actionRow}>
             <TouchableOpacity
-              onPress={() =>
+              onPress={() => {
                 onCreate(
                   notification.title,
                   notification.body,
@@ -152,6 +162,9 @@ export default function NotificationModal({
                     ? notification.target
                     : [recipientOption]
                 )
+              resetNotification();
+              onClose();
+              }
               }
               style={[styles.actionButton, styles.actionLeft]}
             >
@@ -159,7 +172,10 @@ export default function NotificationModal({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={onClose}
+              onPress={() => {
+                resetNotification();
+                onClose();
+              }}
               style={[styles.clearButton, styles.actionRight]}
             >
               <Text style={styles.clearButtonText}>Cancelar</Text>
