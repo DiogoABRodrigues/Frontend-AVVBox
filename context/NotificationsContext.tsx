@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { io } from "socket.io-client";
+import { AuthProvider, useAuth } from './AuthContext';
 
 interface Notification {
   id: string;
@@ -11,28 +14,40 @@ interface Notification {
 
 interface NotificationsContextType {
   notifications: Notification[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  refreshNotifications: (fetched: any[], userId: string) => void;
   markAsRead: (userId: string, notificationId: string) => void;
+  refreshNotifications: (fetched: any[], userId: string) => void;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
 
 export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const refreshNotifications = (fetched: any[], userId: string) => {
-    const formatted: Notification[] = fetched.map(n => ({
-      id: n._id,
-      title: n.title,
-      body: n.body,
-      date: new Date(n.date).toLocaleDateString(),
-      read: n.readBy?.includes(userId) ?? false,
-      readBy: n.readBy ?? [],
-    }));
-    setNotifications(formatted);
-  };
+  useEffect(() => {
+    if (!user) return; // 🚨 só liga o socket quando user existe
+
+    const socket = io("http://192.168.1.184:3000/");
+    socket.emit("join", user.id);
+
+    socket.on("new-notification", (newNotifications: any[]) => {
+      setNotifications(prev => [
+        ...newNotifications.map(n => ({
+          id: n._id,
+          title: n.title,
+          body: n.body,
+          date: new Date(n.date).toLocaleDateString(),
+          read: n.readBy?.includes(user.id) ?? false,
+          readBy: n.readBy ?? [],
+        })),
+        ...prev,
+      ]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]); // 👈 só corre quando user mudar
 
   const markAsRead = (userId: string, notificationId: string) => {
     setNotifications(prev =>
@@ -44,8 +59,20 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
     );
   };
 
+  const refreshNotifications = (fetched: any[], userId: string) => {
+    const formatted = fetched.map(n => ({
+      id: n._id,
+      title: n.title,
+      body: n.body,
+      date: new Date(n.date).toLocaleDateString(),
+      read: n.readBy?.includes(userId) ?? false,
+      readBy: n.readBy ?? [],
+    }));
+    setNotifications(formatted);
+  };
+
   return (
-    <NotificationsContext.Provider value={{ notifications, refreshNotifications, markAsRead }}>
+    <NotificationsContext.Provider value={{ notifications, markAsRead, refreshNotifications }}>
       {children}
     </NotificationsContext.Provider>
   );
