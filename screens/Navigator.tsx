@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import TrainingScreen from "./TrainingScreen";
 import MeasuresScreen from "./MeasurementsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { styles } from "./styles/Navigator.styles";
-import { getUserNotifications } from '../services/notificationService';
-import { useAuth } from '../context/AuthContext';
+import { getUserNotifications } from "../services/notificationService";
+import { useAuth } from "../context/AuthContext";
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 export default function AthleteTabs() {
   const { user } = useAuth();
@@ -20,9 +20,8 @@ export default function AthleteTabs() {
     const fetchNotifications = async () => {
       try {
         const notifications = await getUserNotifications(user.id);
-        const unread = notifications.filter((n) => !n.read).length;
+        const unread = notifications.filter((n) => !(n.readBy?.includes(user.id))).length;
         setUnreadCount(unread);
-        console.log("Notificações buscadas:", notifications);
       } catch (error) {
         console.error("Erro ao buscar notificações:", error);
       }
@@ -30,86 +29,59 @@ export default function AthleteTabs() {
 
     fetchNotifications();
   }, []);
-  
+
+  const renderIcon = (routeName: string) => {
+    switch (routeName) {
+      case "Treino": return "barbell-outline";
+      case "Notificações": return "notifications-outline";
+      case "Medidas": return "scale-outline";
+      case "Perfil": return "person-outline";
+      default: return "home-outline";
+    }
+  };
+
   return (
-        <Tab.Navigator
-        screenOptions={({ route }) => ({
-            headerShown: true,
-            tabBarShowLabel: false,
-            tabBarStyle: styles.tabBar,
-            headerTitle: () => {
-            let titleIcon = "home-outline";
-            const titleText = route.name;
-
-            switch (route.name) {
-                case "Treino":
-                titleIcon = "barbell-outline";
-                break;
-                case "Notificações":
-                titleIcon = "notifications-outline";
-                break;
-                case "Medidas":
-                titleIcon = "scale-outline";
-                break;
-                case "Perfil":
-                titleIcon = "person-outline";
-                break;
-            }
-
-            return (
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name={titleIcon as keyof typeof Ionicons.glyphMap} size={26} color="#000000ff" />
-                <Text style={{ fontSize: 26, fontWeight: "bold", marginLeft: 8 }}>
-                    {titleText}
-                </Text>
-                </View>
-            );
-            },
-            tabBarIcon: ({ focused }) => {
-                let iconName: keyof typeof Ionicons.glyphMap = "home";
-                const IconComponent = Ionicons;
-
-                switch (route.name) {
-                    case "Treino":
-                    iconName = "barbell-outline";
-                    break;
-                    case "Notificações":
-                    iconName = "notifications-outline";
-                    break;
-                    case "Medidas":
-                    iconName = "scale-outline";
-                    break;
-                    case "Perfil":
-                    iconName = "person-outline";
-                    break;
-                }
-
-                return (
-                    <View style={[styles.tabItem, focused && styles.tabItemFocused]}>
-                    <View>
-                        <IconComponent
-                        name={iconName}
-                        size={24}
-                        color={focused ? "#000000ff" : "gray"}
-                        />
-                        {route.name === "Notificações" && unreadCount > 0 && (
-                        <View style={styles.badge}>
-                            <Text style={styles.badgeText}>{unreadCount}</Text>
-                        </View>
-                        )}
-                    </View>
-                    <Text style={[styles.tabLabel, focused && styles.tabLabelFocused]}>
-                        {route.name}
-                    </Text>
-                    </View>
-                );
-                },
-        })}
-        >
-        <Tab.Screen name="Treino" component={TrainingScreen} />
-        <Tab.Screen name="Notificações" component={NotificationsScreen} />
-        <Tab.Screen name="Medidas" component={MeasuresScreen} />
-        <Tab.Screen name="Perfil" component={ProfileScreen} />
-        </Tab.Navigator>
+    <Tab.Navigator
+      tabBarPosition="bottom"
+      screenOptions={({ route }) => ({
+        swipeEnabled: true, // permite swipe entre tabs
+        tabBarShowIcon: true,
+        tabBarShowLabel: false,
+        tabBarStyle: styles.tabBar,
+        tabBarIndicatorStyle: { backgroundColor: "transparent" },
+        headerShown: true,
+        headerTitle: () => {
+          const titleIcon = renderIcon(route.name);
+          return (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name={titleIcon as keyof typeof Ionicons.glyphMap} size={26} color="#000000ff" />
+              <Text style={{ fontSize: 26, fontWeight: "bold", marginLeft: 8 }}>
+                {route.name}
+              </Text>
+            </View>
+          );
+        },
+        tabBarIcon: ({ focused }) => {
+          const iconName = renderIcon(route.name);
+          return (
+            <View style={{ alignItems: 'center' }}>
+              <Ionicons
+                name={iconName as keyof typeof Ionicons.glyphMap}
+                size={24}
+                color={focused ? '#000000' : 'gray'}
+              />
+              <Text style={{ color: focused ? '#000000' : 'gray', fontSize: 12 }}>
+                {route.name}
+              </Text>
+            </View>
+          );
+        },
+      })}
+    >
+      <Tab.Screen name="Treino" component={TrainingScreen} />
+      <Tab.Screen name="Notificações" component={NotificationsScreen} />
+      <Tab.Screen name="Medidas" component={MeasuresScreen} />
+      <Tab.Screen name="Perfil" component={ProfileScreen} />
+    </Tab.Navigator>
   );
 }

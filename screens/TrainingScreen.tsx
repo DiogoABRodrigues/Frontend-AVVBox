@@ -41,7 +41,10 @@ export default function TrainingScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16 }}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Treino</Text>
+      </View>
       {/* Calendário */}
       <Text style={styles.sectionTitle}>Marcar Treino</Text>
       <Calendar

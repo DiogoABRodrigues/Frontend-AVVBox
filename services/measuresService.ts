@@ -2,7 +2,7 @@
 import axios from "axios";
 import { Measures } from "../models/Measures";
 
-const API_URL = "http://localhost:3000/measures";
+const API_URL = "http://192.168.1.184:3000/measures";
 
 export const measuresService = {
   async getByUser(userId: string): Promise<Measures[]> {

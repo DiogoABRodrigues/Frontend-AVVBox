@@ -68,6 +68,9 @@ export default function MeasurementsScreenPT() {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.header}>
+              <Text style={styles.headerTitle}>Medidas</Text>
+      </View>
       {/* Dropdown de atletas */}
       <FlatList
         data={athletes}

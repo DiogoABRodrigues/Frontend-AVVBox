@@ -1,7 +1,7 @@
 // services/notificationService.ts
 import axios from "axios";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000/notifications"; // ajusta se precisares
+const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.184:3000/notifications"; // ajusta se precisares
 
 export interface Notification {
   _id: string;
