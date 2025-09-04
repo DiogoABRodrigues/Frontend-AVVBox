@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AthleteTabs from './screens/Navigator';
-import { useEffect, useState } from 'react';
 import LoginScreen from './screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
@@ -32,13 +33,19 @@ export default function App() {
     loadFonts();
   }, []);
 
-  if (!fontsLoaded) return null; 
+  if (!fontsLoaded) return null;
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </AuthProvider>
+    <GestureHandlerRootView style={styles.container}>
+      <AuthProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
