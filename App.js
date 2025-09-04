@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AthleteTabs from './screens/Navigator';
 import LoginScreen from './screens/LoginScreen';
+import { NotificationsProvider } from './context/NotificationsContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,9 +39,11 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <AuthProvider>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
+        <NotificationsProvider>
+          <NavigationContainer>
+            <AppNavigator />
+          </NavigationContainer>
+        </NotificationsProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );
