@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { io } from "socket.io-client";
-import { AuthProvider, useAuth } from './AuthContext';
+import { useAuth } from './AuthContext';
 
 interface Notification {
   id: string;
