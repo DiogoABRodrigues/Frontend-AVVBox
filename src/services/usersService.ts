@@ -15,6 +15,11 @@ export const userService = {
     return res.data;
   },
 
+  async getMyAthletes(trainerId: string): Promise<User[]> {
+    const res = await axios.get(`${API_URL}/my-atheletes/${trainerId}/`);
+    return res.data;
+  },
+
   async create(user: Partial<User>): Promise<User> {
     const res = await axios.post(API_URL, user);
     return res.data;
