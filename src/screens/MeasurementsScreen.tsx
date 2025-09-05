@@ -1,81 +1,170 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { LineChart } from 'react-native-chart-kit';
-import { Dimensions } from 'react-native';
-import { styles } from './styles/MeasurementsScreen.styles';
-
-interface Measurement {
-  label: string;
-  value: number;
-  delta: number;
-}
-
-interface HistoricalMeasurement {
-  date: string;
-  measurements: Measurement[];
-}
+import React, { useState, useEffect } from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../context/AuthContext";
+import { userService } from "../services/usersService";
+import { measuresService } from "../services/measuresService";
+import { formatMeasurements } from "../utils/measureUtils";
+import { styles } from "./styles/MeasurementsScreen.styles";
+import { Measures } from "../models/Measures";
 
 interface Athlete {
   id: string;
   name: string;
-  currentMeasurements: Measurement[];
-  historicalMeasurements: HistoricalMeasurement[];
 }
 
-// Mock atletas
-const athletes: Athlete[] = [
-  {
-    id: '1',
-    name: 'João',
-    currentMeasurements: [
-      { label: 'Altura', value: 180, delta: 0 },
-      { label: 'Peso', value: 75, delta: 1 },
-      { label: 'Massa Gorda', value: 20, delta: -1 },
-      { label: 'Massa Muscular', value: 35, delta: 0.5 },
-      { label: 'Gordura Visceral', value: 10, delta: -0.3 },
-    ],
-    historicalMeasurements: [
-      { date: '2025-09-01', measurements: [] },
-      { date: '2025-08-01', measurements: [] },
-    ],
-  },
-  {
-    id: '2',
-    name: 'Maria',
-    currentMeasurements: [
-      { label: 'Altura', value: 165, delta: 0 },
-      { label: 'Peso', value: 60, delta: -0.5 },
-      { label: 'Massa Gorda', value: 22, delta: 0 },
-      { label: 'Massa Muscular', value: 30, delta: 0.2 },
-      { label: 'Gordura Visceral', value: 8, delta: 0 },
-    ],
-    historicalMeasurements: [
-      { date: '2025-09-01', measurements: [] },
-      { date: '2025-08-01', measurements: [] },
-    ],
-  },
-];
+interface AthleteData {
+  currentMeasurements: Measures;
+  lastMeasurement: Measures;
+  goalMeasurement: Measures;
+}
 
-export default function MeasurementsScreenPT() {
-  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(athletes[0].id);
-  const [expandedHistory, setExpandedHistory] = useState<string | null>(null);
-  //const [selectedInterval, setSelectedInterval] = useState<'7' | '30' | '90'>('30');
+export default function MeasurementsScreen() {
+  const { user } = useAuth();
+  const isPT = user?.role === "PT";
 
-  const athlete = athletes.find(a => a.id === selectedAthleteId)!;
+  const [athletes, setAthletes] = useState<Athlete[]>([]);
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(user?.id);
+  const [selectedAthleteData, setSelectedAthleteData] =
+    useState<AthleteData | null>(null);
 
-  const screenWidth = Dimensions.get('window').width - 32;
+  const [expandedHistory, setExpandedHistory] = useState<string | null>(null);  
+
+  const screenWidth = Dimensions.get("window").width - 32;
+
+  // FETCH atletas
+  const fetchAthletes = async () => {
+    try {
+      if (!isPT || !user) return;
+      const fetched = await userService.getMyAthletes(user.id);
+
+      interface FetchedAthlete {
+        _id: string;
+        name: string;
+      }
+      const athletesData: Athlete[] = (fetched as FetchedAthlete[]).map((a) => ({
+        id: a._id,
+        name: a.name,
+      }));
+
+      setAthletes(athletesData);
+      if (athletesData.length > 0) {
+        setSelectedAthleteId(athletesData[0].id);
+      }
+    } catch (err) {
+      console.error("Erro ao ir buscar os meus atletas:", err);
+    }
+  };
+
+  // FETCH medidas
+  const fetchMeasures = async () => {
+    try {
+      if (!selectedAthleteId) return;
+      const athleteMeasures = await measuresService.getAtualByUser(selectedAthleteId);
+      const athleteGoalMeasures = await measuresService.getGoalByUser(
+        selectedAthleteId
+      );
+      const athleteLastMeasures = await measuresService.getLastByUser(
+        selectedAthleteId
+      );
+
+      setSelectedAthleteData({
+        currentMeasurements: athleteMeasures,
+        lastMeasurement: athleteLastMeasures,
+        goalMeasurement: athleteGoalMeasures,
+      });
+    } catch (err) {
+      console.error("Erro ao ir buscar medidas do atleta:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAthletes();
+  }, []);
+
+  useEffect(() => {
+    fetchMeasures();
+  }, [selectedAthleteId]);
+
+  // Medidas formatadas (com deltas e cores)
+  const formattedMeasurements = selectedAthleteData
+    ? formatMeasurements(
+        selectedAthleteData.currentMeasurements,
+        selectedAthleteData.lastMeasurement,
+        selectedAthleteData.goalMeasurement
+      )
+    : [];
+
+  // Função para renderizar o ícone apropriado
+  const renderIcon = (measurement) => {
+    const iconColor = measurement.color === "green" ? "#22c55e" : 
+                     measurement.color === "red" ? "#ef4444" : "#6b7280";
+
+    if (measurement.reachedGoal) {
+      return (
+        <Ionicons
+          name="star"
+          size={20}
+          color="#fbbf24" // dourado
+          style={{ marginLeft: 4 }}
+        />
+      );
+    }
+
+    if (measurement.delta === 0) {
+      return (
+        <Ionicons
+          name="remove-outline" // linha horizontal
+          size={20}
+          color={iconColor}
+          style={{ marginLeft: 4 }}
+        />
+      );
+    }
+
+    if (measurement.arrow === "up") {
+      return (
+        <Ionicons
+          name="arrow-up-outline"
+          size={20}
+          color={iconColor}
+          style={{ marginLeft: 4 }}
+        />
+      );
+    }
+
+    if (measurement.arrow === "down") {
+      return (
+        <Ionicons
+          name="arrow-down-outline"
+          size={20}
+          color={iconColor}
+          style={{ marginLeft: 4 }}
+        />
+      );
+    }
+
+    return null;
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-              <Text style={styles.headerTitle}>Medidas</Text>
+        <Text style={styles.headerTitle}>Medidas</Text>
       </View>
+
       {/* Dropdown de atletas */}
       <FlatList
         data={athletes}
         horizontal
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[
@@ -84,7 +173,13 @@ export default function MeasurementsScreenPT() {
             ]}
             onPress={() => setSelectedAthleteId(item.id)}
           >
-            <Text style={item.id === selectedAthleteId ? { fontWeight: 'bold' } : {}}>
+            <Text
+              style={
+                item.id === selectedAthleteId
+                  ? { fontWeight: "bold" }
+                  : undefined
+              }
+            >
               {item.name}
             </Text>
           </TouchableOpacity>
@@ -95,28 +190,34 @@ export default function MeasurementsScreenPT() {
 
       {/* Medidas atuais */}
       <View style={styles.currentMeasurements}>
-        {athlete.currentMeasurements.map((m, idx) => (
+        {formattedMeasurements.map((m, idx) => (
           <View key={idx} style={styles.measureItem}>
             <Text style={styles.measureLabel}>{m.label}</Text>
             <View style={styles.measureValueContainer}>
-              <Text style={styles.measureValue}>{m.value}</Text>
-              {m.delta !== 0 && (
-                <Ionicons
-                  name={m.delta > 0 ? 'arrow-up-outline' : 'arrow-down-outline'}
-                  size={20}
-                  color={'black'}
-                  style={{ marginLeft: 4 }}
-                />
+              <Text style={styles.measureValue}>{m.current}</Text>
+              
+              {/* Renderizar ícone (seta, linha ou estrela) */}
+              {renderIcon(m)}
+              
+              {/* Mostrar delta apenas se não for zero e não atingiu goal */}
+              {m.delta !== 0 && !m.reachedGoal && (
+                <Text style={[
+                  styles.deltaText, 
+                  { color: m.color === "green" ? "#22c55e" : 
+                           m.color === "red" ? "#ef4444" : "#6b7280" }
+                ]}>
+                  {Math.abs(m.delta)}
+                </Text>
               )}
-              {m.delta !== 0 && <Text style={styles.deltaText}>{Math.abs(m.delta)}</Text>}
             </View>
           </View>
         ))}
       </View>
 
       {/* Histórico */}
+      {/*
       <Text style={styles.subTitle}>Histórico</Text>
-      {athlete.historicalMeasurements.map(h => (
+      {athlete.goalMeasurement.map(h => (
         <TouchableOpacity
           key={h.date}
           onPress={() => setExpandedHistory(expandedHistory === h.date ? null : h.date)}
@@ -132,15 +233,19 @@ export default function MeasurementsScreenPT() {
           )}
         </TouchableOpacity>
       ))}
+      */}
 
       {/* Gráficos */}
+      {/*
       <Text style={styles.subTitle}>Gráficos</Text>
       <LineChart
         data={{
-          labels: athlete.historicalMeasurements.map(h => h.date),
+          labels: athlete.goalMeasurement.map(h => h.date),
           datasets: [
             {
-              data: athlete.historicalMeasurements.map(h => h.measurements.find(m => m.label === 'Peso')?.value || 0),
+              data: athlete.goalMeasurement.map(h =>
+                h.measurements.find(m => m.label === 'Peso')?.value || 0
+              ),
               color: () => '#1f77b4',
             },
           ],
@@ -158,6 +263,7 @@ export default function MeasurementsScreenPT() {
         }}
         style={{ marginVertical: 16, borderRadius: 16 }}
       />
+      */}
     </ScrollView>
   );
 }

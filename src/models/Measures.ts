@@ -1,9 +1,9 @@
 // models/Measures.ts
 export interface Measures {
   _id?: string;
-  user: string;
+  user?: string;
   date?: string;
-  type: "atual" | "goal";
+  type?: "atual" | "goal";
   height?: number;
   weight?: number;
   bodyFat?: number;

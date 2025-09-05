@@ -126,7 +126,7 @@ export default function LoginScreen() {
             <View style={styles.header}>
               <View style={styles.logoContainer}>
                 <Image 
-                  source={require('../assets/avvb.png')} // Substitua pelo caminho da sua imagem
+                  source={require('../../assets/avvb.png')} // Substitua pelo caminho da sua imagem
                   style={styles.logo}
                   resizeMode="contain"
                 />

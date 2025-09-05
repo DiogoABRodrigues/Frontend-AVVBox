@@ -5,7 +5,6 @@ export interface User {
   email: string;
   password?: string; // opcional, raramente vais expor
   coach?: string | null; // id do PT principal
-  subs: string[]; // lista de PTs substitutos
-  role: "atleta" | "PT" | "Admin";
-
+  role: "atleta" | "PT";
+  atheleteIds?: string[]; // só para PTs
 }
