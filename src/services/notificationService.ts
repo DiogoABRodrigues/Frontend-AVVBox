@@ -1,17 +1,7 @@
 // services/notificationService.ts
 import axios from "axios";
-
+import {Notification} from "../models/Notifications";
 const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.184:3000/notifications"; // ajusta se precisares
-
-export interface Notification {
-  _id: string;
-  user: string;
-  title: string;
-  body: string;
-  target: string[];
-  date: string;
-  readBy?: string[];
-}
 
 // ======================
 // Criar notificações
