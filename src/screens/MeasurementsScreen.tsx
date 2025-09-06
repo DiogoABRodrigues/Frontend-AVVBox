@@ -3,7 +3,6 @@ import {
   ScrollView,
   View,
   Text,
-  FlatList,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
@@ -14,6 +13,9 @@ import { measuresService } from "../services/measuresService";
 import { formatMeasurements } from "../utils/measureUtils";
 import { styles } from "./styles/MeasurementsScreen.styles";
 import { Measures } from "../models/Measures";
+import { LineChart } from "react-native-chart-kit";
+import { Picker } from "@react-native-picker/picker";
+import MeasuresModal from "../componentes/MeasuresModal";
 
 interface Athlete {
   id: string;
@@ -31,19 +33,34 @@ export default function MeasurementsScreen() {
   const isPT = user?.role === "PT";
 
   const [athletes, setAthletes] = useState<Athlete[]>([]);
-  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(user?.id);
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>();
   const [selectedAthleteData, setSelectedAthleteData] =
     useState<AthleteData | null>(null);
+  const [historyDates, setHistoryDates] = useState<Measures[]>([]); 
 
   const [expandedHistory, setExpandedHistory] = useState<string | null>(null);  
 
+  const [timeFilter, setTimeFilter] = useState<"all" | "1y" | "6m" | "3m">("all");
+  
   const screenWidth = Dimensions.get("window").width - 32;
+
+  const [selectedMetric, setSelectedMetric] = useState<"weight" | "height" | "bodyFat" | "muscleMass" | "visceralFat">("weight");
+
+  const [showMeasuresModal, setShowMeasuresModal] = useState(false);
+
+  const emptyMeasures = {
+    weight: 0,
+    height: 0,
+    bodyFat: 0,
+    muscleMass: 0,
+    visceralFat: 0,
+  } as Measures;
 
   // FETCH atletas
   const fetchAthletes = async () => {
     try {
       if (!isPT || !user) return;
-      const fetched = await userService.getMyAthletes(user.id);
+      const fetched = await userService.getAll();
 
       interface FetchedAthlete {
         _id: string;
@@ -56,24 +73,36 @@ export default function MeasurementsScreen() {
 
       setAthletes(athletesData);
       if (athletesData.length > 0) {
-        setSelectedAthleteId(athletesData[0].id);
+        setSelectedAthleteId(user.id);
       }
     } catch (err) {
       console.error("Erro ao ir buscar os meus atletas:", err);
     }
   };
 
-  // FETCH medidas
   const fetchMeasures = async () => {
     try {
       if (!selectedAthleteId) return;
-      const athleteMeasures = await measuresService.getAtualByUser(selectedAthleteId);
-      const athleteGoalMeasures = await measuresService.getGoalByUser(
-        selectedAthleteId
-      );
-      const athleteLastMeasures = await measuresService.getLastByUser(
-        selectedAthleteId
-      );
+
+      let athleteMeasures = await measuresService.getAtualByUser(selectedAthleteId);
+      if (athleteMeasures === null) {
+        athleteMeasures = emptyMeasures;
+      }
+
+      let athleteGoalMeasures = await measuresService.getGoalByUser(selectedAthleteId);
+      if (athleteGoalMeasures === null) {
+        athleteGoalMeasures = emptyMeasures;
+      }
+
+      let athleteLastMeasures = await measuresService.getLastByUser(selectedAthleteId);
+      if (athleteLastMeasures === null) {
+        athleteLastMeasures = emptyMeasures;
+      }
+
+      const historyMeasures = await measuresService.getByUser(selectedAthleteId);
+
+      setHistoryDates(historyMeasures);
+      // Pode ser usado para mostrar histórico, se necessário
 
       setSelectedAthleteData({
         currentMeasurements: athleteMeasures,
@@ -84,10 +113,15 @@ export default function MeasurementsScreen() {
       console.error("Erro ao ir buscar medidas do atleta:", err);
     }
   };
-
+  
   useEffect(() => {
-    fetchAthletes();
-  }, []);
+    if (isPT) {
+      fetchAthletes();
+    } else {
+      // cliente normal → só vê as próprias medidas
+      setSelectedAthleteId(user?.id);
+    }
+  }, [isPT, user]);
 
   useEffect(() => {
     fetchMeasures();
@@ -154,6 +188,56 @@ export default function MeasurementsScreen() {
     return null;
   };
 
+  const filterHistory = () => {
+    if (!historyDates) return [];
+    const now = new Date();
+    let cutoff: Date | null = null;
+
+    switch (timeFilter) {
+      case "1y":
+        cutoff = new Date();
+        cutoff.setFullYear(now.getFullYear() - 1);
+        break;
+      case "6m":
+        cutoff = new Date();
+        cutoff.setMonth(now.getMonth() - 6);
+        break;
+      case "3m":
+        cutoff = new Date();
+        cutoff.setMonth(now.getMonth() - 3);
+        break;
+      default:
+        cutoff = null;
+    }
+
+    return cutoff
+      ? historyDates.filter((m) => new Date(m.date) >= cutoff)
+      : historyDates;
+  };
+
+  const filteredHistory = filterHistory();
+
+  const chartData = {
+    labels: filteredHistory.map((m) =>
+      new Date(m.date).toLocaleDateString("pt-PT", {
+        month: "short",
+        year: "2-digit",
+      })
+    ),
+    datasets: [
+      {
+        data: filteredHistory.map((m) => {
+          const value = m[selectedMetric];
+          return typeof value === "number" && isFinite(value) ? value : null;
+
+        }),
+        color: () => "#2563eb",
+        strokeWidth: 2,
+      },
+    ],
+  };
+
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -161,32 +245,44 @@ export default function MeasurementsScreen() {
       </View>
 
       {/* Dropdown de atletas */}
-      <FlatList
-        data={athletes}
-        horizontal
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[
-              styles.athleteButton,
-              item.id === selectedAthleteId && styles.athleteSelected,
-            ]}
-            onPress={() => setSelectedAthleteId(item.id)}
+    {isPT && (
+      <>
+      <View style={styles.filterRow}>
+        <View style={styles.dropdownUsersWrapper}>
+          <Picker
+            selectedValue={selectedAthleteId}
+            onValueChange={(value) => setSelectedAthleteId(value)}
+            style={styles.picker}
           >
-            <Text
-              style={
-                item.id === selectedAthleteId
-                  ? { fontWeight: "bold" }
-                  : undefined
-              }
-            >
-              {item.name}
-            </Text>
-          </TouchableOpacity>
-        )}
-        style={{ marginBottom: 16 }}
-        showsHorizontalScrollIndicator={false}
-      />
+            {athletes.map((athlete) => (
+              <Picker.Item
+                key={athlete.id}
+                label={athlete.name}
+                value={athlete.id}
+              />
+            ))}
+          </Picker>
+        </View>
+        {/* Botão de adicionar */}
+        <Ionicons
+            name="add-circle-outline"
+            size={40}
+            color="#000"
+            onPress={() => setShowMeasuresModal(true)}
+          />
+
+          <MeasuresModal
+            visible={showMeasuresModal}
+            athleteName={athletes.find(a => a.id === selectedAthleteId)?.name || "Atleta"}
+            onClose={() => setShowMeasuresModal(false)}
+            onSave={(data, type) => {
+              console.log("Salvar medidas:", data, "Tipo:", type);
+              // chamar service para gravar no backend
+            }}
+          />
+        </View>
+      </>
+    )}
 
       {/* Medidas atuais */}
       <View style={styles.currentMeasurements}>
@@ -213,57 +309,104 @@ export default function MeasurementsScreen() {
           </View>
         ))}
       </View>
-
       {/* Histórico */}
-      {/*
       <Text style={styles.subTitle}>Histórico</Text>
-      {athlete.goalMeasurement.map(h => (
-        <TouchableOpacity
-          key={h.date}
-          onPress={() => setExpandedHistory(expandedHistory === h.date ? null : h.date)}
-          style={styles.historyItem}
-        >
-          <Text style={styles.historyDate}>{h.date}</Text>
-          {expandedHistory === h.date && (
-            <View style={styles.historyDetails}>
-              {h.measurements.map((m, idx) => (
-                <Text key={idx}>{`${m.label}: ${m.value}`}</Text>
-              ))}
-            </View>
-          )}
-        </TouchableOpacity>
-      ))}
-      */}
+      <View style={styles.historyBox}>
+        {(!historyDates || historyDates.length === 0) ? (
+          <View style={{ alignItems: "center", padding: 16 }}>
+            <Text style={{ color: "#6b7280", fontStyle: "italic" }}>
+              Não existem registos de medidas
+            </Text>
+          </View>
+        ) : (
+          <ScrollView>
+            {historyDates.map((m, idx) => (
+              <TouchableOpacity
+                key={idx}
+                onPress={() =>
+                  setExpandedHistory(expandedHistory === m._id ? null : m._id)
+                }
+                style={{
+                  paddingVertical: 8,
+                  borderBottomWidth: idx === historyDates.length - 1 ? 0 : 1,
+                  borderBottomColor: "#eee",
+                }}
+              >
+                <Text style={styles.historyDate}>
+                  {new Date(m.date).toLocaleDateString("pt-PT")}
+                </Text>
+
+                {expandedHistory === m._id && (
+                  <View style={styles.historyDetails}>
+                    <Text>Peso: {m.weight ?? "-"}</Text>
+                    <Text>Altura: {m.height ?? "-"}</Text>
+                    <Text>Gordura corporal: {m.bodyFat ?? "-"}</Text>
+                    <Text>Massa muscular: {m.muscleMass ?? "-"}</Text>
+                    <Text>Gordura visceral: {m.visceralFat ?? "-"}</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+      </View>
 
       {/* Gráficos */}
-      {/*
-      <Text style={styles.subTitle}>Gráficos</Text>
+      <Text style={styles.subTitle}>Progresso</Text>
+      <View style={styles.filterRow}>
+        {/* Dropdown do tempo */}
+        <View style={styles.dropdownWrapper}>
+          <Picker
+            selectedValue={timeFilter}
+            onValueChange={(value) => setTimeFilter(value)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Desde sempre" value="all" />
+            <Picker.Item label="1 ano" value="1y" />
+            <Picker.Item label="6 meses" value="6m" />
+            <Picker.Item label="3 meses" value="3m" />
+          </Picker>
+        </View>
+
+        {/* Dropdown da métrica */}
+        <View style={styles.dropdownWrapper}>
+          <Picker
+            selectedValue={selectedMetric}
+            onValueChange={(value) => setSelectedMetric(value)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Peso" value="weight" />
+            <Picker.Item label="Altura" value="height" />
+            <Picker.Item label="Gordura corporal" value="bodyFat" />
+            <Picker.Item label="Massa muscular" value="muscleMass" />
+            <Picker.Item label="Gordura visceral" value="visceralFat" />
+          </Picker>
+        </View>
+      </View>
+      {!filteredHistory || filteredHistory.length === 0 ? (
+      <View style={{ alignItems: "center", marginVertical: 16 }}>
+        <Text style={{ color: "#6b7280", fontStyle: "italic" }}>
+          Não existem registos de medidas
+        </Text>
+      </View>
+    ) : (
       <LineChart
-        data={{
-          labels: athlete.goalMeasurement.map(h => h.date),
-          datasets: [
-            {
-              data: athlete.goalMeasurement.map(h =>
-                h.measurements.find(m => m.label === 'Peso')?.value || 0
-              ),
-              color: () => '#1f77b4',
-            },
-          ],
-        }}
+        data={chartData}
         width={screenWidth}
         height={220}
         chartConfig={{
-          backgroundColor: '#fff',
-          backgroundGradientFrom: '#fff',
-          backgroundGradientTo: '#fff',
+          backgroundColor: "#fff",
+          backgroundGradientFrom: "#fff",
+          backgroundGradientTo: "#fff",
           decimalPlaces: 1,
-          color: (opacity = 1) => `rgba(31, 119, 180, ${opacity})`,
+          color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
           style: { borderRadius: 16 },
         }}
         style={{ marginVertical: 16, borderRadius: 16 }}
+        bezier
       />
-      */}
+    )}
     </ScrollView>
   );
 }
