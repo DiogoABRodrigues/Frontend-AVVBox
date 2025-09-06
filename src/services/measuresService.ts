@@ -4,8 +4,8 @@ import { Measures } from "../models/Measures";
 const API_URL = "http://192.168.1.184:3000/measures";
 
 export const measuresService = {
-  async getByUser(userId: string): Promise<Measures> {
-    const res = await axios.get(`${API_URL}/measures/${userId}`);
+  async getByUser(userId: string): Promise<Measures[]> {
+    const res = await axios.get(`${API_URL}/${userId}`);
     return res.data;
   },
 

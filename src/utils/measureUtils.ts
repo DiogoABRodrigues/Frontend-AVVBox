@@ -28,7 +28,6 @@ export const formatMeasurements = (current: any, last: any, goal: any) => {
 
     if (currentValue !== null && lastValue !== null) {
       delta = currentValue - lastValue;
-      console.log({ key, currentValue, lastValue, goalValue, delta });
 
       // Determina direção desejada
       const wantsIncrease = goalValue !== null && goalValue > lastValue;
@@ -64,23 +63,27 @@ export const formatMeasurements = (current: any, last: any, goal: any) => {
       }
     }
 
+    // Arredonda valores para 1 casa decimal quando não null
+    const round = (v: number | null) => (v !== null ? Number(v.toFixed(1)) : null);
+
     // Formata deltaLabel
     let deltaLabel = "";
+    const roundedDelta = round(delta);
     if (reachedGoal && key !== "height") {
       deltaLabel = "✨";
     } else if (delta === 0) {
       deltaLabel = "—";
     } else {
-      const sign = delta > 0 ? "+" : "";
-      deltaLabel = `${arrow === "up" ? "↑" : arrow === "down" ? "↓" : "—"} ${sign}${Math.abs(delta)}${units[key]}`;
+      const sign = roundedDelta! > 0 ? "+" : "";
+      deltaLabel = `${arrow === "up" ? "↑" : arrow === "down" ? "↓" : "—"} ${sign}${roundedDelta}${units[key]}`;
     }
 
     return {
       label: labels[key as keyof typeof labels],
-      current: currentValue,
-      last: lastValue,
-      goal: goalValue,
-      delta,
+      current: round(currentValue),
+      last: round(lastValue),
+      goal: round(goalValue),
+      delta: roundedDelta,
       color,
       arrow,
       reachedGoal,
