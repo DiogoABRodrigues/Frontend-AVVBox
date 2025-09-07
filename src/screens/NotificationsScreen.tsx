@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationsContext";
 import { getUserNotifications, deleteNotificationForUser, markNotificationAsRead, createNotification } from "../services/notificationService";
 import { styles } from "./styles/NotificationsScreen.styles";
+import Popup from "../componentes/Popup";
 
 interface Notification {
   id: string;
@@ -25,6 +26,14 @@ export default function NotificationsScreen() {
   const [recipientOption, setRecipientOption] = useState<"all" | "my" | "individual">("all");
 
   const { notifications, refreshNotifications, markAsRead } = useNotifications();
+
+  const [popup, setPopup] = useState({
+    visible: false,
+    type: "success" as "success" | "error" | "confirm",
+    title: "",
+    message: "",
+    onConfirm: undefined as (() => void) | undefined,
+  });
 
   // FETCH
   const fetchNotifications = async () => {
@@ -49,8 +58,8 @@ export default function NotificationsScreen() {
       notifications.forEach(n => {
         if (!n.read) markAsRead(user.id, n.id);
       });
-    } catch (err) {
-      console.error(err);
+    } catch {
+      console.error("An error occurred while marking all notifications as read.");
     }
   };
 
@@ -70,11 +79,36 @@ export default function NotificationsScreen() {
   // ENVIAR
   const handleSendNotification = async (title: string, body: string, target: string[]) => {
     try {
-      await createNotification(user.id, { title, body, target });
+      const res = await createNotification(user.id, { title, body, target });
+      console.log(res);
+      if (res && res.notifications[0]._id) {
+        setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: "Notificação enviada com sucesso!",
+          onConfirm: undefined,
+        });
+      } else { 
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Ocorreu um erro ao enviar a notificação, verifique os dados e tente novamente.",
+          onConfirm: undefined,
+        });
+      }
+
       fetchNotifications();
       setModalVisible(false);
-    } catch (err) {
-      console.error(err);
+    } catch {
+      setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Ocorreu um erro ao enviar a notificação, verifique os dados e tente novamente.",
+          onConfirm: undefined,
+        });
     }
   };
 
@@ -156,6 +190,16 @@ export default function NotificationsScreen() {
             </Swipeable>
           ))
         )}
+        <Popup
+            visible={popup.visible}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            type={popup.type as any}
+            title={popup.title}
+            message={popup.message}
+            onConfirm={popup.onConfirm}
+            onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
+            onClose={() => setPopup((p) => ({ ...p, visible: false }))}
+          />
       </ScrollView>
 
       {/* Modal */}

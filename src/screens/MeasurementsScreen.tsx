@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import {
   ScrollView,
@@ -16,6 +17,7 @@ import { Measures } from "../models/Measures";
 import { LineChart } from "react-native-chart-kit";
 import { Picker } from "@react-native-picker/picker";
 import MeasuresModal from "../componentes/MeasuresModal";
+import Popup from "../componentes/Popup";
 
 interface Athlete {
   id: string;
@@ -55,6 +57,14 @@ export default function MeasurementsScreen() {
     muscleMass: 0,
     visceralFat: 0,
   } as Measures;
+
+  const [popup, setPopup] = useState({
+    visible: false,
+    type: "success" as "success" | "error" | "confirm",
+    title: "",
+    message: "",
+    onConfirm: undefined as (() => void) | undefined,
+  });
 
   // FETCH atletas
   const fetchAthletes = async () => {
@@ -188,6 +198,22 @@ export default function MeasurementsScreen() {
     return null;
   };
 
+    // último registo
+  const latest =
+    historyDates.length > 0
+      ? historyDates.reduce((latest, curr) =>
+          new Date(curr.date) > new Date(latest.date) ? curr : latest
+        )
+      : null;
+
+  // verificar se é mais recente que 30 dias
+  const isDeletable = (dateStr: string) => {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diff = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24); // em dias
+    return diff <= 30;
+  };
+
   const filterHistory = () => {
     if (!historyDates) return [];
     const now = new Date();
@@ -217,16 +243,26 @@ export default function MeasurementsScreen() {
 
   const filteredHistory = filterHistory();
 
+  const historyDatesSorted = [...filteredHistory].sort((a, b) =>
+    new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const labels = historyDatesSorted.map((m) =>
+    new Date(m.date).toLocaleDateString("pt-PT", {
+      month: "short",
+      year: "2-digit",
+    })
+  );
+
+  // reduzir labels (máx 6)
+  const step = Math.ceil(labels.length / 6);
+  const reducedLabels = labels.map((l, i) => (i % step === 0 ? l : ""));
+
   const chartData = {
-    labels: filteredHistory.map((m) =>
-      new Date(m.date).toLocaleDateString("pt-PT", {
-        month: "short",
-        year: "2-digit",
-      })
-    ),
+    labels: reducedLabels,
     datasets: [
       {
-        data: filteredHistory.map((m) => {
+        data: historyDatesSorted.map((m) => {
           const value = m[selectedMetric];
           return typeof value === "number" && isFinite(value) ? value : null;
 
@@ -237,8 +273,97 @@ export default function MeasurementsScreen() {
     ],
   };
 
+  const handleSaveMeasures = async (data: Measures) => {
+    try {
+      data.user = selectedAthleteId;
+
+      let res;
+      if (data.type == "goal" && selectedAthleteData.goalMeasurement._id != null) {
+        res = await measuresService.update(selectedAthleteData.goalMeasurement._id, data);
+      } else {
+        res =await measuresService.create(data);
+      }
+
+      if (res && res._id) {
+        setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: "Alteração guardada com sucesso!",
+          onConfirm: undefined,
+        });
+      } else { 
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
+          onConfirm: undefined,
+        });
+      }
+
+      fetchMeasures();
+      setShowMeasuresModal(false);
+    } catch {
+        setPopup({
+        visible: true,
+        type: "error",
+        title: "Erro",
+        message: "Não foi possível guardar as medidas.",
+        onConfirm: undefined,
+      });
+    }
+};
+
+  const handleDeleteLatest = async (id: string) => {
+    try {
+      const res = await measuresService.delete(id);
+
+      if (res && (res === 200 || res === 201)) {
+        setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: "Registo eliminado com sucesso!",
+          onConfirm: undefined,
+        });
+      } else { 
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Ocorreu um erro ao eliminar o registo, tente novamente.",
+          onConfirm: undefined,
+        });
+      }
+
+      fetchMeasures();
+    } catch {
+      setPopup({
+        visible: true,
+        type: "error",
+        title: "Erro",
+        message: "Não foi possível eliminar o registo. ",
+        onConfirm: undefined,
+      });
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    setPopup({
+      visible: true,
+      type: "confirm",
+      title: "Confirmar eliminação",
+      message: "Tens a certeza que queres eliminar este registo? Esta ação é permanente e não pode ser desfeita.",
+      onConfirm: () => {
+        handleDeleteLatest(id);
+        setPopup((p) => ({ ...p, visible: false }));
+      },
+    });
+  };
 
   return (
+    <>
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Medidas</Text>
@@ -275,9 +400,9 @@ export default function MeasurementsScreen() {
             visible={showMeasuresModal}
             athleteName={athletes.find(a => a.id === selectedAthleteId)?.name || "Atleta"}
             onClose={() => setShowMeasuresModal(false)}
-            onSave={(data, type) => {
-              console.log("Salvar medidas:", data, "Tipo:", type);
-              // chamar service para gravar no backend
+            onSave={(data) => {
+              console.log("Salvar medidas:", data);
+              handleSaveMeasures(data);
             }}
           />
         </View>
@@ -330,12 +455,21 @@ export default function MeasurementsScreen() {
                   paddingVertical: 8,
                   borderBottomWidth: idx === historyDates.length - 1 ? 0 : 1,
                   borderBottomColor: "#eee",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
                 <Text style={styles.historyDate}>
                   {new Date(m.date).toLocaleDateString("pt-PT")}
                 </Text>
 
+                {/* Mostrar lixo apenas se for o último e tiver menos de 30 dias */}
+                {latest && m._id === latest._id && isDeletable(m.date) && (
+                <TouchableOpacity onPress={() => confirmDelete(m._id)}>
+                  <Ionicons name="trash-outline" size={22} color="#ef4444" />
+                </TouchableOpacity>
+                )}
                 {expandedHistory === m._id && (
                   <View style={styles.historyDetails}>
                     <Text>Peso: {m.weight ?? "-"}</Text>
@@ -408,5 +542,17 @@ export default function MeasurementsScreen() {
       />
     )}
     </ScrollView>
+
+    {/* POPUP sempre fora do ScrollView */}
+    <Popup
+      visible={popup.visible}
+      type={popup.type as any}
+      title={popup.title}
+      message={popup.message}
+      onConfirm={popup.onConfirm}
+      onCancel={() => setPopup(p => ({ ...p, visible: false }))}
+      onClose={() => setPopup(p => ({ ...p, visible: false }))}
+    />
+  </>
   );
 }

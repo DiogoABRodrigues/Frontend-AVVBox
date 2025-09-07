@@ -33,4 +33,9 @@ export const measuresService = {
     const res = await axios.put(`${API_URL}/${id}`, data);
     return res.data;
   },
+
+  async delete(id: string): Promise<number> {
+    const response = await axios.delete(`${API_URL}/${id}`);
+    return response.status; 
+  },
 };

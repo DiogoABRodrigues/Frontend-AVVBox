@@ -8,13 +8,14 @@ interface Measures {
   bodyFat: number;
   muscleMass: number;
   visceralFat: number;
+  type: "atual" | "goal";
 }
 
 interface Props {
   visible: boolean;
   athleteName: string;
   onClose: () => void;
-  onSave: (data: Measures, type: "actual" | "goal") => void;
+  onSave: (data: Measures) => void;
 }
 
 export default function MeasuresModal({
@@ -30,6 +31,7 @@ export default function MeasuresModal({
         bodyFat: "",
         muscleMass: "",
         visceralFat: "",
+        type: "atual",
         });
 
   const resetMeasures = () => {
@@ -39,11 +41,12 @@ export default function MeasuresModal({
         bodyFat: "",
         muscleMass: "",
         visceralFat: "",
+        type: "atual",
     });
-    setType("actual"); // se quiser resetar também o tipo
+    setType("atual"); // se quiser resetar também o tipo
     };
 
-  const [type, setType] = useState<"actual" | "goal">("actual");
+  const [type, setType] = useState<"atual" | "goal">("atual");
 
     const handleChange = (field: keyof Measures, value: string) => {
     // Remove tudo que não seja número ou ponto/virgula
@@ -61,8 +64,9 @@ export default function MeasuresModal({
         bodyFat: parseFloat(measuresInput.bodyFat.replace(",", ".")) || 0,
         muscleMass: parseFloat(measuresInput.muscleMass.replace(",", ".")) || 0,
         visceralFat: parseFloat(measuresInput.visceralFat.replace(",", ".")) || 0,
+        type: type,
     };
-    onSave(measuresToSave, type);
+    onSave(measuresToSave);
     resetMeasures();
     onClose();
     };
@@ -96,11 +100,11 @@ export default function MeasuresModal({
 
           {/* Radio buttons para tipo */}
             <View style={styles.radioRow}>
-            {["actual", "goal"].map((option) => (
+            {["atual", "goal"].map((option) => (
                 <TouchableOpacity
                 key={option}
                 style={styles.radioButtonRow}
-                onPress={() => setType(option as "actual" | "goal")}
+                onPress={() => setType(option as "atual" | "goal")}
                 >
                 {/* Círculo do radio */}
                 <View style={[styles.radioOuter, type === option && styles.radioOuterSelected]}>
@@ -108,7 +112,7 @@ export default function MeasuresModal({
                 </View>
                 {/* Texto do radio */}
                 <Text style={styles.radioLabel}>
-                    {option === "actual" ? "Medidas" : "Objetivo"}
+                    {option === "atual" ? "Medidas" : "Objetivo"}
                 </Text>
                 </TouchableOpacity>
             ))}
