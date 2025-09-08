@@ -54,10 +54,7 @@ export default function LoginScreen() {
     if (!password) {
       setPasswordError('Senha é obrigatória');
       isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError('Senha deve ter pelo menos 6 caracteres');
-      isValid = false;
-    }
+    } 
 
     return isValid;
   };

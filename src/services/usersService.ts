@@ -34,4 +34,9 @@ export const userService = {
     const res = await axios.delete(`${API_URL}/${id}`);
     return res.data;
   },
+
+  async updateBasicInfo(id: string, user: Partial<User>): Promise<User> {
+    const res = await axios.put(`${API_URL}/update-basic-info/${id}`, user);
+    return res.data;
+  },
 };

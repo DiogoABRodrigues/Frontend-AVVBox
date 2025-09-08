@@ -20,7 +20,7 @@ interface Notification {
 
 export default function NotificationsScreen() {
   const { user } = useAuth();
-  const isPT = user?.role === "PT";
+  const isPT = user?.role === "PT" || user?.role === "Admin";
 
   const [modalVisible, setModalVisible] = useState(false);
   const [recipientOption, setRecipientOption] = useState<"all" | "my" | "individual">("all");

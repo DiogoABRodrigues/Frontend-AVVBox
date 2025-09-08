@@ -32,7 +32,7 @@ interface AthleteData {
 
 export default function MeasurementsScreen() {
   const { user } = useAuth();
-  const isPT = user?.role === "PT";
+  const isPT = user?.role === "PT" || user?.role === "Admin";
 
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string>();
@@ -415,8 +415,17 @@ export default function MeasurementsScreen() {
           <View key={idx} style={styles.measureItem}>
             <Text style={styles.measureLabel}>{m.label}</Text>
             <View style={styles.measureValueContainer}>
-              <Text style={styles.measureValue}>{m.current}</Text>
-              
+              {// add kg ou m ou % conforme a medida e nada se for visceralFat
+              m.label === "Altura" ? (
+                <Text style={styles.measureValue}>{m.current} cm</Text>
+              ) : m.label === "Peso" ? (
+                <Text style={styles.measureValue}>{m.current} Kg</Text>
+              ) : m.label === "Gordura visceral" ? (
+                <Text style={styles.measureValue}>{m.current}</Text>
+              ) : (
+                <Text style={styles.measureValue}>{m.current} %</Text>
+              )}
+
               {/* Renderizar ícone (seta, linha ou estrela) */}
               {renderIcon(m)}
               
@@ -472,10 +481,10 @@ export default function MeasurementsScreen() {
                 )}
                 {expandedHistory === m._id && (
                   <View style={styles.historyDetails}>
-                    <Text>Peso: {m.weight ?? "-"}</Text>
-                    <Text>Altura: {m.height ?? "-"}</Text>
-                    <Text>Gordura corporal: {m.bodyFat ?? "-"}</Text>
-                    <Text>Massa muscular: {m.muscleMass ?? "-"}</Text>
+                    <Text>Peso: {m.weight ?? "-"} Kg</Text>
+                    <Text>Altura: {m.height ?? "-"} cm</Text>
+                    <Text>Gordura corporal: {m.bodyFat ?? "-"} %</Text>
+                    <Text>Massa muscular: {m.muscleMass ?? "-"} %</Text>
                     <Text>Gordura visceral: {m.visceralFat ?? "-"}</Text>
                   </View>
                 )}
