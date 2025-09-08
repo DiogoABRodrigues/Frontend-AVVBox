@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 interface User {
   id: string;
   name: string;
-  role: 'atleta' | 'PT';
+  role: 'atleta' | 'PT' | 'Admin';
 }
 
 interface AuthContextType {

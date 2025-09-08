@@ -42,29 +42,41 @@ export default function AthleteTabs() {
         headerTitle: () => {
           const titleIcon = renderIcon(route.name);
           return (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name={titleIcon as keyof typeof Ionicons.glyphMap} size={26} color="#000000ff" />
-              <Text style={{ fontSize: 26, fontWeight: "bold", marginLeft: 8 }}>{route.name}</Text>
+            <View style={styles.headerContainer}>
+              <Ionicons 
+                name={titleIcon as keyof typeof Ionicons.glyphMap} 
+                size={24} 
+                style={styles.headerIcon}
+              />
+              <Text style={styles.headerTitle}>{route.name}</Text>
             </View>
           );
         },
         tabBarIcon: ({ focused }) => {
           const iconName = renderIcon(route.name);
           return (
-            <View style={{ alignItems: 'center' }}>
+            <View style={[
+              styles.iconContainer,
+              focused ? styles.tabItemFocused : styles.tabItem
+            ]}>
               <Ionicons
                 name={iconName as keyof typeof Ionicons.glyphMap}
                 size={24}
-                color={focused ? '#000000' : 'gray'}
+                color={focused ? '#1E293B' : '#64748b'}
               />
-              <Text style={{ color: focused ? '#000000' : 'gray', fontSize: 12 }}>
+              <Text style={[
+                styles.tabLabel,
+                focused && styles.tabLabelFocused
+              ]}>
                 {route.name}
               </Text>
 
               {/* Badge apenas na aba de notificações */}
               {route.name === "Notificações" && unreadCount > 0 && (
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{unreadCount}</Text>
+                  <Text style={styles.badgeText}>
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </Text>
                 </View>
               )}
             </View>
