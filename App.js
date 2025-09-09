@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 import AthleteTabs from './src/screens/Navigator';
 import LoginScreen from './src/screens/LoginScreen';
 import { NotificationsProvider } from './src/context/NotificationsContext';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,7 +42,9 @@ export default function App() {
       <AuthProvider>
         <NotificationsProvider>
           <NavigationContainer>
-            <AppNavigator />
+            <PaperProvider>
+              <AppNavigator />
+            </PaperProvider>
           </NavigationContainer>
         </NotificationsProvider>
       </AuthProvider>

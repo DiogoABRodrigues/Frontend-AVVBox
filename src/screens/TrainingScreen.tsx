@@ -40,55 +40,60 @@ export default function TrainingScreen() {
     return `${day}/${month}, ${weekday} às ${time}`;
   };
 
+  const handleScheduleTraining = () => {
+    if (selectedDay && selectedHour) {
+      // Aqui você implementaria a lógica para agendar o treino
+      console.log(`Treino agendado para ${selectedDay} às ${selectedHour}`);
+      // Reset selections
+      setSelectedDay(null);
+      setSelectedHour(null);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Treino</Text>
       </View>
+
       {/* Calendário */}
-      <Text style={styles.sectionTitle}>Marcar Treino</Text>
       <Calendar
         onDayPress={(day) => setSelectedDay(day.dateString)}
         markedDates={
           selectedDay
             ? {
-                [selectedDay]: { selected: true, selectedColor: '#969595ff' },
+                [selectedDay]: { 
+                  selected: true, 
+                  selectedColor: '#2563eb',
+                  selectedTextColor: '#ffffff'
+                },
               }
             : {}
         }
         theme={{
-          todayTextColor: '#000000ff',
-          arrowColor: '#000000ff',
+          todayTextColor: '#2563eb',
+          arrowColor: '#2563eb',
+          selectedDayBackgroundColor: '#2563eb',
+          selectedDayTextColor: '#ffffff',
+          monthTextColor: '#1e293b',
+          textDayFontWeight: '500',
+          textMonthFontWeight: '700',
+          textDayHeaderFontWeight: '600',
         }}
         style={styles.calendar}
       />
-
-      {/* Próximos treinos */}
-      <Text style={styles.sectionTitle}>Próximos 7 dias</Text>
-      {upcomingTrainings.length > 0 ? (
-        <View style={styles.otherTrainingsContainer}>
-          {upcomingTrainings.map((training) => (
-            <View key={training.id} style={styles.trainingCard}>
-              <Text style={styles.trainingText}>
-                {formatDate(training.date, training.time)}
-              </Text>
-            </View>
-          ))}
-        </View>
-      ) : (
-        <Text style={styles.noTrainingText}>Nenhum treino marcado</Text>
-      )}
 
       {/* Lista de horários */}
       {selectedDay && (
         <View style={styles.hoursContainer}>
           <Text style={styles.sectionTitle}>
-            Disponível em {selectedDay}
+            Horários disponíveis em {selectedDay}
           </Text>
           <FlatList
             data={hours}
             keyExtractor={(item) => item}
             horizontal
+            showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
@@ -108,7 +113,35 @@ export default function TrainingScreen() {
               </TouchableOpacity>
             )}
           />
+
+          {/* Botão de confirmação */}
+          {selectedHour && (
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={handleScheduleTraining}
+            >
+              <Text style={styles.actionButtonText}>
+                Confirmar Treino
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
+      )}
+
+      {/* Próximos treinos */}
+      <Text style={styles.sectionTitle}>Próximos 7 dias</Text>
+      {upcomingTrainings.length > 0 ? (
+        <View style={styles.otherTrainingsContainer}>
+          {upcomingTrainings.map((training) => (
+            <View key={training.id} style={styles.trainingCard}>
+              <Text style={styles.trainingText}>
+                {formatDate(training.date, training.time)}
+              </Text>
+            </View>
+          ))}
+        </View>
+      ) : (
+        <Text style={styles.noTrainingText}>Nenhum treino marcado para os próximos dias</Text>
       )}
 
       {/* Estatísticas */}
@@ -124,11 +157,11 @@ export default function TrainingScreen() {
         </View>
         <View style={styles.statBox}>
           <Text style={styles.statValue}>210</Text>
-          <Text style={styles.statLabel}>Treinos desde sempre</Text>
+          <Text style={styles.statLabel}>Total de treinos</Text>
         </View>
         <View style={styles.statBox}>
           <Text style={styles.statValue}>320h</Text>
-          <Text style={styles.statLabel}>Horas totais</Text>
+          <Text style={styles.statLabel}>Horas acumuladas</Text>
         </View>
       </View>
     </ScrollView>

@@ -10,6 +10,11 @@ export const userService = {
     return res.data;
   },
 
+  async getAllAll(): Promise<User[]> {
+    const res = await axios.get(`${API_URL}/all`);
+    return res.data;
+  },
+
   async getById(id: string): Promise<User> {
     const res = await axios.get(`${API_URL}/${id}`);
     return res.data;
@@ -39,4 +44,14 @@ export const userService = {
     const res = await axios.put(`${API_URL}/update-basic-info/${id}`, user);
     return res.data;
   },
+
+  async deactivate(id: string): Promise<{ message: string }> {
+    const res = await axios.put(`${API_URL}/deactivate/${id}`);
+    return res.data;
+  },
+
+  async activate(id: string): Promise<{ message: string }> {
+    const res = await axios.put(`${API_URL}/activate/${id}`);
+    return res.data;
+  }
 };
