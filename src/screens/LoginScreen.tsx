@@ -23,11 +23,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [phoneNumberError, setPhoneNumberError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -40,14 +40,14 @@ export default function LoginScreen() {
 
   const validateForm = () => {
     let isValid = true;
-    setEmailError('');
+    setPhoneNumberError('');
     setPasswordError('');
 
-    if (!email) {
-      setEmailError('Email é obrigatório');
+    if (!phoneNumber) {
+      setPhoneNumberError('Número de telefone é obrigatório');
       isValid = false;
-    } else if (!validateLoginField(email)) {
-      setEmailError('Campo de login é obrigatório');
+    } else if (!validateLoginField(phoneNumber)) {
+      setPhoneNumberError('Campo de login é obrigatório');
       isValid = false;
     }
 
@@ -65,7 +65,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const response = await axios.post('http://192.168.1.184:3000/users/login', { 
-        login: email.trim(),
+        login: phoneNumber.trim(),
         password 
       });
       const user = response.data.user;
@@ -134,23 +134,23 @@ export default function LoginScreen() {
             {/* Form */}
             <View style={styles.formContainer}>
               <View style={styles.inputContainer}>
-                <View style={[styles.inputWrapper, emailError && styles.inputError]}>
-                  <Ionicons name="mail-outline" size={20} color="#999" style={styles.inputIcon} />
+                <View style={[styles.inputWrapper, phoneNumberError && styles.inputError]}>
+                  <Ionicons name="call-outline" size={20} color="#999" style={styles.inputIcon} />
                   <TextInput
-                    placeholder="Introduza o seu email ou nome de utilizador"
+                    placeholder="Introduza o seu número de telefone"
                     placeholderTextColor="#999"
-                    value={email}
+                    value={phoneNumber}
                     onChangeText={(text) => {
-                      setEmail(text);
-                      if (emailError) setEmailError('');
+                      setPhoneNumber(text);
+                      if (phoneNumberError) setPhoneNumberError('');
                     }}
                     style={styles.input}
                     autoCapitalize="none"
-                    keyboardType="email-address"
-                    autoComplete="email"
+                    keyboardType="phone-pad"
+                    autoComplete="tel"
                   />
                 </View>
-                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                {phoneNumberError ? <Text style={styles.errorText}>{phoneNumberError}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
