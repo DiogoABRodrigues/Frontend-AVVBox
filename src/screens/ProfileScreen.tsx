@@ -18,6 +18,9 @@ import { User } from "../models/User";
 import * as Clipboard from 'expo-clipboard';
 import { Settings } from "../models/Settings";
 import { settingsService } from "../services/settingsService";
+import ChangeAthletesModal from "../componentes/ChangeAthletesModal";
+import ChangePtsModal from "../componentes/ChangePtsModal";
+import ChangeRoleModal from "../componentes/ChangeRoleModal";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
@@ -28,6 +31,8 @@ export default function ProfileScreen() {
     phoneNumber: "123456789",
     role: "atleta",
     active: true,
+    coach: [],
+    atheletes: [],
   });
 
   const isAdmin = user?.role === "Admin";
@@ -50,6 +55,17 @@ export default function ProfileScreen() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   const [expandedAction, setExpandedAction] = useState<string | null>(null);
+
+  const [roleChangeTarget, setRoleChangeTarget] = useState<User | null>(null);
+  const [selectedRole, setSelectedRole] = useState<"atleta" | "PT" | "Admin">("atleta");
+
+  const [relationTarget, setRelationTarget] = useState<{ type: "pts" | "atheletes", user: User } | null>(null);
+  const [selectedRelations, setSelectedRelations] = useState<string[]>([]); // lista de ids selecionados
+
+  const [isRoleModalVisible, setRoleModalVisible] = useState(false);
+  const [isPtsModalVisible, setPtsModalVisible] = useState(false);
+  const [isAthletesModalVisible, setAthletesModalVisible] = useState(false);
+
 
   const [editFormData, setEditFormData] = useState({
     name: "",
@@ -117,7 +133,6 @@ export default function ProfileScreen() {
 
   useEffect(() => {
     fetchNotificationSettings();
-    console.log("Fetched notification settings", notificationSettings);
   }, []);
 
 
@@ -163,14 +178,21 @@ export default function ProfileScreen() {
         break;
       
       case 'change-role':
-        setPopup({
-          visible: true,
-          type: "confirm",
-          title: "Alterar Role",
-          message: `Funcionalidade de alterar role para ${targetUser.name} será implementada.`,
-          onConfirm: undefined,
-        });
+        setRoleChangeTarget(targetUser);
+        setSelectedRole(targetUser.role);
+        setRoleModalVisible(true);
         break;
+
+      case 'change-athletes':
+        setRelationTarget({ type: "atheletes", user: targetUser });
+        setAthletesModalVisible(true);
+        break;
+
+      case 'change-pts':
+        setRelationTarget({ type: "pts", user: targetUser });
+        setPtsModalVisible(true);
+        break;
+
         
       default:
         setPopup({
@@ -185,31 +207,42 @@ export default function ProfileScreen() {
 
   const UserMenu = ({ userId }: { userId: string }) => {
     const targetUser = users.find(u => u._id === userId);
-    
-    return (
-      <View style={styles.menuDropdown}>
-        {[
-          { title: "Alterar PTs", action: "change-pts" },
-          { title: "Alterar Atletas", action: "change-athletes" },
-          { title: "Alterar Role", action: "change-role" },
-          { title: targetUser?.active ? "Desativar" : "Ativar", action: "toggle-status" },
-        ].map((option, index) => (
-          <TouchableOpacity
-            key={option.action}
-            style={[styles.menuOption, index === 3 && styles.menuOptionLast]}
-            onPress={() => handleUserAction(userId, option.action)}
-          >
-            <Text style={[
+
+    const options = [
+    ...(targetUser.role === "atleta"
+      ? [{ title: "Alterar PT", action: "change-pts" }]
+      : []),
+    ...(targetUser.role === "PT" || targetUser.role === "Admin"
+      ? [{ title: "Alterar Atletas", action: "change-athletes" }]
+      : []),
+    { title: "Alterar Role", action: "change-role" },
+    { title: targetUser.active ? "Desativar" : "Ativar", action: "toggle-status" },
+  ];
+  
+   return (
+    <View style={styles.menuDropdown}>
+      {options.map((option, index) => (
+        <TouchableOpacity
+          key={option.action}
+          style={[
+            styles.menuOption,
+            index === options.length - 1 && styles.menuOptionLast
+          ]}
+          onPress={() => handleUserAction(userId, option.action)}
+        >
+          <Text
+            style={[
               styles.menuOptionText,
               option.action === "toggle-status" && styles.menuOptionDanger
-            ]}>
-              {option.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
-  };
+            ]}
+          >
+            {option.title}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
 
   const handleCancelMeasures = () => {
     setExpandedAction(null);
@@ -239,7 +272,7 @@ export default function ProfileScreen() {
     };
 
     try {
-      const res = await userService.updateBasicInfo(userData._id, updatedData);
+      const res = await userService.update(userData._id, updatedData);
 
       if (res && res._id) {
         setPopup({
@@ -328,6 +361,8 @@ export default function ProfileScreen() {
         role: string;
         active: boolean;
         phoneNumber?: number | null;
+        atheletes: string[];
+        coach: string[];
       }
       const usersData: User[] = (fetched as FetchedUser[]).map((a) => ({
         _id: a._id,
@@ -336,9 +371,11 @@ export default function ProfileScreen() {
         phoneNumber: a.phoneNumber || null,
         role: ["atleta", "PT", "Admin"].includes(a.role) ? (a.role as "atleta" | "PT" | "Admin") : "atleta",
         active: a.active,
+        atheletes: a.atheletes || [],
+        coach: a.coach || [],
       }));
 
-      setUsers(usersData);
+      setUsers(usersData.sort((a, b) => a.name.localeCompare(b.name)));
     } catch (err) {
       console.error("Erro ao ir buscar users", err);
     }
@@ -458,6 +495,84 @@ export default function ProfileScreen() {
     setTimeout(() => {
       setCopiedId("");
     }, 5000);
+  };
+
+  const saveRoleChange = async (newRole: "atleta" | "PT" | "Admin") => {
+    if (roleChangeTarget) {
+      try {
+        await userService.update(roleChangeTarget._id, { role: newRole });
+
+        setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
+          onConfirm: undefined,
+        });
+
+        fetchUsers();
+      } catch {
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Não foi possível alterar o role do utilizador.",
+          onConfirm: undefined,
+        });
+      }
+    }
+    setRoleModalVisible(false);
+  };
+
+  const savePTsChange = async (selectedPtId: string) => {
+    if (relationTarget?.user) {
+      try {
+        await userService.update(relationTarget.user._id, { coach: [selectedPtId] });
+
+        setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: `O PT do utilizador ${relationTarget.user.name} foi alterado com sucesso.`,
+          onConfirm: undefined,
+        });
+        fetchUsers();
+      } catch {
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Não foi possível alterar o PT do utilizador.",
+          onConfirm: undefined,
+        });
+      }
+    }
+    setPtsModalVisible(false);
+  };
+
+  const saveAthletesChange = async (selectedAthleteIds: string[]) => {
+    if (relationTarget && relationTarget.type === "atheletes") {
+      try {
+        await userService.update(relationTarget.user._id, { atheletes: selectedAthleteIds });
+        setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+          onConfirm: undefined,
+        });
+        fetchUsers();
+      } catch {
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Não foi possível alterar os atletas do utilizador.",
+          onConfirm: undefined,
+        });
+      }
+    }
+    setAthletesModalVisible(false);
   };
 
   return (
@@ -803,6 +918,40 @@ export default function ProfileScreen() {
           onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
           onClose={() => setPopup((p) => ({ ...p, visible: false }))}
         />
+        <ChangeRoleModal
+          visible={isRoleModalVisible}
+          onClose={() => setRoleModalVisible(false)}
+          currentRole={selectedRole || "atleta"}
+          onConfirm={saveRoleChange}
+        />
+
+        <ChangePtsModal
+            visible={isPtsModalVisible}
+            onClose={() => setPtsModalVisible(false)}
+            users={ptsAndAdmins}
+            selected={
+              relationTarget?.type === "pts" &&
+              relationTarget.user &&
+              Array.isArray(relationTarget.user.coach)
+                ? relationTarget.user.coach
+                : []
+            }
+            onConfirm={savePTsChange}
+          />
+
+          <ChangeAthletesModal
+            visible={isAthletesModalVisible}
+            onClose={() => setAthletesModalVisible(false)}
+            users={users.filter((u) => u.role === "atleta" && u.active)}
+            selected={
+              relationTarget?.type === "atheletes" &&
+              relationTarget.user &&
+              Array.isArray(relationTarget.user.atheletes)
+                ? relationTarget.user.atheletes
+                : []
+            }
+            onConfirm={saveAthletesChange}
+          />
       </ScrollView>
     </View>
   );

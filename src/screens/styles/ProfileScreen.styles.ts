@@ -552,4 +552,13 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     lineHeight: 22,
   },
+  overlayTouchable: {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "transparent",
+  zIndex: 1, // para ficar por baixo do menu mas acima da lista
+},
 });
