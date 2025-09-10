@@ -29,19 +29,14 @@ export const userService = {
     const res = await axios.post(API_URL, user);
     return res.data;
   },
-
-  async update(id: string, user: Partial<User>): Promise<User> {
-    const res = await axios.put(`${API_URL}/${id}`, user);
-    return res.data;
-  },
-
+  
   async delete(id: string): Promise<{ message: string }> {
     const res = await axios.delete(`${API_URL}/${id}`);
     return res.data;
   },
 
-  async updateBasicInfo(id: string, user: Partial<User>): Promise<User> {
-    const res = await axios.put(`${API_URL}/update-basic-info/${id}`, user);
+  async update(id: string, user: Partial<User>): Promise<User> {
+    const res = await axios.put(`${API_URL}/update/${id}`, user);
     return res.data;
   },
 
