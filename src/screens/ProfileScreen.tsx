@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,16 +16,31 @@ import { Measures } from "../models/Measures";
 import Popup from "../componentes/Popup";
 import { User } from "../models/User";
 import * as Clipboard from 'expo-clipboard';
+import { Settings } from "../models/Settings";
+import { settingsService } from "../services/settingsService";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
 
-  const [userData, setUserData] = useState<User>(null);
+  const [userData, setUserData] = useState<User>({
+    _id: "",
+    name: "",
+    phoneNumber: "123456789",
+    role: "atleta",
+    active: true,
+  });
 
   const isAdmin = user?.role === "Admin";
   const isPT = user?.role === "PT" || isAdmin;
 
-  const [goalMeasures, setGoalMeasures] = useState<Measures | null>(null);
+  const [goalMeasures, setGoalMeasures] = useState<Measures>({
+  weight: 0,
+  height: 0,
+  bodyFat: 0,
+  muscleMass: 0,
+  visceralFat: 0,
+});
+
   const [measuresInput, setMeasuresInput] = useState<Record<string, string>>({});
 
   const [users, setUsers] = useState<User[]>([]);
@@ -41,11 +56,11 @@ export default function ProfileScreen() {
     phoneNumber: "",
   });
 
-  const [notificationSettings, setNotificationSettings] = useState({
-    notify15min: false,
-    notify30min: false,
-    notify1h: false,
-    notify2h: false,
+  const [notificationSettings, setNotificationSettings] = useState<Settings>({
+    fifteenMin: false,
+    thirtyMin: false,
+    sixtyMin: false,
+    onetwentyMin: false,
   });
 
   const toggleExpand = (title: string) => {
@@ -87,6 +102,24 @@ export default function ProfileScreen() {
   useEffect(() => {
     filterUsers();
   }, [users, activeFilter, roleFilter]);
+
+  const fetchNotificationSettings = async () => {
+    if (!user?.id) return;
+    try {
+      const settings = await settingsService.getByUser(user.id);
+      if (settings) {
+        setNotificationSettings(settings);
+      }
+    } catch (error) {
+      console.error("Error fetching user settings:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotificationSettings();
+    console.log("Fetched notification settings", notificationSettings);
+  }, []);
+
 
   const handleUserAction = async (userId: string, action: string) => {
     setActiveMenu(null);
@@ -410,6 +443,11 @@ export default function ProfileScreen() {
       ...prev,
       [setting]: !prev[setting],
     }));
+
+    settingsService.update(user.id, {
+      ...notificationSettings,
+      [setting]: !notificationSettings[setting],
+    });
   };
 
   const [copiedId, setCopiedId] = useState<string>("");
@@ -587,10 +625,10 @@ export default function ProfileScreen() {
                   </Text>
                   
                   {[
-                    { key: "notify15min", label: "Notificar 15 minutos antes" },
-                    { key: "notify30min", label: "Notificar 30 minutos antes" },
-                    { key: "notify1h", label: "Notificar 1 hora antes" },
-                    { key: "notify2h", label: "Notificar 2 horas antes" },
+                    { key: "fifteenMin", label: "Notificar 15 minutos antes" },
+                    { key: "thirtyMin", label: "Notificar 30 minutos antes" },
+                    { key: "sixtyMin", label: "Notificar 1 hora antes" },
+                    { key: "onetwentyMin", label: "Notificar 2 horas antes" },
                   ].map((notification) => (
                     <TouchableOpacity
                       key={notification.key}
@@ -659,7 +697,7 @@ export default function ProfileScreen() {
                 <View style={styles.userManagementContainer}>
                   {/* Filtros de Status */}
                   <View style={styles.filterContainer}>
-                    {['odos', 'ativos', 'inativos'].map((filter) => (
+                    {['todos', 'ativos', 'inativos'].map((filter) => (
                       <TouchableOpacity
                         key={filter}
                         style={[
