@@ -66,6 +66,54 @@ export default function LoginScreen() {
     setPopup(prev => ({ ...prev, visible: false }));
   };
 
+  // Estados do reset password
+  const [resetEmail, setResetEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [resetStep, setResetStep] = useState<'none' | 'email' | 'code'>('none');
+
+  // Pedir código por email
+  const handleRequestReset = async () => {
+    if (!resetEmail) {
+      showPopup('Insira seu email', 'error', 'Email necessário');
+      return;
+    }
+    setLoading(true);
+    try {
+      await userService.requestPasswordReset(resetEmail);
+      showPopup('Código enviado por email!', 'success', 'Sucesso');
+      setResetStep('code');
+    } catch (err: any) {
+      showPopup(err.response?.data?.message || 'Erro ao solicitar redefinição', 'error', 'Erro');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Confirmar código e nova senha
+  const handleResetWithCode = async () => {
+    if (newPassword !== confirmNewPassword) {
+      showPopup('As senhas não coincidem', 'error', 'Erro de validação');
+      return;
+    }
+    setLoading(true);
+    try {
+      await userService.resetPasswordWithCode(resetEmail, code, newPassword);
+      showPopup('Senha alterada com sucesso!', 'success', 'Sucesso', () => {
+        setResetStep('none');
+        setResetEmail('');
+        setCode('');
+        setNewPassword('');
+        setConfirmNewPassword('');
+      });
+    } catch (err: any) {
+      showPopup(err.response?.data?.message || 'Código inválido ou expirado', 'error', 'Erro');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogin = async () => {
     if (!email || !password) {
       showPopup('Preencha email e senha', 'error', 'Campos obrigatórios');
@@ -81,9 +129,7 @@ export default function LoginScreen() {
 
       const user = response.data.user;
 
-      // Verifica se o utilizador está confirmado
       if (!user.verified) {
-        // Mostra popup personalizado
         showPopup(
           'Utilizador à espera de autenticação',
           'confirm',
@@ -97,16 +143,13 @@ export default function LoginScreen() {
             }
           }
         );
-        return; // Não faz login
+        return;
       }
 
-      // Continua normalmente se verificado
       login(user, rememberMe);
-
       if (rememberMe) {
         await AsyncStorage.setItem('user', JSON.stringify(user));
       }
-
       navigation.reset({ index: 0, routes: [{ name: 'Athlete' }] });
       
     } catch (err: any) {
@@ -117,25 +160,19 @@ export default function LoginScreen() {
     }
   };
 
-
   const handleRegister = async () => {
-    // Validações básicas
     if (!email || !password || !name || !phoneNumber) {
       showPopup('Preencha todos os campos', 'error', 'Campos obrigatórios');
       return;
     }
-    
     if (password !== confirmPassword) {
       showPopup('As senhas não coincidem', 'error', 'Erro de validação');
       return;
     }
-
     if (password.length < 6) {
       showPopup('A senha deve ter pelo menos 6 caracteres', 'error', 'Senha inválida');
       return;
     }
-
-    // Validação de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       showPopup('Por favor, insira um email válido', 'error', 'Email inválido');
@@ -155,33 +192,15 @@ export default function LoginScreen() {
       showPopup(
         'Conta criada com sucesso! Verifique o seu email para confirmar a conta. O email pode estar na pasta de spam.', 
         'success', 
-        'Conta criada',
-        () => {
-        }
+        'Conta criada'
       );
       setIsRegistering(false);
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Erro ao criar conta';
-      
-      // Tratamento específico para erros de duplicação
       if (errorMessage.toLowerCase().includes('email') && errorMessage.toLowerCase().includes('já existe')) {
-        showPopup(
-          'Este email já está registado no sistema. Tente fazer login ou use outro email.', 
-          'error', 
-          'Email já existe'
-        );
+        showPopup('Este email já está registado. Tente login ou outro email.', 'error', 'Email já existe');
       } else if (errorMessage.toLowerCase().includes('telefone') || errorMessage.toLowerCase().includes('telemóvel')) {
-        showPopup(
-          'Este número de telemóvel já está registado no sistema. Tente usar outro número.', 
-          'error', 
-          'Telemóvel já existe'
-        );
-      } else if (errorMessage.toLowerCase().includes('user already exists') || errorMessage.toLowerCase().includes('already registered')) {
-        showPopup(
-          'Já existe uma conta com estes dados. Tente fazer login ou use informações diferentes.', 
-          'error', 
-          'Conta já existe'
-        );
+        showPopup('Este número já está registado. Tente outro.', 'error', 'Telemóvel já existe');
       } else {
         showPopup(errorMessage, 'error', 'Erro no registo');
       }
@@ -201,9 +220,9 @@ export default function LoginScreen() {
   };
 
   const handleSwitchMode = () => {
-        setIsRegistering(!isRegistering);
-        clearForm();
-        hidePopup();
+    setIsRegistering(!isRegistering);
+    clearForm();
+    hidePopup();
   };
 
   return (
@@ -222,209 +241,255 @@ export default function LoginScreen() {
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <Image 
-                  source={avvbLogo} 
-                  style={styles.logo} 
-                  resizeMode="contain" 
-                />
+                <Image source={avvbLogo} style={styles.logo} resizeMode="contain" />
               </View>
               <Text style={styles.title}>
-                {isRegistering ? 'Criar Conta' : 'Bem-vindo'}
+                {resetStep !== 'none' 
+                  ? 'Recuperar Senha' 
+                  : isRegistering ? 'Criar Conta' : 'Bem-vindo'}
               </Text>
               <Text style={styles.subtitle}>
-                {isRegistering 
-                  ? 'Preencha os dados para criar sua conta' 
-                  : 'Coloque as suas credenciais para continuar'
-                }
+                {resetStep === 'email' && 'Digite o seu email para receber o código'}
+                {resetStep === 'code' && 'Insira o código e defina a nova senha'}
+                {resetStep === 'none' && (
+                  isRegistering 
+                    ? 'Preencha os dados para criar sua conta' 
+                    : 'Coloque as suas credenciais para continuar'
+                )}
               </Text>
             </View>
 
             {/* Form */}
-            <View style={styles.formContainer}>
-              {/* Campos de Registro */}
-              {isRegistering && (
-                <>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputWrapper}>
-                      <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
-                      <TextInput
-                        placeholder="Nome completo"
-                        placeholderTextColor="#999"
-                        value={name}
-                        onChangeText={setName}
-                        style={styles.input}
-                        autoCapitalize="words"
-                        returnKeyType="next"
-                      />
+            {resetStep === 'none' && (
+              <View style={styles.formContainer}>
+                {isRegistering && (
+                  <>
+                    <View style={styles.inputContainer}>
+                      <View style={styles.inputWrapper}>
+                        <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                        <TextInput
+                          placeholder="Nome completo"
+                          placeholderTextColor="#999"
+                          value={name}
+                          onChangeText={setName}
+                          style={styles.input}
+                        />
+                      </View>
                     </View>
-                  </View>
-
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputWrapper}>
-                      <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
-                      <TextInput
-                        placeholder="Número de Telemóvel"
-                        placeholderTextColor="#999"
-                        value={phoneNumber}
-                        onChangeText={setPhone}
-                        style={styles.input}
-                        keyboardType="phone-pad"
-                        autoComplete="tel"
-                        returnKeyType="next"
-                        maxLength={9}
-                      />
+                    <View style={styles.inputContainer}>
+                      <View style={styles.inputWrapper}>
+                        <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                        <TextInput
+                          placeholder="Número de Telemóvel"
+                          placeholderTextColor="#999"
+                          value={phoneNumber}
+                          onChangeText={setPhone}
+                          style={styles.input}
+                          keyboardType="phone-pad"
+                          maxLength={9}
+                        />
+                      </View>
                     </View>
-                  </View>
-                </>
-              )}
-              
-              {/* Email - sempre presente */}
-              <View style={styles.inputContainer}>
-                <View style={styles.inputWrapper}>
-                  <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
-                  <TextInput
-                    placeholder="Email"
-                    placeholderTextColor="#999"
-                    value={email}
-                    onChangeText={setEmail}
-                    style={styles.input}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                    autoComplete="email"
-                    returnKeyType="next"
-                  />
-                </View>
-              </View>
+                  </>
+                )}
 
-              {/* Senha - sempre presente */}
-              <View style={styles.inputContainer}>
-                <View style={styles.passwordWrapper}>
-                  <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
-                  <TextInput
-                    placeholder="Senha"
-                    placeholderTextColor="#999"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!showPassword}
-                    style={styles.input}
-                    autoComplete="password"
-                    returnKeyType={isRegistering ? "next" : "done"}
-                  />
-                  <TouchableOpacity 
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.eyeIcon}
-                  >
-                    <Ionicons 
-                      name={showPassword ? "eye-outline" : "eye-off-outline"} 
-                      size={20} 
-                      color="#666" 
+                {/* Email */}
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputWrapper}>
+                    <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      placeholder="Email"
+                      placeholderTextColor="#999"
+                      value={email}
+                      onChangeText={setEmail}
+                      style={styles.input}
+                      autoCapitalize="none"
+                      keyboardType="email-address"
                     />
-                  </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
 
-              {/* Confirmar Senha - apenas no registro */}
-              {isRegistering && (
+                {/* Password */}
                 <View style={styles.inputContainer}>
                   <View style={styles.passwordWrapper}>
                     <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
                     <TextInput
-                      placeholder="Confirmar senha"
+                      placeholder="Senha"
                       placeholderTextColor="#999"
-                      value={confirmPassword}
-                      onChangeText={setConfirmPassword}
-                      secureTextEntry={!showConfirmPassword}
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry={!showPassword}
                       style={styles.input}
-                      returnKeyType="done"
                     />
-                    <TouchableOpacity 
-                      onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                      style={styles.eyeIcon}
-                    >
-                      <Ionicons 
-                        name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} 
-                        size={20} 
-                        color="#666" 
-                      />
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+                      <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
                     </TouchableOpacity>
                   </View>
                 </View>
-              )}
 
-              {/* Lembrar-me - apenas no login */}
-              {!isRegistering && (
-                <View style={styles.rememberMeContainer}>
-                  <TouchableOpacity 
-                    style={styles.rememberMeButton}
-                    onPress={() => setRememberMe(!rememberMe)}
-                  >
-                    <View style={[
-                      styles.checkboxContainer,
-                      rememberMe && styles.checkboxSelected
-                    ]}>
-                      {rememberMe && (
-                        <Ionicons name="checkmark" size={12} color="#1a1a1a" />
-                      )}
+                {/* Confirmar Senha no registo */}
+                {isRegistering && (
+                  <View style={styles.inputContainer}>
+                    <View style={styles.passwordWrapper}>
+                      <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                      <TextInput
+                        placeholder="Confirmar senha"
+                        placeholderTextColor="#999"
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry={!showConfirmPassword}
+                        style={styles.input}
+                      />
+                      <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeIcon}>
+                        <Ionicons name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
+                      </TouchableOpacity>
                     </View>
-                    <Text style={styles.rememberMeText}>Lembrar-me</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-
-              {/* Botão Principal */}
-              <TouchableOpacity
-                style={[
-                  styles.loginButton,
-                  loading && styles.loginButtonDisabled
-                ]}
-                onPress={isRegistering ? handleRegister : handleLogin}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#1a1a1a" size="small" />
-                ) : (
-                  <Text style={styles.loginButtonText}>
-                    {isRegistering ? 'Criar Conta' : 'Entrar'}
-                  </Text>
+                  </View>
                 )}
-              </TouchableOpacity>
 
-              {/* Esqueci a senha - apenas no login */}
-              {!isRegistering && (
-                <TouchableOpacity style={styles.forgotPassword}>
-                  <Text style={styles.forgotPasswordText}>
-                    Esqueceu a senha?
-                  </Text>
+                {/* Botão Login/Register */}
+                <TouchableOpacity
+                  style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                  onPress={isRegistering ? handleRegister : handleLogin}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#1a1a1a" size="small" />
+                  ) : (
+                    <Text style={styles.loginButtonText}>
+                      {isRegistering ? 'Criar Conta' : 'Entrar'}
+                    </Text>
+                  )}
                 </TouchableOpacity>
-              )}
-            </View>
+                {!isRegistering && (
+                  <View style={styles.rememberMeContainer}>
+                    <TouchableOpacity 
+                      style={styles.rememberMeButton}
+                      onPress={() => setRememberMe(!rememberMe)}
+                    >
+                      <View style={[
+                        styles.checkboxContainer,
+                        rememberMe && styles.checkboxSelected
+                      ]}>
+                        {rememberMe && (
+                          <Ionicons name="checkmark" size={12} color="#1a1a1a" />
+                        )}
+                      </View>
+                      <Text style={styles.rememberMeText}>Lembrar-me</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                {/* Esqueci senha */}
+                {!isRegistering && (
+                  <TouchableOpacity style={styles.forgotPassword} onPress={() => setResetStep('email')}>
+                    <Text style={styles.forgotPasswordText}>Esqueceu a senha?</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+
+            {/* Fluxo Reset: Email */}
+            {resetStep === 'email' && (
+              <View style={styles.formContainer}>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputWrapper}>
+                    <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      placeholder="Email"
+                      placeholderTextColor="#999"
+                      value={resetEmail}
+                      onChangeText={setResetEmail}
+                      style={styles.input}
+                      autoCapitalize="none"
+                      keyboardType="email-address"
+                    />
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                  onPress={handleRequestReset}
+                  disabled={loading}
+                >
+                  {loading ? <ActivityIndicator color="#1a1a1a" size="small" /> : <Text style={styles.loginButtonText}>Enviar Código</Text>}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.switchModeButton} onPress={() => setResetStep('none')}>
+                  <Text style={styles.switchModeText}>Voltar ao Login</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Fluxo Reset: Código + Nova Senha */}
+            {resetStep === 'code' && (
+              <View style={styles.formContainer}>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputWrapper}>
+                    <Ionicons name="key-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      placeholder="Código recebido"
+                      placeholderTextColor="#999"
+                      value={code}
+                      onChangeText={setCode}
+                      style={styles.input}
+                    />
+                  </View>
+                </View>
+                <View style={styles.inputContainer}>
+                  <View style={styles.passwordWrapper}>
+                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      placeholder="Nova Senha"
+                      placeholderTextColor="#999"
+                      value={newPassword}
+                      onChangeText={setNewPassword}
+                      secureTextEntry
+                      style={styles.input}
+                    />
+                  </View>
+                </View>
+                <View style={styles.inputContainer}>
+                  <View style={styles.passwordWrapper}>
+                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      placeholder="Confirmar Nova Senha"
+                      placeholderTextColor="#999"
+                      value={confirmNewPassword}
+                      onChangeText={setConfirmNewPassword}
+                      secureTextEntry
+                      style={styles.input}
+                    />
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                  onPress={handleResetWithCode}
+                  disabled={loading}
+                >
+                  {loading ? <ActivityIndicator color="#1a1a1a" size="small" /> : <Text style={styles.loginButtonText}>Alterar Senha</Text>}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.switchModeButton} onPress={() => setResetStep('none')}>
+                  <Text style={styles.switchModeText}>Voltar ao Login</Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
             {/* Switch Mode */}
-            <View style={styles.switchModeContainer}>
-              <TouchableOpacity 
-                style={styles.switchModeButton}
-                onPress={handleSwitchMode}
-              >
-                <Text style={styles.switchModeText}>
-                  {isRegistering 
-                    ? 'Já tem conta? Entrar' 
-                    : 'Não tem conta? Criar Conta'
-                  }
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {resetStep === 'none' && (
+              <View style={styles.switchModeContainer}>
+                <TouchableOpacity style={styles.switchModeButton} onPress={handleSwitchMode}>
+                  <Text style={styles.switchModeText}>
+                    {isRegistering ? 'Já tem conta? Entrar' : 'Não tem conta? Criar Conta'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
-            {/* Footer */}
             <View style={styles.footer}>
-              <Text style={styles.footerText}>
-                Versão 1.0.0
-              </Text>
+              <Text style={styles.footerText}>Versão 1.0.0</Text>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
       </LinearGradient>
 
-      {/* Popup Component */}
       <Popup
         visible={popup.visible}
         title={popup.title}

@@ -6,17 +6,30 @@ const API_URL = "http://192.168.1.184:3000/users";
 
 export const userService = {
 
-  async login (email: string, password: string): Promise<{ token: string; user: User }> {
-    const res = await axios.post(`${API_URL}/login`, { email, password });
+  async login(email: string, password: string): Promise<{ token: string; user: User }> {
+    const res = await axios.post(`${API_URL}/login`, { login: email, password });
     return res.data;
   },
 
-  async register (user: Partial<User>): Promise<{ message: string }> {
+  async register(user: Partial<User>): Promise<{ message: string }> {
     const res = await axios.post(`${API_URL}/register`, user);
     return res.data;
   },
-  
 
+  async requestPasswordReset(email: string): Promise<{ message: string }> {
+    const res = await axios.post(`${API_URL}/request-password-reset`, { email });
+    return res.data;
+  },
+
+  async resetPasswordWithCode(email: string, code: string, newPassword: string): Promise<{ message: string }> {
+    const res = await axios.post(`${API_URL}/reset-password-with-code`, {
+      email,
+      code,
+      newPassword,
+    });
+    return res.data;
+  },
+  
   async getAll(): Promise<User[]> {
     const res = await axios.get(API_URL);
     return res.data;
