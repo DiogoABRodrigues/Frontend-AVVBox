@@ -2,6 +2,7 @@
 export interface User {
   _id: string;
   name: string;
+  email: string;
   phoneNumber: string;
   password?: string; // opcional, raramente vais expor
   coach: string[]; // id do PT principal

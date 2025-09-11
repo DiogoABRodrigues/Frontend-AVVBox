@@ -1,374 +1,416 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Dimensions,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
   Image,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { userService } from '../services/usersService';
+import { styles } from './styles/LoginScreen.styles';
+import Popup from '../componentes/Popup';
+import avvbLogo from '../../assets/avvb.png';
+import axios from 'axios';
 
-const { width, height } = Dimensions.get('window');
+interface PopupState {
+  visible: boolean;
+  title?: string;
+  message: string;
+  type: "success" | "error" | "confirm";
+  onConfirm?: () => void;
+}
 
 export default function LoginScreen() {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhone] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [phoneNumberError, setPhoneNumberError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
+  const [popup, setPopup] = useState<PopupState>({
+    visible: false,
+    message: '',
+    type: 'success'
+  });
 
   const { login } = useAuth();
   const navigation = useNavigation<any>();
 
-  const validateLoginField = (value: string) => {
-  return value && value.length > 0; // apenas verifica se não está vazio
+  const showPopup = (message: string, type: "success" | "error" | "confirm" = "success", title?: string, onConfirm?: () => void) => {
+    setPopup({
+      visible: true,
+      title,
+      message,
+      type,
+      onConfirm
+    });
   };
 
-  const validateForm = () => {
-    let isValid = true;
-    setPhoneNumberError('');
-    setPasswordError('');
-
-    if (!phoneNumber) {
-      setPhoneNumberError('Número de telefone é obrigatório');
-      isValid = false;
-    } else if (!validateLoginField(phoneNumber)) {
-      setPhoneNumberError('Campo de login é obrigatório');
-      isValid = false;
-    }
-
-    if (!password) {
-      setPasswordError('Senha é obrigatória');
-      isValid = false;
-    } 
-
-    return isValid;
+  const hidePopup = () => {
+    setPopup(prev => ({ ...prev, visible: false }));
   };
 
   const handleLogin = async () => {
-    if (!validateForm()) return;
+    if (!email || !password) {
+      showPopup('Preencha email e senha', 'error', 'Campos obrigatórios');
+      return;
+    }
 
     setLoading(true);
     try {
-      const response = await axios.post('http://192.168.1.184:3000/users/login', { 
-        login: phoneNumber.trim(),
+       const response = await axios.post('http://192.168.1.184:3000/users/login', { 
+        login: email.trim(),
         password 
       });
-      const user = response.data.user;
 
-      // Guarda o usuário no contexto
+      const user = response.data.user;
       login(user, rememberMe);
 
       if (rememberMe) {
-
-      try {
-          await AsyncStorage.setItem('user', JSON.stringify(user));
-        } catch (err) {
-          console.log('Erro ao salvar usuário localmente:', err);
-        }
+        await AsyncStorage.setItem('user', JSON.stringify(user));
       }
-      // Direciona para tela baseada no role
-      const routeName = user.role === 'atleta' || user.role === 'PT' || user.role === 'Admin' 
-        ? 'Athlete' 
-        : 'Athlete';
-      
-      navigation.reset({ 
-        index: 0, 
-        routes: [{ name: routeName }] 
-      });
-    } catch (error: any) {
-      console.log(error.response?.data);
-      Alert.alert(
-        'Erro de Login', 
-        error.response?.data?.message || 'Credenciais inválidas. Tente novamente.'
-      );
+
+      navigation.reset({ index: 0, routes: [{ name: 'Athlete' }] });
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Credenciais inválidas';
+      showPopup(errorMessage, 'error', 'Erro de Login');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleForgotPassword = () => {
-    // Navigate to forgot password screen or show alert
-    Alert.alert('Recuperar Senha', 'Funcionalidade em desenvolvimento');
+  const handleRegister = async () => {
+    // Validações básicas
+    if (!email || !password || !name || !phoneNumber) {
+      showPopup('Preencha todos os campos', 'error', 'Campos obrigatórios');
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      showPopup('As senhas não coincidem', 'error', 'Erro de validação');
+      return;
+    }
+
+    if (password.length < 6) {
+      showPopup('A senha deve ter pelo menos 6 caracteres', 'error', 'Senha inválida');
+      return;
+    }
+
+    // Validação de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showPopup('Por favor, insira um email válido', 'error', 'Email inválido');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await userService.register({ 
+        name, 
+        email, 
+        password, 
+        phoneNumber,
+        role: 'atleta' 
+      });
+      
+      showPopup(
+        'Conta criada com sucesso! Verifique o seu email para confirmar a conta. O email pode estar na pasta de spam.', 
+        'success', 
+        'Conta criada',
+        () => {
+        }
+      );
+      setIsRegistering(false);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Erro ao criar conta';
+      
+      // Tratamento específico para erros de duplicação
+      if (errorMessage.toLowerCase().includes('email') && errorMessage.toLowerCase().includes('já existe')) {
+        showPopup(
+          'Este email já está registado no sistema. Tente fazer login ou use outro email.', 
+          'error', 
+          'Email já existe'
+        );
+      } else if (errorMessage.toLowerCase().includes('telefone') || errorMessage.toLowerCase().includes('telemóvel')) {
+        showPopup(
+          'Este número de telemóvel já está registado no sistema. Tente usar outro número.', 
+          'error', 
+          'Telemóvel já existe'
+        );
+      } else if (errorMessage.toLowerCase().includes('user already exists') || errorMessage.toLowerCase().includes('already registered')) {
+        showPopup(
+          'Já existe uma conta com estes dados. Tente fazer login ou use informações diferentes.', 
+          'error', 
+          'Conta já existe'
+        );
+      } else {
+        showPopup(errorMessage, 'error', 'Erro no registo');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const clearForm = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setPhone('');
+    setConfirmPassword('');
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+  };
 
+  const handleSwitchMode = () => {
+        setIsRegistering(!isRegistering);
+        clearForm();
+        hidePopup();
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <LinearGradient
-        colors={['#000000ff', '#303030ff']}
-        style={styles.gradient}
-      >
+      <LinearGradient colors={['#1a1a1a', '#2d2d2d', '#1a1a1a']} style={styles.gradient}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardView}
         >
-          <View style={styles.container}>
+          <ScrollView 
+            contentContainerStyle={styles.container}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            bounces={false}
+          >
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.logoContainer}>
                 <Image 
-                  source={require('../../assets/avvb.png')} // Substitua pelo caminho da sua imagem
-                  style={styles.logo}
-                  resizeMode="contain"
+                  source={avvbLogo} 
+                  style={styles.logo} 
+                  resizeMode="contain" 
                 />
               </View>
-              <Text style={styles.title}>Bem-vindo</Text>
+              <Text style={styles.title}>
+                {isRegistering ? 'Criar Conta' : 'Bem-vindo'}
+              </Text>
+              <Text style={styles.subtitle}>
+                {isRegistering 
+                  ? 'Preencha os dados para criar sua conta' 
+                  : 'Coloque as suas credenciais para continuar'
+                }
+              </Text>
             </View>
 
             {/* Form */}
             <View style={styles.formContainer}>
+              {/* Campos de Registro */}
+              {isRegistering && (
+                <>
+                  <View style={styles.inputContainer}>
+                    <View style={styles.inputWrapper}>
+                      <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                      <TextInput
+                        placeholder="Nome completo"
+                        placeholderTextColor="#999"
+                        value={name}
+                        onChangeText={setName}
+                        style={styles.input}
+                        autoCapitalize="words"
+                        returnKeyType="next"
+                      />
+                    </View>
+                  </View>
+
+                  <View style={styles.inputContainer}>
+                    <View style={styles.inputWrapper}>
+                      <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                      <TextInput
+                        placeholder="Número de Telemóvel"
+                        placeholderTextColor="#999"
+                        value={phoneNumber}
+                        onChangeText={setPhone}
+                        style={styles.input}
+                        keyboardType="phone-pad"
+                        autoComplete="tel"
+                        returnKeyType="next"
+                        maxLength={9}
+                      />
+                    </View>
+                  </View>
+                </>
+              )}
+              
+              {/* Email - sempre presente */}
               <View style={styles.inputContainer}>
-                <View style={[styles.inputWrapper, phoneNumberError && styles.inputError]}>
-                  <Ionicons name="call-outline" size={20} color="#999" style={styles.inputIcon} />
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
                   <TextInput
-                    placeholder="Introduza o seu número de telefone"
+                    placeholder="Email"
                     placeholderTextColor="#999"
-                    value={phoneNumber}
-                    onChangeText={(text) => {
-                      setPhoneNumber(text);
-                      if (phoneNumberError) setPhoneNumberError('');
-                    }}
+                    value={email}
+                    onChangeText={setEmail}
                     style={styles.input}
                     autoCapitalize="none"
-                    keyboardType="phone-pad"
-                    autoComplete="tel"
+                    keyboardType="email-address"
+                    autoComplete="email"
+                    returnKeyType="next"
                   />
                 </View>
-                {phoneNumberError ? <Text style={styles.errorText}>{phoneNumberError}</Text> : null}
               </View>
 
+              {/* Senha - sempre presente */}
               <View style={styles.inputContainer}>
-                <View style={[styles.inputWrapper, passwordError && styles.inputError]}>
-                  <Ionicons name="lock-closed-outline" size={20} color="#999" style={styles.inputIcon} />
+                <View style={styles.passwordWrapper}>
+                  <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
                   <TextInput
-                    placeholder="Palavra-passe"
+                    placeholder="Senha"
                     placeholderTextColor="#999"
                     value={password}
-                    onChangeText={(text) => {
-                      setPassword(text);
-                      if (passwordError) setPasswordError('');
-                    }}
+                    onChangeText={setPassword}
                     secureTextEntry={!showPassword}
                     style={styles.input}
                     autoComplete="password"
+                    returnKeyType={isRegistering ? "next" : "done"}
                   />
-                  <TouchableOpacity
+                  <TouchableOpacity 
                     onPress={() => setShowPassword(!showPassword)}
                     style={styles.eyeIcon}
                   >
-                    <Ionicons
-                      name={showPassword ? "eye-outline" : "eye-off-outline"}
-                      size={20}
-                      color="#999"
+                    <Ionicons 
+                      name={showPassword ? "eye-outline" : "eye-off-outline"} 
+                      size={20} 
+                      color="#666" 
                     />
                   </TouchableOpacity>
                 </View>
-                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
               </View>
 
-              <TouchableOpacity
-                style={styles.forgotPassword}
-                onPress={handleForgotPassword}
-              >
-                <Text style={styles.forgotPasswordText}>Esqueceu-se da palavra-passe?</Text>
-              </TouchableOpacity>
-              <View style={styles.rememberMeContainer}>
-                <TouchableOpacity
-                  style={styles.rememberMeButton}
-                  onPress={() => setRememberMe(!rememberMe)}
-                >
-                  <Ionicons
-                    name={rememberMe ? "checkbox" : "square-outline"}
-                    size={20}
-                    color="#fff"
-                    style={{ marginRight: 8 }}
-                  />
-                  <Text style={styles.rememberMeText}>Manter sessão iniciada</Text>
-                </TouchableOpacity>
-              </View>
+              {/* Confirmar Senha - apenas no registro */}
+              {isRegistering && (
+                <View style={styles.inputContainer}>
+                  <View style={styles.passwordWrapper}>
+                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      placeholder="Confirmar senha"
+                      placeholderTextColor="#999"
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      secureTextEntry={!showConfirmPassword}
+                      style={styles.input}
+                      returnKeyType="done"
+                    />
+                    <TouchableOpacity 
+                      onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                      style={styles.eyeIcon}
+                    >
+                      <Ionicons 
+                        name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} 
+                        size={20} 
+                        color="#666" 
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
 
+              {/* Lembrar-me - apenas no login */}
+              {!isRegistering && (
+                <View style={styles.rememberMeContainer}>
+                  <TouchableOpacity 
+                    style={styles.rememberMeButton}
+                    onPress={() => setRememberMe(!rememberMe)}
+                  >
+                    <View style={[
+                      styles.checkboxContainer,
+                      rememberMe && styles.checkboxSelected
+                    ]}>
+                      {rememberMe && (
+                        <Ionicons name="checkmark" size={12} color="#1a1a1a" />
+                      )}
+                    </View>
+                    <Text style={styles.rememberMeText}>Lembrar-me</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {/* Botão Principal */}
               <TouchableOpacity
-                style={[styles.loginButton, loading && styles.loginButtonDisabled]}
-                onPress={handleLogin}
+                style={[
+                  styles.loginButton,
+                  loading && styles.loginButtonDisabled
+                ]}
+                onPress={isRegistering ? handleRegister : handleLogin}
                 disabled={loading}
               >
                 {loading ? (
-                  <ActivityIndicator color="#fff" size="small" />
+                  <ActivityIndicator color="#1a1a1a" size="small" />
                 ) : (
-                  <Text style={styles.loginButtonText}>Entrar</Text>
+                  <Text style={styles.loginButtonText}>
+                    {isRegistering ? 'Criar Conta' : 'Entrar'}
+                  </Text>
                 )}
+              </TouchableOpacity>
+
+              {/* Esqueci a senha - apenas no login */}
+              {!isRegistering && (
+                <TouchableOpacity style={styles.forgotPassword}>
+                  <Text style={styles.forgotPasswordText}>
+                    Esqueceu a senha?
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Switch Mode */}
+            <View style={styles.switchModeContainer}>
+              <TouchableOpacity 
+                style={styles.switchModeButton}
+                onPress={handleSwitchMode}
+              >
+                <Text style={styles.switchModeText}>
+                  {isRegistering 
+                    ? 'Já tem conta? Entrar' 
+                    : 'Não tem conta? Criar Conta'
+                  }
+                </Text>
               </TouchableOpacity>
             </View>
 
             {/* Footer */}
             <View style={styles.footer}>
-              <Text style={styles.footerText}>© 2025 Avv Box Official App</Text>
+              <Text style={styles.footerText}>
+                Versão 1.0.0
+              </Text>
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </LinearGradient>
+
+      {/* Popup Component */}
+      <Popup
+        visible={popup.visible}
+        title={popup.title}
+        message={popup.message}
+        type={popup.type}
+        onConfirm={popup.onConfirm}
+        onCancel={hidePopup}
+        onClose={hidePopup}
+      />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  gradient: {
-    flex: 1,
-  },
-  keyboardView: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-  },
-  header: {
-    alignItems: 'center',
-    marginTop: height * 0.1,
-  },
-  logoContainer: {
-    width: 200,
-    height: 200,
-    borderRadius: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    padding: 10,
-  },
-  logo: {
-    width: '100%',
-    height: '100%',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
-  formContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    maxWidth: 400,
-    width: '100%',
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  inputError: {
-    borderWidth: 1,
-    borderColor: '#ff6b6b',
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333',
-    paddingVertical: 16,
-  },
-  eyeIcon: {
-    padding: 4,
-  },
-  errorText: {
-    color: '#ff6b6b',
-    fontSize: 12,
-    marginTop: 4,
-    marginLeft: 4,
-  },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    marginBottom: 30,
-  },
-  forgotPasswordText: {
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: 14,
-  },
-  loginButton: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingVertical: 18,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
-    marginBottom: 24,
-  },
-  loginButtonDisabled: {
-    opacity: 0.7,
-  },
-  loginButtonText: {
-    color: '#667eea',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  footer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  footerText: {
-    color: 'rgba(255, 255, 255, 0.6)',
-    fontSize: 14,
-  },
-  rememberMeContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  marginBottom: 20,
-  },
-  rememberMeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rememberMeText: {
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: 14,
-  },
-});
