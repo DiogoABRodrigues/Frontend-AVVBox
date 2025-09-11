@@ -74,12 +74,33 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-       const response = await axios.post('http://192.168.1.184:3000/users/login', { 
+      const response = await axios.post('http://192.168.1.184:3000/users/login', { 
         login: email.trim(),
         password 
       });
 
       const user = response.data.user;
+
+      // Verifica se o utilizador está confirmado
+      if (!user.verified) {
+        // Mostra popup personalizado
+        showPopup(
+          'Utilizador à espera de autenticação',
+          'confirm',
+          'Conta não verificada',
+          async () => {
+            try {
+              await axios.post(`http://192.168.1.184:3000/users/resend-verification`, { email: user.email });
+              showPopup('Email de verificação reenviado!', 'success', 'Sucesso');
+            } catch (err: any) {
+              showPopup(err.response?.data?.message || 'Erro ao reenviar email', 'error', 'Erro');
+            }
+          }
+        );
+        return; // Não faz login
+      }
+
+      // Continua normalmente se verificado
       login(user, rememberMe);
 
       if (rememberMe) {
@@ -87,6 +108,7 @@ export default function LoginScreen() {
       }
 
       navigation.reset({ index: 0, routes: [{ name: 'Athlete' }] });
+      
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Credenciais inválidas';
       showPopup(errorMessage, 'error', 'Erro de Login');
@@ -94,6 +116,7 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
+
 
   const handleRegister = async () => {
     // Validações básicas
