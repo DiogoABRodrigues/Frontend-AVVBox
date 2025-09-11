@@ -5,6 +5,18 @@ import { User } from "../models/User";
 const API_URL = "http://192.168.1.184:3000/users";
 
 export const userService = {
+
+  async login (email: string, password: string): Promise<{ token: string; user: User }> {
+    const res = await axios.post(`${API_URL}/login`, { email, password });
+    return res.data;
+  },
+
+  async register (user: Partial<User>): Promise<{ message: string }> {
+    const res = await axios.post(`${API_URL}/register`, user);
+    return res.data;
+  },
+  
+
   async getAll(): Promise<User[]> {
     const res = await axios.get(API_URL);
     return res.data;
