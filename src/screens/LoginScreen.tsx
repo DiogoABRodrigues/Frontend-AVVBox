@@ -22,7 +22,7 @@ import { styles } from './styles/LoginScreen.styles';
 import Popup from '../componentes/Popup';
 import avvbLogo from '../../assets/avvb.png';
 import axios from 'axios';
-
+import LoginTransition from './LoginTransition';
 interface PopupState {
   visible: boolean;
   title?: string;
@@ -114,6 +114,8 @@ export default function LoginScreen() {
     }
   };
 
+  const [showTransition, setShowTransition] = React.useState(false);
+
   const handleLogin = async () => {
     if (!email || !password) {
       showPopup('Preencha email e senha', 'error', 'Campos obrigatórios');
@@ -150,7 +152,8 @@ export default function LoginScreen() {
       if (rememberMe) {
         await AsyncStorage.setItem('user', JSON.stringify(user));
       }
-      navigation.reset({ index: 0, routes: [{ name: 'Athlete' }] });
+
+      setShowTransition(true);
       
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Credenciais inválidas';
@@ -227,6 +230,16 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* Transição de login */}
+      {showTransition && (
+        <LoginTransition 
+          onFinish={() => {
+            console.log('Transição terminou - navegando');
+            setShowTransition(false);
+            navigation.reset({ index: 0, routes: [{ name: 'Athlete' }] });
+          }}
+        />
+      )}
       <LinearGradient colors={['#1a1a1a', '#2d2d2d', '#1a1a1a']} style={styles.gradient}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

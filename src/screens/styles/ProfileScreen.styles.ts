@@ -561,4 +561,148 @@ export const styles = StyleSheet.create({
   backgroundColor: "transparent",
   zIndex: 1, // para ficar por baixo do menu mas acima da lista
 },
+dayContainer: {
+  marginBottom: 20,
+  backgroundColor: '#f8fafc',
+  borderRadius: 12,
+  padding: 16,
+  borderWidth: 1,
+  borderColor: '#e2e8f0',
+},
+
+dayHeader: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 12,
+},
+
+dayTitle: {
+  fontSize: 16,
+  fontWeight: '600',
+  color: '#1e293b',
+},
+
+workingDayToggle: {
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 16,
+  backgroundColor: '#ffffff',
+  borderWidth: 1,
+  borderColor: '#e2e8f0',
+},
+
+workingDayText: {
+  fontSize: 12,
+  color: '#64748b',
+  fontWeight: '500',
+},
+
+workingDayTextActive: {
+  color: '#059669',
+  fontWeight: '600',
+},
+
+timeRangesContainer: {
+  gap: 8,
+},
+
+timeRangeRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 8,
+  marginBottom: 8,
+},
+
+timeInput: {
+  borderWidth: 1,
+  borderColor: '#e2e8f0',
+  borderRadius: 8,
+  padding: 8,
+  fontSize: 14,
+  backgroundColor: '#ffffff',
+  textAlign: 'center',
+  minWidth: 60,
+},
+
+timeSeparator: {
+  fontSize: 14,
+  color: '#64748b',
+  fontWeight: '500',
+},
+
+removeTimeButton: {
+  padding: 8,
+  borderRadius: 6,
+  backgroundColor: '#fef2f2',
+  borderWidth: 1,
+  borderColor: '#fecaca',
+},
+
+addTimeButton: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 12,
+  borderRadius: 8,
+  backgroundColor: '#ffffff',
+  borderWidth: 1,
+  borderColor: '#cbd5e1',
+  borderStyle: 'dashed',
+  gap: 6,
+  marginTop: 8,
+},
+
+addTimeButtonText: {
+  fontSize: 14,
+  color: '#2563eb',
+  fontWeight: '500',
+},
+dayContainerDisabled: {
+  opacity: 1,
+  backgroundColor: '#f1f5f9',
+},
+
+dayTitleDisabled: {
+  color: '#9ca3af',
+},
+
+workingDayToggleActive: {
+  backgroundColor: '#dbeafe',
+  borderColor: '#93c5fd',
+},
+
+timeRangesContainerDisabled: {
+  opacity: 0.7,
+},
+
+timeRangeRowDisabled: {
+  opacity: 0.8,
+},
+
+timeInputDisabled: {
+  backgroundColor: '#f3f4f6',
+  color: '#9ca3af',
+  borderColor: '#d1d5db',
+},
+
+timeSeparatorDisabled: {
+  color: '#9ca3af',
+},
+
+removeTimeButtonDisabled: {
+  backgroundColor: '#f9fafb',
+  borderColor: '#e5e7eb',
+  opacity: 0.5,
+},
+
+addTimeButtonDisabled: {
+  backgroundColor: '#f9fafb',
+  borderColor: '#e5e7eb',
+  opacity: 0.6,
+},
+
+addTimeButtonTextDisabled: {
+  color: '#9ca3af',
+},
 });
