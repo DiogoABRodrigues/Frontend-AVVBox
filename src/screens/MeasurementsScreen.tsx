@@ -18,7 +18,7 @@ import { LineChart } from "react-native-chart-kit";
 import { Picker } from "@react-native-picker/picker";
 import MeasuresModal from "../componentes/MeasuresModal";
 import Popup from "../componentes/Popup";
-
+ 
 interface Athlete {
   id: string;
   name: string;
