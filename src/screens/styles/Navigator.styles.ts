@@ -3,29 +3,29 @@ import { StyleSheet, Dimensions } from "react-native";
 const { height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
-  tabBar: {
-    height: height * 0.08, // Mudança: ligeiramente mais alto
-    backgroundColor: "#ffffff",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    borderTopWidth: 1, // Mudança: borda sutil no topo
-    borderTopColor: "#e2e8f0",
-    shadowColor: '#000', // Mudança: sombra para elevação
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: -2 },
-    elevation: 3,
-  },
+tabBar: {
+  height: 80, // Mudança: altura fixa em vez de porcentagem
+  backgroundColor: "#ffffff",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-around",
+  borderTopWidth: 1,
+  borderTopColor: "#e2e8f0",
+  shadowColor: '#000',
+  shadowOpacity: 0.08,
+  shadowRadius: 6,
+  shadowOffset: { width: 0, height: -2 },
+  elevation: 3,
+},
   tabItem: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingVertical: 8, // Mudança: padding vertical específico
     borderRadius: 12, // Mudança: border radius consistente
-    minWidth: 60, // Mudança: largura mínima para consistência
+    minWidth: 80, // Mudança: largura mínima para consistência
   },
   tabItemFocused: {
     backgroundColor: "#dbeafe", // Mudança: azul suave consistente
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingVertical: 8, // Mudança: padding consistente
     borderRadius: 12, // Mudança: border radius consistente
     borderWidth: 1, // Mudança: borda sutil
@@ -35,16 +35,19 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
     elevation: 2,
+    minWidth: 80,
   },
   tabLabel: {
-    fontSize: 12,
-    marginTop: 4,
-    color: "#64748b", // Mudança: cor mais suave
-    fontWeight: '500', // Mudança: peso específico
+    fontSize: 13, // menor que 12
+    marginTop: 2, // diminui o espaço do topo
+    color: "#64748b",
+    fontWeight: '500',
+    textAlign: 'center', // importante
   },
+
   tabLabelFocused: {
     color: "#1E293B", // Mudança: azul escuro consistente
-    fontWeight: '600', // Mudança: peso mais específico
+    fontWeight: '600',
   },
   badge: {
     position: "absolute",
@@ -77,7 +80,10 @@ export const styles = StyleSheet.create({
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative', // Para posicionamento do badge
+    position: 'relative',
+    paddingVertical: 4,
+    minHeight: 50,
+    flexDirection: 'column',
   },
   
   // Estilo para o header title container
