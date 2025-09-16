@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from './AuthContext';
+import { API_BASE_URL } from "../../config";
 
 interface Notification {
   id: string;
@@ -27,7 +28,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   useEffect(() => {
     if (!user) return; // 🚨 só liga o socket quando user existe
 
-    const socket = io("http://192.168.1.184:3000/");
+    const socket = io(API_BASE_URL);
     socket.emit("join", user.id);
 
     socket.on("new-notification", (newNotifications: any[]) => {

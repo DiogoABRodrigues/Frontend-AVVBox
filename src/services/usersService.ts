@@ -1,8 +1,8 @@
 // services/userService.ts
 import axios from "axios";
 import { User } from "../models/User";
-
-const API_URL = "http://192.168.1.184:3000/users";
+import { API_BASE_URL } from "../../config";
+const API_URL = `${API_BASE_URL}/users`;
 
 export const userService = {
 

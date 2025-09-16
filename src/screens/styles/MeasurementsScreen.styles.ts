@@ -22,64 +22,6 @@ export const styles = StyleSheet.create({
     color: '#1e293b',
   },
 
-  // Filter Row (Dropdowns e botões)
-  filterRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 16,
-    gap: 12,
-  },
-
-  // Dropdown Styles
-  dropdownWrapper: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-    borderRadius: 12,
-    overflow: "hidden",
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  dropdownUsersWrapper: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-    borderRadius: 12,
-    overflow: "hidden",
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  picker: {
-    height: 48,
-    width: "100%",
-    color: '#374151',
-    fontSize: 16,
-  },
-
-  // Action Button (ícone de adicionar)
-  actionButton: {
-    backgroundColor: '#2563eb',
-    borderRadius: 12,
-    padding: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#2563eb',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-
   // Medidas Atuais
   currentMeasurements: { 
     flexDirection: 'row', 
@@ -342,4 +284,138 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e5e7eb',
   },
+  // Filter Row (Dropdowns e botões)
+  filterRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+    gap: 12,
+  },
+
+  // Dropdown Styles Melhorados
+  dropdownWrapper: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderWidth: 2,
+    borderColor: "#e2e8f0",
+    borderRadius: 16,
+    overflow: "hidden",
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  dropdownHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+    gap: 8,
+  },
+  dropdownLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#64748b',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  // Action Button Melhorado
+  actionButton: {
+    backgroundColor: '#2563eb',
+    borderRadius: 16,
+    width: 50,
+    height: 49,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#2563eb',
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
+    marginBottom: 5,
+  },
+
+  // Chips Container
+  chipsContainer: {
+    marginBottom: 0,
+  },
+  chipRow: {
+    marginBottom: 0,
+  },
+  chipRowLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
+    marginLeft: 4,
+  },
+  chipScrollView: {
+    flexGrow: 0,
+  },
+  chip: {
+    backgroundColor: '#f1f5f9',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginBottom: 8,
+    marginRight: 8,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  chipActive: {
+    backgroundColor: '#2563eb',
+    borderColor: '#1d4ed8',
+    shadowColor: '#2563eb',
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
+  },
+  chipText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#64748b',
+  },
+  chipTextActive: {
+    color: '#ffffff',
+    fontWeight: '600',
+  },
+
+  // Dropdown simplificado
+dropdownUsersWrapper: {
+  flex: 1,
+  backgroundColor: '#ffffff',
+  borderWidth: 1,
+  borderColor: "#e2e8f0",
+  borderRadius: 12,
+  overflow: "hidden",
+  marginBottom: 8,
+  shadowOpacity: 0.06,
+  shadowRadius: 4,
+  shadowOffset: { width: 0, height: 2 },
+  elevation: 2,
+},
+
+picker: {
+  height: 48,
+  width: "100%",
+  color: '#1e293b',
+  fontSize: 16,
+  fontWeight: '500',
+},
+
+// Novo estilo para chips em grid
+chipGrid: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginBottom: 4,
+},
 });

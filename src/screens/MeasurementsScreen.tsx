@@ -362,6 +362,29 @@ export default function MeasurementsScreen() {
     });
   };
 
+  // Função para obter o texto do filtro de tempo
+  const getTimeFilterText = (filter: string) => {
+    switch (filter) {
+      case "all": return "Desde sempre";
+      case "1y": return "1 ano";
+      case "6m": return "6 meses";
+      case "3m": return "3 meses";
+      default: return "Desde sempre";
+    }
+  };
+
+  // Função para obter o texto da métrica
+  const getMetricText = (metric: string) => {
+    switch (metric) {
+      case "weight": return "Peso";
+      case "height": return "Altura";
+      case "bodyFat": return "Gordura corporal";
+      case "muscleMass": return "Massa muscular";
+      case "visceralFat": return "Gordura visceral";
+      default: return "Peso";
+    }
+  };
+
   return (
     <>
     <ScrollView style={styles.container}>
@@ -389,12 +412,16 @@ export default function MeasurementsScreen() {
           </Picker>
         </View>
         {/* Botão de adicionar */}
-        <Ionicons
-            name="add-circle-outline"
-            size={40}
-            color="#000"
-            onPress={() => setShowMeasuresModal(true)}
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={() => setShowMeasuresModal(true)}
+        >
+          <Ionicons
+            name="add"
+            size={24}
+            color="#ffffff"
           />
+        </TouchableOpacity>
 
           <MeasuresModal
             visible={showMeasuresModal}
@@ -496,36 +523,87 @@ export default function MeasurementsScreen() {
 
       {/* Gráficos */}
       <Text style={styles.subTitle}>Progresso</Text>
-      <View style={styles.filterRow}>
-        {/* Dropdown do tempo */}
-        <View style={styles.dropdownWrapper}>
-          <Picker
-            selectedValue={timeFilter}
-            onValueChange={(value) => setTimeFilter(value)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Desde sempre" value="all" />
-            <Picker.Item label="1 ano" value="1y" />
-            <Picker.Item label="6 meses" value="6m" />
-            <Picker.Item label="3 meses" value="3m" />
-          </Picker>
+      
+      {/* Chips de Filtros */}
+      <View style={styles.chipsContainer}>
+        <View style={styles.chipRow}>
+          <Text style={styles.chipRowLabel}>Período:</Text>
+          <View style={styles.chipGrid}>
+            {[
+              { key: "all", label: "Desde sempre" },
+              { key: "1y", label: "1 ano" },
+              { key: "6m", label: "6 meses" },
+              { key: "3m", label: "3 meses" }
+            ].map((item) => (
+              <TouchableOpacity
+                key={item.key}
+                style={[
+                  styles.chip,
+                  timeFilter === item.key && styles.chipActive
+                ]}
+                onPress={() => setTimeFilter(item.key as any)}
+              >
+                <Text style={[
+                  styles.chipText,
+                  timeFilter === item.key && styles.chipTextActive
+                ]}>
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
-        {/* Dropdown da métrica */}
-        <View style={styles.dropdownWrapper}>
-          <Picker
-            selectedValue={selectedMetric}
-            onValueChange={(value) => setSelectedMetric(value)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Peso" value="weight" />
-            <Picker.Item label="Altura" value="height" />
-            <Picker.Item label="Gordura corporal" value="bodyFat" />
-            <Picker.Item label="Massa muscular" value="muscleMass" />
-            <Picker.Item label="Gordura visceral" value="visceralFat" />
-          </Picker>
+        <View style={styles.chipRow}>
+          <Text style={styles.chipRowLabel}>Métrica:</Text>
+          <View style={styles.chipGrid}>
+            {[
+              { key: "weight", label: "Peso" },
+              { key: "height", label: "Altura" },
+              { key: "bodyFat", label: "Gordura corporal" }
+            ].map((item) => (
+              <TouchableOpacity
+                key={item.key}
+                style={[
+                  styles.chip,
+                  selectedMetric === item.key && styles.chipActive
+                ]}
+                onPress={() => setSelectedMetric(item.key as any)}
+              >
+                <Text style={[
+                  styles.chipText,
+                  selectedMetric === item.key && styles.chipTextActive
+                ]}>
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={styles.chipGrid}>
+            {[
+              { key: "muscleMass", label: "Massa muscular" },
+              { key: "visceralFat", label: "Gordura visceral" }
+            ].map((item) => (
+              <TouchableOpacity
+                key={item.key}
+                style={[
+                  styles.chip,
+                  selectedMetric === item.key && styles.chipActive
+                ]}
+                onPress={() => setSelectedMetric(item.key as any)}
+              >
+                <Text style={[
+                  styles.chipText,
+                  selectedMetric === item.key && styles.chipTextActive
+                ]}>
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </View>
+
       {!filteredHistory || filteredHistory.length === 0 ? (
       <View style={{ alignItems: "center", marginVertical: 16 }}>
         <Text style={{ color: "#6b7280", fontStyle: "italic" }}>
@@ -533,22 +611,24 @@ export default function MeasurementsScreen() {
         </Text>
       </View>
     ) : (
-      <LineChart
-        data={chartData}
-        width={screenWidth}
-        height={220}
-        chartConfig={{
-          backgroundColor: "#fff",
-          backgroundGradientFrom: "#fff",
-          backgroundGradientTo: "#fff",
-          decimalPlaces: 1,
-          color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
-          style: { borderRadius: 16 },
-        }}
-        style={{ marginVertical: 16, borderRadius: 16 }}
-        bezier
-      />
+      <View style={styles.chartContainer}>
+        <LineChart
+          data={chartData}
+          width={screenWidth - 32}
+          height={220}
+          chartConfig={{
+            backgroundColor: "#fff",
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            decimalPlaces: 1,
+            color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
+            style: { borderRadius: 16 },
+          }}
+          style={{ borderRadius: 16 }}
+          bezier
+        />
+      </View>
     )}
     </ScrollView>
 

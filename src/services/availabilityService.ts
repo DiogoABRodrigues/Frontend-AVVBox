@@ -1,8 +1,9 @@
 // frontend/services/availabilityService.ts
 import axios from "axios";
 import { Availability } from "../models/Availability";
+import { API_BASE_URL } from "../../config";
 
-const API_URL = "http://192.168.1.184:3000/availability";
+const API_URL = `${API_BASE_URL}/availability`;
 
 export const availabilityService = {
   async getByPT(ptId: string): Promise<Availability> {
