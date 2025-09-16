@@ -124,7 +124,7 @@ export default function MeasuresModal({
             style={[styles.actionButton, styles.actionLeft]}
             onPress={handleSave} // chama a função que já converte para número
             >
-            <Text style={styles.actionButtonText}>Salvar</Text>
+            <Text style={styles.actionButtonText}>Guardar</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

@@ -1,320 +1,342 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
-  // Container Principal
-  container: {
-    flex: 1,
-    backgroundColor: '#f8fafc',
-    paddingHorizontal: 16,
-  },
-
-  // Header
-  titleHeader: {
-    paddingVertical: 20,
-    paddingBottom: 16,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#1e293b',
-    textAlign: 'left',
-  },
-
-  // Ações Header
-  actionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  actionButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: '#2563eb',
-    borderRadius: 10,
-    shadowColor: '#2563eb',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-    minWidth: 100,
-    alignItems: 'center',
-  },
-  actionButtonText: {
-    color: '#ffffff',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  clearButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: '#ffffff',
-    borderColor: '#ef4444',
-    borderWidth: 2,
-    borderRadius: 10,
-    minWidth: 100,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  clearButtonText: {
-    color: '#ef4444',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-
-  // Separador
-  separator: {
-    height: 1,
-    backgroundColor: '#e2e8f0',
-    marginVertical: 16,
-  },
-
-  // Lista de Notificações
-  notificationsList: {
-    flex: 1,
-  },
-  notificationItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: '#ffffff',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  notificationUnread: {
-    backgroundColor: '#f0f9ff',
-    borderColor: '#3b82f6',
-    borderLeftWidth: 4,
-    borderLeftColor: '#3b82f6',
-  },
-  notificationContent: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  notificationTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#64748b',
-    marginBottom: 4,
-  },
-  notificationTitleUnread: {
-    color: '#1e293b',
-    fontWeight: '700',
-  },
-  notificationBody: {
-    fontSize: 14,
-    color: '#64748b',
-    lineHeight: 20,
-    marginBottom: 8,
-  },
-  notificationDate: {
-    fontSize: 12,
-    color: '#94a3b8',
-    fontWeight: '500',
-  },
-
-  // Estado Vazio
-  emptyStateContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 60,
-    paddingHorizontal: 40,
-  },
-  emptyStateTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#64748b',
-    marginTop: 16,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptyStateText: {
-    fontSize: 16,
-    color: '#94a3b8',
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-
-  // Modal Styles
+  // Modal Overlay
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backgroundColor: "rgba(15, 23, 42, 0.7)", // Darker, more modern overlay
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
   },
+  
+  // Modal Container
   modalContainer: {
     width: "100%",
-    maxWidth: 400,
+    maxWidth: 420,
+    maxHeight: height * 0.85, // Responsive height
     backgroundColor: "#ffffff",
-    borderRadius: 16,
+    borderRadius: 20, // More rounded for modern feel
     padding: 24,
     shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 10,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 20,
-    textAlign: "center",
-    color: '#1e293b',
+    shadowOpacity: 0.3,
+    shadowRadius: 25,
+    shadowOffset: { width: 0, height: 15 },
+    elevation: 15,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
   },
 
-  // Form Inputs
+  // Modal Title
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 24,
+    textAlign: "center",
+    color: '#1e293b',
+    letterSpacing: -0.5,
+  },
+
+  // Form Labels
   label: {
-    marginBottom: 8,
     fontSize: 14,
     fontWeight: "600",
     color: '#374151',
+    marginBottom: 8,
+    marginTop: 4,
+    letterSpacing: 0.5,
   },
+
+  // Input Fields
   modalInput: {
-    borderWidth: 1,
-    borderColor: "#d1d5db",
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: "#e2e8f0",
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    marginBottom: 20,
     fontSize: 16,
-    backgroundColor: "#f9fafb",
-    color: '#374151',
+    backgroundColor: "#f8fafc",
+    color: '#1e293b',
+    fontWeight: '500',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  modalInputFocused: {
+    borderColor: "#2563eb",
+    backgroundColor: "#f0f9ff",
+    shadowColor: '#2563eb',
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
   },
   bodyInput: {
     height: 100,
     textAlignVertical: 'top',
+    paddingTop: 14,
   },
 
-  // Recipient Options
+  // Recipient Selection
   recipientButtons: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    marginBottom: 16,
-    gap: 8,
+    marginBottom: 20,
+    backgroundColor: '#f1f5f9',
+    borderRadius: 14,
+    padding: 4,
+    gap: 4,
   },
   recipientButton: {
     flex: 1,
-    minWidth: 80,
-    padding: 12,
-    borderWidth: 2,
-    borderColor: "#d1d5db",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: '#f9fafb',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    minHeight: 44,
   },
   recipientSelected: {
     backgroundColor: "#dbeafe",
-    borderColor: "#3b82f6",
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   recipientButtonText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#6b7280',
+    color: '#64748b',
+    textAlign: 'center',
   },
   recipientButtonTextSelected: {
-    color: '#1e40af',
+    color: '#ffffff',
+    fontWeight: '700',
   },
 
-  // User List
+  // User List Container
   userListContainer: {
-    maxHeight: 200,
-    marginTop: 12,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 10,
-    backgroundColor: '#f9fafb',
+    maxHeight: 220,
+    marginBottom: 24,
+    borderRadius: 14,
+    backgroundColor: '#f8fafc',
+    borderWidth: 2,
+    borderColor: '#e2e8f0',
+    overflow: 'hidden',
   },
+  
+  // Individual User Items in FlatList
   userItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
+    backgroundColor: '#ffffff',
   },
   userItemLast: {
     borderBottomWidth: 0,
   },
   userItemSelected: {
     backgroundColor: '#dbeafe',
+    borderLeftWidth: 4,
+    borderLeftColor: '#2563eb',
   },
   userItemText: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#374151',
-    marginLeft: 8,
+    fontWeight: '500',
+    marginLeft: 12,
+  },
+  userItemTextSelected: {
+    color: '#1e40af',
+    fontWeight: '600',
+  },
+  
+  // Selection Indicator
+  selectionIndicator: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#d1d5db',
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectionIndicatorSelected: {
+    backgroundColor: '#2563eb',
+    borderColor: '#2563eb',
+  },
+  selectionDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
   },
 
-  // Action Buttons
+  // Action Buttons Row
   actionRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 24,
+    marginTop: 8,
     gap: 12,
   },
+  
+  // Action Buttons
   actionLeft: {
     flex: 1,
   },
   actionRight: {
     flex: 1,
   },
-  modalActionButton: {
-    paddingVertical: 14,
-    borderRadius: 10,
+  actionButton: {
+    flex: 1,
+    backgroundColor: "#2563eb",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginRight: 8,
+  },
+  actionButtonText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#ffffff",
+    letterSpacing: 0.3,
+  },
+  clearButton: {
+    flex: 1,
+    backgroundColor: "#e5e7eb",
+    paddingVertical: 12,
+    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
   },
-  modalPrimaryButton: {
-    backgroundColor: "#2563eb",
-    shadowColor: '#2563eb',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  modalSecondaryButton: {
-    backgroundColor: "#f8fafc",
-    borderWidth: 2,
-    borderColor: '#d1d5db',
-  },
-  modalButtonText: {
+  clearButtonText: {
+    color: "#374151",
+    fontWeight: "bold",
     fontSize: 16,
-    fontWeight: "600",
-  },
-  modalPrimaryButtonText: {
-    color: "#ffffff",
-  },
-  modalSecondaryButtonText: {
-    color: "#6b7280",
   },
 
-  // Swipe Actions
-  swipeAction: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    marginBottom: 12,
+  // Disabled States
+  actionButtonDisabled: {
+    backgroundColor: '#e2e8f0',
+    shadowOpacity: 0,
+    elevation: 0,
   },
-  deleteAction: {
-    backgroundColor: "#ef4444",
-    borderRadius: 12,
-    minWidth: 80,
-    height: '100%',
+  actionButtonTextDisabled: {
+    color: '#94a3b8',
+  },
+
+  // Loading State
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 20,
+  },
+  
+  // Responsive Design for Smaller Screens
+  ...(width < 350 && {
+    modalContainer: {
+      margin: 16,
+      padding: 20,
+    },
+    modalTitle: {
+      fontSize: 20,
+      marginBottom: 20,
+    },
+    recipientButtons: {
+      flexDirection: 'column',
+      gap: 8,
+      backgroundColor: 'transparent',
+      padding: 0,
+    },
+    recipientButton: {
+      backgroundColor: '#f8fafc',
+      borderWidth: 2,
+      borderColor: '#e2e8f0',
+      borderRadius: 12,
+    },
+    actionRow: {
+      flexDirection: 'column',
+      gap: 12,
+    },
+  }),
+
+  // Animation Preparation Classes
+  modalEntering: {
+    transform: [{ scale: 0.9 }],
+    opacity: 0,
+  },
+  modalEntered: {
+    transform: [{ scale: 1 }],
+    opacity: 1,
+  },
+
+  // Additional Utility Styles
+  textCenter: {
+    textAlign: 'center',
+  },
+  textBold: {
+    fontWeight: '700',
+  },
+  textSemiBold: {
+    fontWeight: '600',
+  },
+  
+  // Counter Badge (for selected users)
+  counterBadge: {
+    backgroundColor: '#ef4444',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    minWidth: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  counterBadgeText: {
+    color: '#ffffff',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+
+  // Success/Error States
+  successBorder: {
+    borderColor: '#10b981',
+  },
+  errorBorder: {
+    borderColor: '#ef4444',
+  },
+  
+  // Header for User List
+  userListHeader: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#f1f5f9',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+  },
+  userListHeaderText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#64748b',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
 });
