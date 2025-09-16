@@ -23,6 +23,8 @@ import Popup from '../componentes/Popup';
 import avvbLogo from '../../assets/avvb.png';
 import axios from 'axios';
 import LoginTransition from './LoginTransition';
+import { API_BASE_URL } from "../../config";
+
 interface PopupState {
   visible: boolean;
   title?: string;
@@ -124,7 +126,7 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://192.168.1.184:3000/users/login', { 
+      const response = await axios.post(`${API_BASE_URL}/users/login`, { 
         login: email.trim(),
         password 
       });
@@ -138,7 +140,7 @@ export default function LoginScreen() {
           'Conta não verificada',
           async () => {
             try {
-              await axios.post(`http://192.168.1.184:3000/users/resend-verification`, { email: user.email });
+              await axios.post(`${API_BASE_URL}/users/resend-verification`, { email: user.email });
               showPopup('Email de verificação reenviado!', 'success', 'Sucesso');
             } catch (err: any) {
               showPopup(err.response?.data?.message || 'Erro ao reenviar email', 'error', 'Erro');

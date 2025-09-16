@@ -1,7 +1,9 @@
 // frontend/services/measuresService.ts
 import axios from "axios";
-import { Measures } from "../models/Measures";  
-const API_URL = "http://192.168.1.184:3000/measures";
+import { Measures } from "../models/Measures"; 
+import { API_BASE_URL } from "../../config"; 
+
+const API_URL = `${API_BASE_URL}/measures`;
 
 export const measuresService = {
   async getByUser(userId: string): Promise<Measures[]> {

@@ -1,7 +1,8 @@
 // frontend/services/settingsService.ts
 import axios from "axios";
-import { Settings } from "../models/Settings";  
-const API_URL = "http://192.168.1.184:3000/settings";
+import { Settings } from "../models/Settings";
+import { API_BASE_URL } from "../../config";
+const API_URL = `${API_BASE_URL}/settings`;
 
 export const settingsService = {
   async getByUser(userId: string): Promise<Settings> {
