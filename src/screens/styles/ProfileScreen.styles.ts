@@ -705,4 +705,8 @@ addTimeButtonDisabled: {
 addTimeButtonTextDisabled: {
   color: '#9ca3af',
 },
+timeInputError: {
+  borderColor: '#dc2626',
+  borderWidth: 1,
+},
 });

@@ -151,7 +151,8 @@ import { Availability } from "../models/Availability";
     const fetchAvailability = async () => {
       if (!isAdmin || !isPT) return;
       try {
-        const availability = await availabilityService.getByPT(user.id);
+        const availability = await availabilityService.getByPT(user.id)
+
         if (availability) {
           setAvailability(availability);
         }
@@ -608,6 +609,29 @@ import { Availability } from "../models/Availability";
       setAthletesModalVisible(false);
     };
 
+    const validateTimeFormat = (time: string): boolean => {
+      // Verifica se está no formato HH:MM
+      const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+      return timeRegex.test(time);
+    };
+
+    const formatTimeInput = (text: string): string => {
+      // Remove caracteres não numéricos
+      let cleaned = text.replace(/[^0-9]/g, '');
+      
+      // Limita a 4 dígitos
+      if (cleaned.length > 4) {
+        cleaned = cleaned.slice(0, 4);
+      }
+      
+      // Adiciona o ":" automaticamente após 2 dígitos
+      if (cleaned.length > 2) {
+        return `${cleaned.slice(0, 2)}:${cleaned.slice(2)}`;
+      }
+      
+      return cleaned;
+    };
+
     const addTimeRange = (day: keyof Omit<Availability, '_id' | 'PT' | 'maxAthletesPerHour'>) => {
       setAvailability(prev => ({
         ...prev,
@@ -637,16 +661,18 @@ import { Availability } from "../models/Availability";
       field: 'start' | 'end', 
       value: string
     ) => {
-      setAvailability(prev => ({
-        ...prev,
-        [day]: {
-          ...prev[day],
-          intervals: prev[day].intervals.map((range, i) => 
-            i === index ? { ...range, [field]: value } : range
-          )
-        }
-      }));
-    };
+    // Formata o input automaticamente
+    const formattedValue = formatTimeInput(value);
+    
+    // Só atualiza se o formato for válido ou estiver em construção
+    if (formattedValue.length <= 5) {
+      setAvailability(prev => {
+        const newAvailability = {...prev};
+        newAvailability[day].intervals[index][field] = formattedValue;
+        return newAvailability;
+      });
+    }
+  };
 
     const toggleWorkingDay = (day: keyof Omit<Availability, '_id' | 'PT' | 'maxAthletesPerHour'>) => {
       setAvailability(prev => ({
@@ -661,6 +687,42 @@ import { Availability } from "../models/Availability";
 
     const handleSaveAvailability = async () => {
       try {
+
+        // checl if end is after start in each range
+        for (const day of Object.keys(availability) as (keyof Omit<Availability, '_id' | 'PT' | 'maxAthletesPerHour'>)[]) {
+          if (availability[day].working) {
+            for (const range of availability[day].intervals) {
+              if (range.start >= range.end) {
+                setPopup({
+                  visible: true,
+                  type: "error",
+                  title: "Erro",
+                  message: `O horário de início não pode ser igual ou superior ao horário de término.`,
+                  onConfirm: undefined,
+                });
+                return;
+              }
+            }
+          }
+        }
+
+        //check format of time inputs
+        for (const day of Object.keys(availability) as (keyof Omit<Availability, '_id' | 'PT' | 'maxAthletesPerHour'>)[]) {
+          if (availability[day].working) {
+            for (const range of availability[day].intervals) {
+              if (!validateTimeFormat(range.start) || !validateTimeFormat(range.end)) {
+                setPopup({
+                  visible: true,
+                  type: "error",
+                  title: "Erro",
+                  message: `Formato de hora inválido. Use HH:MM.`,
+                  onConfirm: undefined,
+                });
+                return;
+              }
+            }
+          }
+        }
         const dataToSave = {
           ...availability,
           PT: user?.id || "",
@@ -954,7 +1016,6 @@ import { Availability } from "../models/Availability";
                                     ]}
                                     value={range.start}
                                     onChangeText={(val) => updateTimeRange(day, index, 'start', val)}
-                                    placeholder="08:00"
                                     maxLength={5}
                                     editable={availability[day].working}
                                   />
@@ -969,7 +1030,6 @@ import { Availability } from "../models/Availability";
                                     ]}
                                     value={range.end}
                                     onChangeText={(val) => updateTimeRange(day, index, 'end', val)}
-                                    placeholder="17:00"
                                     maxLength={5}
                                     editable={availability[day].working}
                                   />
