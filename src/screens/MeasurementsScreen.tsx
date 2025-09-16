@@ -215,7 +215,8 @@ export default function MeasurementsScreen() {
   };
 
   const filterHistory = () => {
-    if (!historyDates) return [];
+    if (!historyDates || historyDates.length === 0) return [];
+    
     const now = new Date();
     let cutoff: Date | null = null;
 
@@ -236,9 +237,11 @@ export default function MeasurementsScreen() {
         cutoff = null;
     }
 
-    return cutoff
+    const filtered = cutoff
       ? historyDates.filter((m) => new Date(m.date) >= cutoff)
       : historyDates;
+    
+    return filtered;
   };
 
   const filteredHistory = filterHistory();
@@ -247,15 +250,21 @@ export default function MeasurementsScreen() {
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
+  // Verificar se há dados válidos para a métrica selecionada
+  const hasValidData = historyDatesSorted.some(m => {
+    const value = m[selectedMetric];
+    return typeof value === "number" && isFinite(value) && value > 0;
+  });
+
   const labels = historyDatesSorted.map((m) =>
     new Date(m.date).toLocaleDateString("pt-PT", {
       month: "short",
-      year: "2-digit",
+      day: "numeric",
     })
   );
 
-  // reduzir labels (máx 6)
-  const step = Math.ceil(labels.length / 6);
+  // Reduzir labels para evitar sobreposição
+  const step = Math.max(1, Math.ceil(labels.length / 6));
   const reducedLabels = labels.map((l, i) => (i % step === 0 ? l : ""));
 
   const chartData = {
@@ -264,11 +273,10 @@ export default function MeasurementsScreen() {
       {
         data: historyDatesSorted.map((m) => {
           const value = m[selectedMetric];
-          return typeof value === "number" && isFinite(value) ? value : null;
-
+          return typeof value === "number" && isFinite(value) && value > 0 ? value : 0;
         }),
         color: () => "#2563eb",
-        strokeWidth: 2,
+        strokeWidth: 3,
       },
     ],
   };
@@ -560,27 +568,7 @@ export default function MeasurementsScreen() {
             {[
               { key: "weight", label: "Peso" },
               { key: "height", label: "Altura" },
-              { key: "bodyFat", label: "Gordura corporal" }
-            ].map((item) => (
-              <TouchableOpacity
-                key={item.key}
-                style={[
-                  styles.chip,
-                  selectedMetric === item.key && styles.chipActive
-                ]}
-                onPress={() => setSelectedMetric(item.key as any)}
-              >
-                <Text style={[
-                  styles.chipText,
-                  selectedMetric === item.key && styles.chipTextActive
-                ]}>
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <View style={styles.chipGrid}>
-            {[
+              { key: "bodyFat", label: "Gordura corporal" },
               { key: "muscleMass", label: "Massa muscular" },
               { key: "visceralFat", label: "Gordura visceral" }
             ].map((item) => (
@@ -605,31 +593,52 @@ export default function MeasurementsScreen() {
       </View>
 
       {!filteredHistory || filteredHistory.length === 0 ? (
-      <View style={{ alignItems: "center", marginVertical: 16 }}>
-        <Text style={{ color: "#6b7280", fontStyle: "italic" }}>
-          Não existem registos de medidas
-        </Text>
-      </View>
-    ) : (
-      <View style={styles.chartContainer}>
-        <LineChart
-          data={chartData}
-          width={screenWidth - 32}
-          height={220}
-          chartConfig={{
-            backgroundColor: "#fff",
-            backgroundGradientFrom: "#fff",
-            backgroundGradientTo: "#fff",
-            decimalPlaces: 1,
-            color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
-            style: { borderRadius: 16 },
-          }}
-          style={{ borderRadius: 16 }}
-          bezier
-        />
-      </View>
-    )}
+        <View style={styles.emptyStateContainer}>
+          <Text style={styles.emptyStateText}>
+            Não existem registos de medidas para o período selecionado
+          </Text>
+        </View>
+      ) : !hasValidData ? (
+        <View style={styles.emptyStateContainer}>
+          <Text style={styles.emptyStateText}>
+            Não há dados disponíveis para a métrica &quot;{getMetricText(selectedMetric)}&quot; no período selecionado
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.chartContainer}>
+          <LineChart
+            data={chartData}
+            width={screenWidth - 32}
+            height={220}
+            chartConfig={{
+              backgroundColor: "#fff",
+              backgroundGradientFrom: "#fff",
+              backgroundGradientTo: "#fff",
+              decimalPlaces: selectedMetric === "height" ? 0 : 1,
+              color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
+              style: { borderRadius: 16 },
+              propsForDots: {
+                r: "4",
+                strokeWidth: "2",
+                stroke: "#2563eb"
+              }
+            }}
+            style={{ borderRadius: 16 }}
+            bezier
+            withDots
+            withInnerLines={true}
+            withOuterLines={true}
+            withVerticalLines={true}
+            withHorizontalLines={true}
+          />
+          <View style={styles.chartInfo}>
+            <Text style={styles.chartInfoText}>
+              {getMetricText(selectedMetric)} • {getTimeFilterText(timeFilter)}
+            </Text>
+          </View>
+        </View>
+      )}
     </ScrollView>
 
     {/* POPUP sempre fora do ScrollView */}
