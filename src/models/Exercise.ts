@@ -1,17 +1,25 @@
 export interface Exercise {
-  name: string;   // ex: "Supino"
-  weight: number; // ex: 45 (kg)
-  reps?: number;  // ex: 10
-  sets?: number;  // ex: 4
+  _id?: string;
+  athleteId?: string;
+  group?: string; // Só para grupos normais
+  name?: string;
+  weight?: number;
+  reps?: number;
+  sets?: number;
+  details?: string; // Só para extra
 }
 
 export interface MuscleGroup {
   exercises: Exercise[];
 }
 
+export interface ExtraGroup {
+  exercises: Exercise[];
+}
+
 export interface Weights {
   _id?: string;
-  athlete: string; // ID do User (ObjectId no backend)
+  athlete: string;
   triceps: MuscleGroup;
   biceps: MuscleGroup;
   shoulders: MuscleGroup;
@@ -20,6 +28,7 @@ export interface Weights {
   legs: MuscleGroup;
   abs: MuscleGroup;
   cardio: MuscleGroup;
+  extra: ExtraGroup; 
   createdAt?: string;
   updatedAt?: string;
 }
