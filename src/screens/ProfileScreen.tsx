@@ -385,29 +385,7 @@ import { Availability } from "../models/Availability";
         if (!isAdmin || !user) return;
         const fetched = await userService.getAllAll();
 
-        interface FetchedUser {
-          _id: string;
-          name: string;
-          role: string;
-          active: boolean;
-          phoneNumber?: number | null;
-          email?: string | null;
-          atheletes: string[];
-          coach: string[];
-        }
-        const usersData: User[] = (fetched as FetchedUser[]).map((a) => ({
-          _id: a._id,
-          id: a._id,
-          name: a.name,
-          phoneNumber: a.phoneNumber || null,
-          email: a.email || null,
-          role: ["atleta", "PT", "Admin"].includes(a.role) ? (a.role as "atleta" | "PT" | "Admin") : "atleta",
-          active: a.active,
-          atheletes: a.atheletes || [],
-          coach: a.coach || [],
-        }));
-
-        setUsers(usersData.sort((a, b) => a.name.localeCompare(b.name)));
+        setUsers(fetched.sort((a, b) => a.name.localeCompare(b.name)));
       } catch (err) {
         console.error("Erro ao ir buscar users", err);
       }
@@ -415,34 +393,20 @@ import { Availability } from "../models/Availability";
 
     const fetchPtsAndAdmins = async () => {
       try {
+
+        if (user.role === "atleta" || user.role === "PT") {
+          const staff = await userService.getStaff();
+          setPtsAndAdmins(staff);
+          return;
+        }
         if (users.length > 0) {
           const filtered = users.filter((u) => (u.role === "PT" || u.role === "Admin") && u.active);
           setPtsAndAdmins(filtered);
           return;
         }
-        const fetched = await userService.getAll();
+        const fetched = await userService.getStaff();
 
-        interface FetchedUser {
-          _id: string;
-          name: string;
-          role: string;
-          active: boolean;
-          phoneNumber?: number | null;
-          email?: string | null;
-        }
-        const usersData: User[] = (fetched as FetchedUser[])
-          .filter((u) => (u.role === "PT" || u.role === "Admin") && u.active)
-          .map((a) => ({
-            _id: a._id,
-            id: a._id,
-            name: a.name,
-            phoneNumber: a.phoneNumber || null,
-            role: ["atleta", "PT", "Admin"].includes(a.role) ? (a.role as "atleta" | "PT" | "Admin") : "atleta",
-            active: a.active,
-            email: a.email || null,
-          }));
-
-        setPtsAndAdmins(usersData);
+        setPtsAndAdmins(fetched);
       } catch (err) {
         console.error("Erro ao ir buscar PTs e Admins", err);
       }
@@ -558,16 +522,17 @@ import { Availability } from "../models/Availability";
       setRoleModalVisible(false);
     };
 
-    const savePTsChange = async (selectedPtId: string) => {
+    const savePTsChange = async (selectedPtIds: string[]) => {
       if (relationTarget?.user) {
         try {
-          await userService.update(relationTarget.user._id, { coach: [selectedPtId] });
-
+          const selectedPts = users.filter(u => selectedPtIds.includes(u._id));
+          await userService.update(relationTarget.user._id, { coach: selectedPts });
+    
           setPopup({
             visible: true,
             type: "success",
             title: "Sucesso",
-            message: `O PT do utilizador ${relationTarget.user.name} foi alterado com sucesso.`,
+            message: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
             onConfirm: undefined,
           });
           fetchUsers();
@@ -576,7 +541,7 @@ import { Availability } from "../models/Availability";
             visible: true,
             type: "error",
             title: "Erro",
-            message: "Não foi possível alterar o PT do utilizador.",
+            message: "Não foi possível alterar os PTs do utilizador.",
             onConfirm: undefined,
           });
         }
@@ -1259,12 +1224,12 @@ import { Availability } from "../models/Availability";
               onClose={() => setPtsModalVisible(false)}
               users={ptsAndAdmins}
               selected={
-                relationTarget?.type === "pts" &&
-                relationTarget.user &&
-                Array.isArray(relationTarget.user.coach)
-                  ? relationTarget.user.coach
-                  : []
-              }
+    relationTarget?.type === "pts" &&
+    relationTarget.user &&
+    Array.isArray(relationTarget.user.coach)
+      ? relationTarget.user.coach.map(c => typeof c === "string" ? c : c._id)
+      : []
+  }
               onConfirm={savePTsChange}
             />
 

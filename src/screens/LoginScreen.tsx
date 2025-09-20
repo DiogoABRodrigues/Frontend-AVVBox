@@ -21,9 +21,9 @@ import { userService } from '../services/usersService';
 import { styles } from './styles/LoginScreen.styles';
 import Popup from '../componentes/Popup';
 import avvbLogo from '../../assets/avvb.png';
-import axios from 'axios';
 import LoginTransition from './LoginTransition';
 import { API_BASE_URL } from "../../config";
+import api from "../../api";
 
 interface PopupState {
   visible: boolean;
@@ -126,13 +126,15 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${API_BASE_URL}/users/login`, { 
+      const response = await api.post(`${API_BASE_URL}/users/login`, { 
         login: email.trim(),
         password 
       });
 
-      const user = response.data.user;
-
+      const { token, user } = response.data;
+      await AsyncStorage.setItem("token", token); // interceptor usa este token
+      login(user, rememberMe); // salva user no context
+      console.log('User data:', user);
       if (!user.verified) {
         showPopup(
           'Utilizador à espera de autenticação',
@@ -140,13 +142,18 @@ export default function LoginScreen() {
           'Conta não verificada',
           async () => {
             try {
-              await axios.post(`${API_BASE_URL}/users/resend-verification`, { email: user.email });
+              await api.post(`${API_BASE_URL}/users/resend-verification`, { email: user.email });
               showPopup('Email de verificação reenviado!', 'success', 'Sucesso');
             } catch (err: any) {
               showPopup(err.response?.data?.message || 'Erro ao reenviar email', 'error', 'Erro');
             }
           }
         );
+        return;
+      }
+
+      if (!user.active) {
+        showPopup('Conta desativada. Contacte o suporte.', 'error', 'Conta desativada');
         return;
       }
 

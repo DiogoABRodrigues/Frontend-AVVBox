@@ -13,7 +13,7 @@ export interface Training {
   proposedBy: 'PT' | 'Athlete' | 'Admin';
   ptStatus: 'proposed' | 'accepted' | 'rejected';
   athleteStatus: 'proposed' | 'accepted' | 'rejected';
-  overallStatus: 'pending' | 'confirmed' | 'rejected';
+  overallStatus: 'pending' | 'confirmed' | 'rejected' | 'canceled';
 }
 
 export interface TrainingRequest {

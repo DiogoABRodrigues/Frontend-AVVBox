@@ -15,7 +15,6 @@ import { formatMeasurements } from "../utils/measureUtils";
 import { styles } from "./styles/MeasurementsScreen.styles";
 import { Measures } from "../models/Measures";
 import { LineChart } from "react-native-chart-kit";
-import { Picker } from "@react-native-picker/picker";
 import MeasuresModal from "../componentes/MeasuresModal";
 import Popup from "../componentes/Popup";
  
@@ -49,6 +48,8 @@ export default function MeasurementsScreen() {
   const [selectedMetric, setSelectedMetric] = useState<"weight" | "height" | "bodyFat" | "muscleMass" | "visceralFat">("weight");
 
   const [showMeasuresModal, setShowMeasuresModal] = useState(false);
+
+  const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
 
   const emptyMeasures = {
     weight: 0,
@@ -393,56 +394,52 @@ export default function MeasurementsScreen() {
     }
   };
 
-  return (
-    <>
+return (
+  <>
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Medidas</Text>
+        <TouchableOpacity onPress={async () => await fetchMeasures()}>
+          <Ionicons name="refresh-circle-outline" size={40} color="#1e293b" />
+        </TouchableOpacity>
       </View>
 
-      {/* Dropdown de atletas */}
-    {isPT && (
-      <>
-      <View style={styles.filterRow}>
-        <View style={styles.dropdownUsersWrapper}>
-          <Picker
-            selectedValue={selectedAthleteId}
-            onValueChange={(value) => setSelectedAthleteId(value)}
-            style={styles.picker}
+      {/* Filtro Row */}
+      {isPT && (
+        <View style={styles.filterRow}>
+          <View style={styles.dropdownSection}>
+            <TouchableOpacity
+              style={styles.dropdownButton}
+              onPress={() => setShowAthleteDropdown(!showAthleteDropdown)}
+            >
+              <Text style={styles.dropdownButtonText}>
+                {selectedAthleteId 
+                  ? athletes.find(a => a.id === selectedAthleteId)?.name 
+                  : 'Escolher atleta...'
+                }
+              </Text>
+              <Text style={styles.dropdownArrow}>
+                {showAthleteDropdown ? '▲' : '▼'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Botão de adicionar */}
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => setShowMeasuresModal(true)}
           >
-            {athletes.map((athlete) => (
-              <Picker.Item
-                key={athlete.id}
-                label={athlete.name}
-                value={athlete.id}
-              />
-            ))}
-          </Picker>
-        </View>
-        {/* Botão de adicionar */}
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={() => setShowMeasuresModal(true)}
-        >
-          <Ionicons
-            name="add"
-            size={24}
-            color="#ffffff"
-          />
-        </TouchableOpacity>
+            <Ionicons name="add" size={24} color="#ffffff" />
+          </TouchableOpacity>
 
           <MeasuresModal
             visible={showMeasuresModal}
             athleteName={athletes.find(a => a.id === selectedAthleteId)?.name || "Atleta"}
             onClose={() => setShowMeasuresModal(false)}
-            onSave={(data) => {
-              console.log("Salvar medidas:", data);
-              handleSaveMeasures(data);
-            }}
+            onSave={handleSaveMeasures}
           />
         </View>
-      </>
-    )}
+      )}
 
       {/* Medidas atuais */}
       <View style={styles.currentMeasurements}>
@@ -450,8 +447,7 @@ export default function MeasurementsScreen() {
           <View key={idx} style={styles.measureItem}>
             <Text style={styles.measureLabel}>{m.label}</Text>
             <View style={styles.measureValueContainer}>
-              {// add kg ou m ou % conforme a medida e nada se for visceralFat
-              m.label === "Altura" ? (
+              {m.label === "Altura" ? (
                 <Text style={styles.measureValue}>{m.current} cm</Text>
               ) : m.label === "Peso" ? (
                 <Text style={styles.measureValue}>{m.current} Kg</Text>
@@ -461,10 +457,8 @@ export default function MeasurementsScreen() {
                 <Text style={styles.measureValue}>{m.current} %</Text>
               )}
 
-              {/* Renderizar ícone (seta, linha ou estrela) */}
               {renderIcon(m)}
               
-              {/* Mostrar delta apenas se não for zero e não atingiu goal */}
               {m.delta !== 0 && !m.reachedGoal && (
                 <Text style={[
                   styles.deltaText, 
@@ -478,6 +472,7 @@ export default function MeasurementsScreen() {
           </View>
         ))}
       </View>
+
       {/* Histórico */}
       <Text style={styles.subTitle}>Histórico</Text>
       <View style={styles.historyBox}>
@@ -492,35 +487,46 @@ export default function MeasurementsScreen() {
             {historyDates.map((m, idx) => (
               <TouchableOpacity
                 key={idx}
-                onPress={() =>
-                  setExpandedHistory(expandedHistory === m._id ? null : m._id)
-                }
-                style={{
-                  paddingVertical: 8,
-                  borderBottomWidth: idx === historyDates.length - 1 ? 0 : 1,
-                  borderBottomColor: "#eee",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
+                onPress={() => setExpandedHistory(expandedHistory === m._id ? null : m._id)}
+                style={styles.historyItem}
               >
-                <Text style={styles.historyDate}>
-                  {new Date(m.date).toLocaleDateString("pt-PT")}
-                </Text>
+                <View style={styles.historyActionContainer}>
+                  <Text style={styles.historyDate}>
+                    {new Date(m.date).toLocaleDateString("pt-PT")}
+                  </Text>
+                  
+                  {latest && m._id === latest._id && isDeletable(m.date) && (
+                    <TouchableOpacity 
+                      style={styles.deleteButton}
+                      onPress={() => confirmDelete(m._id)}
+                    >
+                      <Ionicons name="trash-outline" size={22} color="#ef4444" />
+                    </TouchableOpacity>
+                  )}
+                </View>
 
-                {/* Mostrar lixo apenas se for o último e tiver menos de 30 dias */}
-                {latest && m._id === latest._id && isDeletable(m.date) && (
-                <TouchableOpacity onPress={() => confirmDelete(m._id)}>
-                  <Ionicons name="trash-outline" size={22} color="#ef4444" />
-                </TouchableOpacity>
-                )}
                 {expandedHistory === m._id && (
-                  <View style={styles.historyDetails}>
-                    <Text>Peso: {m.weight ?? "-"} Kg</Text>
-                    <Text>Altura: {m.height ?? "-"} cm</Text>
-                    <Text>Gordura corporal: {m.bodyFat ?? "-"} %</Text>
-                    <Text>Massa muscular: {m.muscleMass ?? "-"} %</Text>
-                    <Text>Gordura visceral: {m.visceralFat ?? "-"}</Text>
+                  <View style={styles.expandedHistoryContainer}>
+                    <View style={styles.historyDetailRow}>
+                      <Text style={styles.historyDetailLabel}>Peso:</Text>
+                      <Text style={styles.historyDetailValue}>{m.weight ?? "-"} Kg</Text>
+                    </View>
+                    <View style={styles.historyDetailRow}>
+                      <Text style={styles.historyDetailLabel}>Altura:</Text>
+                      <Text style={styles.historyDetailValue}>{m.height ?? "-"} cm</Text>
+                    </View>
+                    <View style={styles.historyDetailRow}>
+                      <Text style={styles.historyDetailLabel}>Gordura corporal:</Text>
+                      <Text style={styles.historyDetailValue}>{m.bodyFat ?? "-"} %</Text>
+                    </View>
+                    <View style={styles.historyDetailRow}>
+                      <Text style={styles.historyDetailLabel}>Massa muscular:</Text>
+                      <Text style={styles.historyDetailValue}>{m.muscleMass ?? "-"} %</Text>
+                    </View>
+                    <View style={styles.historyDetailRow}>
+                      <Text style={styles.historyDetailLabel}>Gordura visceral:</Text>
+                      <Text style={styles.historyDetailValue}>{m.visceralFat ?? "-"}</Text>
+                    </View>
                   </View>
                 )}
               </TouchableOpacity>
@@ -545,16 +551,10 @@ export default function MeasurementsScreen() {
             ].map((item) => (
               <TouchableOpacity
                 key={item.key}
-                style={[
-                  styles.chip,
-                  timeFilter === item.key && styles.chipActive
-                ]}
+                style={[styles.chip, timeFilter === item.key && styles.chipActive]}
                 onPress={() => setTimeFilter(item.key as any)}
               >
-                <Text style={[
-                  styles.chipText,
-                  timeFilter === item.key && styles.chipTextActive
-                ]}>
+                <Text style={[styles.chipText, timeFilter === item.key && styles.chipTextActive]}>
                   {item.label}
                 </Text>
               </TouchableOpacity>
@@ -574,16 +574,10 @@ export default function MeasurementsScreen() {
             ].map((item) => (
               <TouchableOpacity
                 key={item.key}
-                style={[
-                  styles.chip,
-                  selectedMetric === item.key && styles.chipActive
-                ]}
+                style={[styles.chip, selectedMetric === item.key && styles.chipActive]}
                 onPress={() => setSelectedMetric(item.key as any)}
               >
-                <Text style={[
-                  styles.chipText,
-                  selectedMetric === item.key && styles.chipTextActive
-                ]}>
+                <Text style={[styles.chipText, selectedMetric === item.key && styles.chipTextActive]}>
                   {item.label}
                 </Text>
               </TouchableOpacity>
@@ -641,7 +635,40 @@ export default function MeasurementsScreen() {
       )}
     </ScrollView>
 
-    {/* POPUP sempre fora do ScrollView */}
+    {/* Dropdown overlay - FORA DO SCROLLVIEW */}
+    {isPT && showAthleteDropdown && (
+      <View style={styles.dropdownOverlay}>
+        <View style={styles.dropdownListContainer}>
+          <ScrollView nestedScrollEnabled={true} style={styles.dropdownScrollView}>
+            {athletes.map((athlete) => (
+              <TouchableOpacity
+                key={athlete.id}
+                style={[
+                  styles.dropdownItem,
+                  selectedAthleteId === athlete.id && styles.dropdownItemSelected
+                ]}
+                onPress={() => {
+                  setSelectedAthleteId(athlete.id);
+                  setShowAthleteDropdown(false);
+                }}
+              >
+                <Text style={[
+                  styles.dropdownItemText,
+                  selectedAthleteId === athlete.id && styles.dropdownItemTextSelected
+                ]}>
+                  {athlete.name}
+                </Text>
+                {selectedAthleteId === athlete.id && (
+                  <Text style={styles.checkmark}>✓</Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </View>
+    )}
+
+    {/* POPUP */}
     <Popup
       visible={popup.visible}
       type={popup.type as any}
@@ -652,5 +679,5 @@ export default function MeasurementsScreen() {
       onClose={() => setPopup(p => ({ ...p, visible: false }))}
     />
   </>
-  );
+);
 }
