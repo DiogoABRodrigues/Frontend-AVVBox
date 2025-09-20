@@ -154,6 +154,7 @@ export const styles = StyleSheet.create({
   
   exerciseActions: {
     flexDirection: 'row',
+    marginLeft: 12,
     gap: 8,
   },
   
@@ -486,4 +487,14 @@ dropdownList: {
       color: '#2563eb',
       fontWeight: '700',
     },
+  textArea: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  exerciseDetailsText: {
+    fontSize: 14,
+    color: '#64748b',
+    marginTop: 4,
+    lineHeight: 18,
+  },
 });
