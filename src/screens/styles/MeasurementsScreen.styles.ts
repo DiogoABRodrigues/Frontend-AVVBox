@@ -17,6 +17,10 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
     paddingTop: 8,
   },
+  teste: { 
+    flex: 1,
+    
+  },
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
@@ -25,6 +29,7 @@ export const styles = StyleSheet.create({
 
   // Filter Row (Dropdowns e botões)
   filterRow: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
@@ -71,14 +76,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 4,
     gap: 8,
   },
-  dropdownLabel: {
-    
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#64748b',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
   picker: {
     height: 56,
     width: "100%",
@@ -91,16 +88,15 @@ export const styles = StyleSheet.create({
   actionButton: {
     backgroundColor: '#2563eb',
     borderRadius: 16,
-    width: 56,
-    height: 56,
+    width: 51,
+    height: 51,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#2563eb',
     shadowOpacity: 0.4,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
     elevation: 6,
-    marginBottom: 9,
+    marginBottom: 20,
   },
 
   // Chips Container
@@ -127,7 +123,7 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
   },
   chip: {
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#ffffffff',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -153,7 +149,7 @@ export const styles = StyleSheet.create({
   chipText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#64748b',
+    color: '#29528bff',
   },
   chipTextActive: {
     color: '#ffffff',
@@ -165,7 +161,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', 
     flexWrap: 'wrap', 
     justifyContent: 'space-between', 
-    marginBottom: 24,
+    elevation: 0,
+    zIndex: 0,
+
   },
   measureItem: { 
     width: '48%', 
@@ -209,7 +207,7 @@ export const styles = StyleSheet.create({
     fontSize: 22, 
     fontWeight: '700', 
     color: '#1e293b',
-    marginTop: 24, 
+    marginTop: 10, 
     marginBottom: 16,
   },
 
@@ -429,5 +427,130 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     borderWidth: 1,
     borderColor: '#e5e7eb',
+  },
+  dropdownSection: {
+    flex: 1,
+    marginBottom: 20,
+    zIndex: 100,
+    position: "relative",
+    elevation: 100,
+  },
+
+  dropdownLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#475569',
+    marginBottom: 8,
+  },
+
+  dropdownButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderWidth: 2,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    shadowColor: '#64748b',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 4,
+  },
+
+  dropdownButtonText: {
+    fontSize: 15,
+    color: '#374151',
+    fontWeight: '500',
+    flex: 1,
+  },
+
+  dropdownArrow: {
+    fontSize: 12,
+    color: '#64748b',
+    fontWeight: '600',
+  },
+
+dropdownList: {
+  position: 'absolute',
+  top: "100%", // aparece logo abaixo do botão
+  backgroundColor: '#ffffff',
+  borderWidth: 1,
+  borderColor: '#e2e8f0',
+  borderRadius: 12,
+  shadowColor: '#1e293b',
+  shadowOpacity: 0.15,
+  shadowRadius: 12,
+  shadowOffset: { width: 0, height: 4 },
+  elevation: 1001,
+  maxHeight: 200, // 👈 limite
+  overflow: 'hidden', // 👈 evita passar do container
+  left: 15,
+  right: 45,
+  zIndex: 1001,
+},
+
+  dropdownListContainer: {
+    backgroundColor: '#ffffff',
+    top: 28,
+    position: 'absolute', 
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    shadowColor: '#1e293b',
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 1001,
+    maxHeight: 200,
+    right: 65,
+    left: 0,
+    overflow: 'hidden',
+  },
+
+  dropdownItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
+  },
+
+  dropdownItemSelected: {
+    backgroundColor: '#eff6ff',
+  },
+
+  dropdownItemText: {
+    fontSize: 15,
+    color: '#374151',
+    fontWeight: '500',
+    flex: 1,
+  },
+
+  dropdownItemTextSelected: {
+    color: '#2563eb',
+    fontWeight: '600',
+  },
+  checkmark: {
+      fontSize: 14,
+      color: '#2563eb',
+      fontWeight: '700',
+    },
+  
+    dropdownOverlay: {
+    position: 'absolute',
+    top: 100, // Ajuste conforme a posição do seu header
+    left: 16,
+    right: 16,
+    zIndex: 1000,
+    elevation: 1000,
+  },
+
+  dropdownScrollView: {
+    maxHeight: 200,
   },
 });

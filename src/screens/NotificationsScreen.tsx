@@ -80,8 +80,7 @@ export default function NotificationsScreen() {
   const handleSendNotification = async (title: string, body: string, target: string[]) => {
     try {
       const res = await createNotification(user.id, { title, body, target });
-      console.log(res);
-      if (res && res.notifications[0]._id) {
+      if (res && res.notification && res.notification._id) {
         setPopup({
           visible: true,
           type: "success",
@@ -94,7 +93,7 @@ export default function NotificationsScreen() {
           visible: true,
           type: "error",
           title: "Erro",
-          message: "Ocorreu um erro ao enviar a notificação, verifique os dados e tente novamente.",
+          message: "Ocorreu um erro ao enviar a notificação. Por favor verifique os dados e tente novamente.",
           onConfirm: undefined,
         });
       }
@@ -106,7 +105,7 @@ export default function NotificationsScreen() {
           visible: true,
           type: "error",
           title: "Erro",
-          message: "Ocorreu um erro ao enviar a notificação, verifique os dados e tente novamente.",
+          message: "Ocorreu um erro ao enviar a notificação. Por favor verifique os dados e tente novamente.",
           onConfirm: undefined,
         });
     }

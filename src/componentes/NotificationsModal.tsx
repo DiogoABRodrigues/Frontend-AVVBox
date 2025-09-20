@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Modal, TextInput, TouchableOpacity, FlatList } from "react-native";
 import { styles } from "./styles/NotificationsModal.styles";
 import { userService } from "../services/usersService";
+import { useAuth } from "../context/AuthContext";
 
 interface User {
   id: string;
@@ -30,6 +31,8 @@ export default function NotificationModal({
   setRecipientOption,
 }: Props) {
   const [users, setUsers] = useState<User[]>([]);
+  const { user } = useAuth();
+
   const [notification, setNotification] = useState<Notification>({
     title: "",
     body: "",
@@ -38,6 +41,7 @@ export default function NotificationModal({
 
   useEffect(() => {
     const fetchUsers = async () => {
+      if(user.role === 'atleta') return;
       try {
         const usersFromApi = await userService.getAll();
         const usersToShow = usersFromApi.map((u: { _id: string; name: string }) => ({

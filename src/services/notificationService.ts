@@ -1,7 +1,8 @@
 // services/notificationService.ts
-import axios from "axios";
 import {Notification} from "../models/Notifications";
 import { API_BASE_URL } from "../../config";
+import api from "../../api";
+
 const API_URL = `${API_BASE_URL}/notifications`;
 
 // ======================
@@ -11,7 +12,7 @@ export async function createNotification(
   senderId: string,
   data: { title: string; body: string; target: "all" | "my" | string[] }
 ) {
-  const res = await axios.post(`${API_URL}/${senderId}`, data);
+  const res = await api.post(`${API_URL}/${senderId}`, data);
   return res.data;
 }
 
@@ -19,7 +20,7 @@ export async function createNotification(
 // Buscar todas (admin/PT)
 // ======================
 export async function getAllNotifications() {
-  const res = await axios.get<Notification[]>(`${API_URL}`);
+  const res = await api.get<Notification[]>(`${API_URL}`);
   return res.data;
 }
 
@@ -27,7 +28,7 @@ export async function getAllNotifications() {
 // Buscar notificações de um user
 // ======================
 export async function getUserNotifications(targetId: string) {
-  const res = await axios.get<Notification[]>(`${API_URL}/${targetId}`);
+  const res = await api.get<Notification[]>(`${API_URL}/${targetId}`);
   return res.data;
 }
 
@@ -35,7 +36,7 @@ export async function getUserNotifications(targetId: string) {
 // Remover notificação apenas para um usuário (clear)
 // ======================
 export async function deleteNotificationForUser(notificationId: string, userId: string) {
-  const res = await axios.delete(`${API_URL}/${notificationId}/${userId}`);
+  const res = await api.delete(`${API_URL}/${notificationId}/${userId}`);
   return res.data;
 }
 
@@ -43,6 +44,6 @@ export async function deleteNotificationForUser(notificationId: string, userId: 
 // Marcar notificação como lida
 // ======================
 export async function markNotificationAsRead(notificationId: string, userId: string) {
-  const res = await axios.post(`${API_URL}/${notificationId}/${userId}/read`);
+  const res = await api.post(`${API_URL}/${notificationId}/${userId}/read`);
   return res.data;
 }

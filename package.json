@@ -45,6 +45,7 @@
     "@eslint/css": "^0.11.0",
     "@eslint/js": "^9.34.0",
     "@eslint/markdown": "^7.2.0",
+    "@types/expo__vector-icons": "^9.0.1",
     "@types/react": "~19.0.10",
     "@types/react-native-linear-gradient": "^2.3.1",
     "eslint": "^9.34.0",

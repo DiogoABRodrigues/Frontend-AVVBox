@@ -7,7 +7,7 @@ import { styles } from "./styles/Modal.styles";
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onConfirm: (selectedPts: string) => void;
+  onConfirm: (selectedPts: string[]) => void;
   users: User[];
   selected: string[];
 }
@@ -24,7 +24,6 @@ export default function ChangePtsModal({ visible, onClose, onConfirm, users, sel
       setSelectedPt(selected[0] || null);
     }
   }, [selected, visible]);
-
   return (
     <Modal visible={visible} transparent>
       <View style={styles.overlay}>
