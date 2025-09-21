@@ -31,9 +31,7 @@ export default function ExerciseScreen() {
   const [exercisesByGroup, setExercisesByGroup] = useState<
     Record<string, Exercise[]>
   >({});
-  const [editingExerciseId, setEditingExerciseId] = useState<string | null>(
-    null,
-  );
+  const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
     null,
@@ -41,6 +39,7 @@ export default function ExerciseScreen() {
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
   const isPT = user?.role === "PT" || user?.role === "Admin";
   const [userWeights, setUserWeights] = useState<Weights | null>(null);
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
   const [popup, setPopup] = useState({
     visible: false,
@@ -108,6 +107,16 @@ export default function ExerciseScreen() {
     if (expandedMuscleGroup === groupKey) {
       setExpandedMuscleGroup(null);
     } else {
+      // Antes de expandir outro grupo, limpar exercícios temporários do grupo atual
+      if (expandedMuscleGroup) {
+        setExercisesByGroup((prev) => ({
+          ...prev,
+          [expandedMuscleGroup]:
+            prev[expandedMuscleGroup]?.filter(
+              (ex) => !ex._id.startsWith("temp-"),
+            ) || [],
+        }));
+      }
       setExpandedMuscleGroup(groupKey);
       if (!exercisesByGroup[groupKey]) {
         const loadedExercises = userWeights?.[groupKey]?.exercises || [];
@@ -117,12 +126,21 @@ export default function ExerciseScreen() {
         }));
       }
     }
-    setEditingExerciseId(null);
+    setInputValues({});
+    setEditingExercise(null);
   };
 
   const addExercise = (groupKey: string) => {
+    setExercisesByGroup((prev) => ({
+      ...prev,
+      [expandedMuscleGroup]:
+        prev[expandedMuscleGroup]?.filter(
+          (ex) => !ex._id.startsWith("temp-"),
+        ) || [],
+    }));
+
     const newExercise: Exercise = {
-      _id: "temp-" + Math.random().toString(36),
+      _id: "temp-" + Math.random(),
       athleteId: selectedAthleteId || user?._id || "",
       group: groupKey,
       name: "",
@@ -137,7 +155,21 @@ export default function ExerciseScreen() {
       [groupKey]: [...(prev[groupKey] || []), newExercise],
     }));
 
-    setEditingExerciseId(newExercise._id);
+    setEditingExercise(newExercise);
+    // Clear the input value for this new exercise
+    setInputValues((prev) => ({
+      ...prev,
+      [newExercise._id]: "",
+    }));
+  };
+
+  const handleWeightInputChange = (exerciseId: string, value: string) => {
+    // Allow empty string, numbers, and decimal points
+    const cleanedValue = value.replace(/[^0-9.,]/g, "");
+    setInputValues((prev) => ({
+      ...prev,
+      [exerciseId]: cleanedValue,
+    }));
   };
 
   const confirmDelete = (groupKey: string, exercise: Exercise) => {
@@ -177,7 +209,8 @@ export default function ExerciseScreen() {
             prev[groupKey]?.filter((ex) => ex._id !== exercise._id) || [],
         }));
       }
-      setEditingExerciseId(null);
+      setInputValues({});
+      setEditingExercise(null);
       setPopup({
         visible: true,
         type: "success",
@@ -213,16 +246,23 @@ export default function ExerciseScreen() {
   };
 
   const handleSaveExercises = async () => {
-    if (!userWeights || !selectedAthleteId || !editingExerciseId) return;
+    if (!userWeights || !selectedAthleteId || !editingExercise) return;
 
     const group = expandedMuscleGroup!;
     const exercise = exercisesByGroup[group].find(
-      (ex) => ex._id === editingExerciseId,
+      (ex) => ex._id === editingExercise._id,
     );
     if (!exercise) return;
 
     try {
+      // Get the current input value or use the exercise weight as fallback
+      const inputValue = inputValues[exercise._id];
+      const numericWeight = parseFloat(inputValue.replace(",", ".")) || 0;
+
+      updateExercise(exercise.group, exercise._id, "weight", numericWeight);
+
       if (exercise._id.startsWith("temp-")) {
+        exercise.weight = numericWeight; // Ensure weight is set correctly
         await exerciseService.create(exercise);
       } else {
         const payload = {
@@ -230,12 +270,11 @@ export default function ExerciseScreen() {
           athleteId: selectedAthleteId,
           group: group,
           exerciseName: exercise.name,
-          newWeight: exercise.weight,
+          newWeight: numericWeight, // Use the parsed numeric value
           reps: exercise.reps,
           sets: exercise.sets,
           details: exercise.details || "",
         };
-
         await exerciseService.update(exercise._id, payload);
         fetchUserWeights(selectedAthleteId);
       }
@@ -248,20 +287,34 @@ export default function ExerciseScreen() {
         onConfirm: undefined,
       });
     }
-    setEditingExerciseId(null);
+
+    // Clear the input value for this exercise
+    setInputValues((prev) => ({
+      ...prev,
+      [exercise._id]: "",
+    }));
+    setEditingExercise(null);
     fetchUserWeights(selectedAthleteId);
   };
 
   const clearExercise = (groupKey: string) => {
-    if (editingExerciseId) {
-      // If the exercise being edited is new (no name), remove it
+    if (editingExercise && editingExercise._id.startsWith("temp-")) {
       setExercisesByGroup((prev) => ({
         ...prev,
         [groupKey]:
-          prev[groupKey]?.filter((ex) => ex._id !== editingExerciseId) || [],
+          prev[groupKey]?.filter((ex) => ex._id !== editingExercise._id) || [],
       }));
     }
-    setEditingExerciseId(null);
+
+    // Clear the input value
+    if (editingExercise) {
+      setInputValues((prev) => ({
+        ...prev,
+        [editingExercise._id]: "",
+      }));
+    }
+
+    setEditingExercise(null);
   };
 
   return (
@@ -348,7 +401,8 @@ export default function ExerciseScreen() {
                 <View style={styles.exercisesContainer}>
                   {(exercisesByGroup[group.key] || []).map((exercise) => (
                     <View key={exercise._id} style={styles.exerciseItem}>
-                      {editingExerciseId === exercise._id ? (
+                      {editingExercise &&
+                      editingExercise._id === exercise._id ? (
                         // EDIT MODE - Diferente para grupo "extra"
                         group.key === "extra" ? (
                           // EDIT MODE para grupo EXTRA (só name e details)
@@ -432,14 +486,13 @@ export default function ExerciseScreen() {
                                   <Text style={styles.editLabel}>Tempo:</Text>
                                   <TextInput
                                     style={styles.editInputSmall}
-                                    value={exercise?.weight?.toString() || ""}
-                                    onChangeText={(value) =>
-                                      updateExercise(
-                                        group.key,
-                                        exercise?._id,
-                                        "weight",
-                                        parseFloat(value) || 0,
-                                      )
+                                    value={
+                                      inputValues[exercise._id] !== undefined
+                                        ? inputValues[exercise._id]
+                                        : exercise.weight.toString() || ""
+                                    }
+                                    onChangeText={(val) =>
+                                      handleWeightInputChange(exercise._id, val)
                                     }
                                     keyboardType="decimal-pad"
                                   />
@@ -451,14 +504,13 @@ export default function ExerciseScreen() {
                                   </Text>
                                   <TextInput
                                     style={styles.editInputSmall}
-                                    value={exercise?.weight?.toString() || ""}
-                                    onChangeText={(value) =>
-                                      updateExercise(
-                                        group.key,
-                                        exercise._id,
-                                        "weight",
-                                        parseFloat(value) || 0,
-                                      )
+                                    value={
+                                      inputValues[exercise._id] !== undefined
+                                        ? inputValues[exercise._id]
+                                        : exercise.weight.toString() || ""
+                                    }
+                                    onChangeText={(val) =>
+                                      handleWeightInputChange(exercise._id, val)
                                     }
                                     keyboardType="decimal-pad"
                                   />
@@ -540,9 +592,7 @@ export default function ExerciseScreen() {
                             <View style={styles.exerciseActions}>
                               <TouchableOpacity
                                 style={styles.editButton}
-                                onPress={() =>
-                                  setEditingExerciseId(exercise._id)
-                                }
+                                onPress={() => setEditingExercise(exercise)}
                               >
                                 <Ionicons
                                   name="create-outline"
@@ -585,9 +635,7 @@ export default function ExerciseScreen() {
                             <View style={styles.exerciseActions}>
                               <TouchableOpacity
                                 style={styles.editButton}
-                                onPress={() =>
-                                  setEditingExerciseId(exercise._id)
-                                }
+                                onPress={() => setEditingExercise(exercise)}
                               >
                                 <Ionicons
                                   name="create-outline"

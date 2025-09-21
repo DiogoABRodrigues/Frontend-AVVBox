@@ -59,7 +59,9 @@ export default function NotificationsScreen() {
       await Promise.all(
         notifications
           .filter((n) => !n.read)
-          .map((n) => notificationService.markNotificationAsRead(n.id, user._id)),
+          .map((n) =>
+            notificationService.markNotificationAsRead(n.id, user._id),
+          ),
       );
       notifications.forEach((n) => {
         if (!n.read) markAsRead(user._id, n.id);
@@ -76,7 +78,9 @@ export default function NotificationsScreen() {
     try {
       await handleMarkAllAsRead();
       await Promise.all(
-        notifications.map((n) => notificationService.deleteNotificationForUser(n.id, user._id)),
+        notifications.map((n) =>
+          notificationService.deleteNotificationForUser(n.id, user._id),
+        ),
       );
       fetchNotifications();
     } catch (err) {
@@ -91,7 +95,11 @@ export default function NotificationsScreen() {
     target: string[],
   ) => {
     try {
-      const res = await notificationService.createNotification(user._id, { title, body, target });
+      const res = await notificationService.createNotification(user._id, {
+        title,
+        body,
+        target,
+      });
       if (res && res.notification && res.notification._id) {
         setPopup({
           visible: true,
@@ -117,7 +125,10 @@ export default function NotificationsScreen() {
   // MARCAR INDIVIDUAL COMO LIDA
   const handleMarkAsRead = async (notification: Notification) => {
     if (!notification.read) {
-      await notificationService.markNotificationAsRead(notification.id, user._id);
+      await notificationService.markNotificationAsRead(
+        notification.id,
+        user._id,
+      );
       markAsRead(user._id, notification.id);
     }
   };
@@ -184,7 +195,10 @@ export default function NotificationsScreen() {
                       padding: 12,
                     }}
                     onPress={async () => {
-                      await notificationService.deleteNotificationForUser(n.id, user._id);
+                      await notificationService.deleteNotificationForUser(
+                        n.id,
+                        user._id,
+                      );
                       fetchNotifications();
                     }}
                   >
