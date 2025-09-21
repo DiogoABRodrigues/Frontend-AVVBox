@@ -7,8 +7,10 @@ import api from "../../api";
 const API_URL = `${API_BASE_URL}/users`;
 
 export const userService = {
-
-   async login(email: string, password: string): Promise<{ token: string; user: User }> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<{ token: string; user: User }> {
     const res = await api.post(`${API_URL}/login`, { login: email, password });
 
     const { token, user } = res.data;
@@ -34,7 +36,11 @@ export const userService = {
     return res.data;
   },
 
-  async resetPasswordWithCode(email: string, code: string, newPassword: string): Promise<{ message: string }> {
+  async resetPasswordWithCode(
+    email: string,
+    code: string,
+    newPassword: string,
+  ): Promise<{ message: string }> {
     const res = await api.post(`${API_URL}/reset-password-with-code`, {
       email,
       code,
@@ -42,7 +48,7 @@ export const userService = {
     });
     return res.data;
   },
-  
+
   async getAll(): Promise<User[]> {
     const res = await api.get(API_URL);
     return res.data;
@@ -67,7 +73,7 @@ export const userService = {
     const res = await api.post(API_URL, user);
     return res.data;
   },
-  
+
   async delete(id: string): Promise<{ message: string }> {
     const res = await api.delete(`${API_URL}/${id}`);
     return res.data;
@@ -91,5 +97,5 @@ export const userService = {
   async getStaff(): Promise<User[]> {
     const res = await api.get(`${API_URL}/get-staff`);
     return res.data;
-  }
+  },
 };

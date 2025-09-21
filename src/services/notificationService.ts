@@ -1,5 +1,5 @@
 // services/notificationService.ts
-import {Notification} from "../models/Notifications";
+import { Notification } from "../models/Notifications";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
 
@@ -10,7 +10,7 @@ const API_URL = `${API_BASE_URL}/notifications`;
 // ======================
 export async function createNotification(
   senderId: string,
-  data: { title: string; body: string; target: "all" | "my" | string[] }
+  data: { title: string; body: string; target: "all" | "my" | string[] },
 ) {
   const res = await api.post(`${API_URL}/${senderId}`, data);
   return res.data;
@@ -35,7 +35,10 @@ export async function getUserNotifications(targetId: string) {
 // ======================
 // Remover notificação apenas para um usuário (clear)
 // ======================
-export async function deleteNotificationForUser(notificationId: string, userId: string) {
+export async function deleteNotificationForUser(
+  notificationId: string,
+  userId: string,
+) {
   const res = await api.delete(`${API_URL}/${notificationId}/${userId}`);
   return res.data;
 }
@@ -43,7 +46,10 @@ export async function deleteNotificationForUser(notificationId: string, userId: 
 // ======================
 // Marcar notificação como lida
 // ======================
-export async function markNotificationAsRead(notificationId: string, userId: string) {
+export async function markNotificationAsRead(
+  notificationId: string,
+  userId: string,
+) {
   const res = await api.post(`${API_URL}/${notificationId}/${userId}/read`);
   return res.data;
 }

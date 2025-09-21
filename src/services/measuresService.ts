@@ -1,6 +1,6 @@
 // frontend/services/measuresService.ts
-import { Measures } from "../models/Measures"; 
-import { API_BASE_URL } from "../../config"; 
+import { Measures } from "../models/Measures";
+import { API_BASE_URL } from "../../config";
 import api from "../../api";
 
 const API_URL = `${API_BASE_URL}/measures`;
@@ -38,6 +38,6 @@ export const measuresService = {
 
   async delete(id: string): Promise<number> {
     const response = await api.delete(`${API_URL}/${id}`);
-    return response.status; 
+    return response.status;
   },
 };
