@@ -6,12 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-interface User {
-  id: string;
-  name: string;
-  role: "atleta" | "PT" | "Admin";
-}
+import { User } from "../models/User";
 
 interface AuthContextType {
   user: User | null;

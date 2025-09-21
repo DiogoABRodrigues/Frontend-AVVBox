@@ -23,6 +23,7 @@ interface LocalMuscleGroup {
 }
 
 export default function ExerciseScreen() {
+  console.log("Rendering ExerciseScreen");
   const { user } = useAuth();
   const [expandedMuscleGroup, setExpandedMuscleGroup] = useState<string | null>(
     null,
@@ -62,17 +63,17 @@ export default function ExerciseScreen() {
   ];
 
   useEffect(() => {
+    console.log("Fetching athletes for ExerciseScreen");
     const fetchAthletes = async () => {
       if (user.role !== "atleta") {
         // Carregar os atletas do treinador
-        const userData = await userService.getById(user.id);
         let athletes: User[] = [];
-        athletes = await userService.getMyAthletes(user.id);
-        athletes.unshift(userData); // Adiciona o treinador no topo
+        athletes = await userService.getMyAthletes(user._id);
+        athletes.unshift(user); // Adiciona o treinador no topo
         setMineAthletes(athletes);
-        setSelectedAthleteId(user.id);
+        setSelectedAthleteId(user._id);
       } else {
-        setSelectedAthleteId(user.id);
+        setSelectedAthleteId(user._id);
       }
     };
     fetchAthletes();
@@ -81,8 +82,8 @@ export default function ExerciseScreen() {
   useEffect(() => {
     if (selectedAthleteId) {
       fetchUserWeights(selectedAthleteId);
-    } else if (user.id) {
-      fetchUserWeights(user.id);
+    } else if (user._id) {
+      fetchUserWeights(user._id);
     }
   }, [selectedAthleteId]);
 
@@ -122,7 +123,7 @@ export default function ExerciseScreen() {
   const addExercise = (groupKey: string) => {
     const newExercise: Exercise = {
       _id: "temp-" + Math.random().toString(36),
-      athleteId: selectedAthleteId || user?.id || "",
+      athleteId: selectedAthleteId || user?._id || "",
       group: groupKey,
       name: "",
       weight: 0,

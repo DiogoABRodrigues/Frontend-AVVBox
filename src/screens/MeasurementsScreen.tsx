@@ -30,6 +30,7 @@ interface AthleteData {
 }
 
 export default function MeasurementsScreen() {
+  console.log("Rendering MeasurementsScreen");
   const { user } = useAuth();
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
@@ -90,7 +91,7 @@ export default function MeasurementsScreen() {
 
       setAthletes(athletesData);
       if (athletesData.length > 0) {
-        setSelectedAthleteId(user.id);
+        setSelectedAthleteId(user._id);
       }
     } catch (err) {
       console.error("Erro ao ir buscar os meus atletas:", err);
@@ -140,7 +141,7 @@ export default function MeasurementsScreen() {
       fetchAthletes();
     } else {
       // cliente normal → só vê as próprias medidas
-      setSelectedAthleteId(user?.id);
+      setSelectedAthleteId(user?._id);
     }
   }, [isPT, user]);
 

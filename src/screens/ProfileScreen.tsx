@@ -25,6 +25,7 @@ import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
 
 export default function ProfileScreen() {
+  console.log("Rendering ProfileScreen");
   const { user, logout } = useAuth();
 
   const [userData, setUserData] = useState<User>({
@@ -54,6 +55,7 @@ export default function ProfileScreen() {
   );
 
   const [users, setUsers] = useState<User[]>([]);
+
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [activeFilter, setActiveFilter] = useState<
     "todos" | "ativos" | "inativos"
@@ -80,7 +82,7 @@ export default function ProfileScreen() {
   const [isAthletesModalVisible, setAthletesModalVisible] = useState(false);
 
   const [availability, setAvailability] = useState<Availability>({
-    PT: user?.id || "",
+    PT: user?._id || "",
     Monday: { working: true, intervals: [] },
     Tuesday: { working: true, intervals: [] },
     Wednesday: { working: true, intervals: [] },
@@ -144,9 +146,9 @@ export default function ProfileScreen() {
   }, [users, activeFilter, roleFilter]);
 
   const fetchNotificationSettings = async () => {
-    if (!user?.id) return;
+    if (!user?._id) return;
     try {
-      const settings = await settingsService.getByUser(user.id);
+      const settings = await settingsService.getByUser(user._id);
       if (settings) {
         setNotificationSettings(settings);
       }
@@ -162,7 +164,7 @@ export default function ProfileScreen() {
   const fetchAvailability = async () => {
     if (!isAdmin || !isPT) return;
     try {
-      const availability = await availabilityService.getByPT(user.id);
+      const availability = await availabilityService.getByPT(user._id);
 
       if (availability) {
         setAvailability(availability);
@@ -359,12 +361,11 @@ export default function ProfileScreen() {
   ];
 
   const fetchUserData = async () => {
-    if (user?.id) {
-      const data = await userService.getById(user.id);
-      setUserData(data);
+    if (user?._id) {
+      setUserData(user);
       setEditFormData({
-        name: data?.name,
-        phoneNumber: data?.phoneNumber,
+        name: user?.name,
+        phoneNumber: user?.phoneNumber,
       });
     }
   };
@@ -375,7 +376,7 @@ export default function ProfileScreen() {
 
   const fetchMeasures = async () => {
     try {
-      const measures = await measuresService.getGoalByUser(user.id);
+      const measures = await measuresService.getGoalByUser(user._id);
       if (measures) {
         setGoalMeasures(measures);
         setMeasuresInput({
@@ -400,7 +401,7 @@ export default function ProfileScreen() {
       if (!isAdmin || !user) return;
       const fetched = await userService.getAllAll();
 
-      setUsers(fetched.sort((a, b) => a.name.localeCompare(b.name)));
+      setUsers(fetched);
     } catch (err) {
       console.error("Erro ao ir buscar users", err);
     }
@@ -513,7 +514,7 @@ export default function ProfileScreen() {
       [setting]: !prev[setting],
     }));
 
-    settingsService.update(user.id, {
+    settingsService.update(user._id, {
       ...notificationSettings,
       [setting]: !notificationSettings[setting],
     });
@@ -532,7 +533,7 @@ export default function ProfileScreen() {
   const saveRoleChange = async (newRole: "atleta" | "PT" | "Admin") => {
     if (!roleChangeTarget) return;
     //passar esta confirmação para o backend
-    if (roleChangeTarget._id === user.id) {
+    if (roleChangeTarget._id === user._id) {
       setPopup({
         visible: true,
         type: "error",
@@ -752,7 +753,7 @@ export default function ProfileScreen() {
       }
       const dataToSave = {
         ...availability,
-        PT: user?.id || "",
+        PT: user?._id || "",
       };
       const res = await availabilityService.update(dataToSave);
 
