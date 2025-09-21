@@ -1,20 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // TrainingScreen.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import { ScrollView} from 'react-native-gesture-handler';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
-import { styles } from './styles/TrainingScreen.styles';
-import { Availability, DayAvailability } from '../models/Availability';
-import { availabilityService } from '../services/availabilityService';
-import { Training, TrainingRequest } from '../models/Training';
-import { trainingService } from '../services/trainingService';
-import { useAuth } from '../context/AuthContext';
-import { User } from '../models/User';
-import { userService } from '../services/usersService';
-import Popup from '../componentes/Popup';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { Calendar, LocaleConfig } from "react-native-calendars";
+import { styles } from "./styles/TrainingScreen.styles";
+import { Availability, DayAvailability } from "../models/Availability";
+import { availabilityService } from "../services/availabilityService";
+import { Training, TrainingRequest } from "../models/Training";
+import { trainingService } from "../services/trainingService";
+import { useAuth } from "../context/AuthContext";
+import { User } from "../models/User";
+import { userService } from "../services/usersService";
+import Popup from "../componentes/Popup";
 import { Ionicons } from "@expo/vector-icons";
-import ExerciseScreen from './ExerciseScreen';
+import ExerciseScreen from "./ExerciseScreen";
 
 interface TimeSlot {
   time: string;
@@ -22,27 +28,54 @@ interface TimeSlot {
 }
 
 // Configurar o calendário para português
-LocaleConfig.locales['pt'] = {
+LocaleConfig.locales["pt"] = {
   monthNames: [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ],
   monthNamesShort: [
-    'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-    'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Set",
+    "Out",
+    "Nov",
+    "Dez",
   ],
   dayNames: [
-    'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira',
-    'Quinta-feira', 'Sexta-feira', 'Sábado'
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado",
   ],
-  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-  today: 'Hoje'
+  dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+  today: "Hoje",
 };
-LocaleConfig.defaultLocale = 'pt';
+LocaleConfig.defaultLocale = "pt";
 
 export default function TrainingScreen() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'schedule' | 'exercises'>('schedule');
+  const [activeTab, setActiveTab] = useState<"schedule" | "exercises">(
+    "schedule",
+  );
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
@@ -51,19 +84,25 @@ export default function TrainingScreen() {
   const [morningSlots, setMorningSlots] = useState<TimeSlot[]>([]);
   const [afternoonSlots, setAfternoonSlots] = useState<TimeSlot[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Estados separados para os diferentes tipos de treinos
-  const [trainingsNeedMyAction, setTrainingsNeedMyAction] = useState<Training[]>([]);
+  const [trainingsNeedMyAction, setTrainingsNeedMyAction] = useState<
+    Training[]
+  >([]);
   const [confirmedTrainings, setConfirmedTrainings] = useState<Training[]>([]);
   const [pendingOtherPerson, setPendingOtherPerson] = useState<Training[]>([]);
-  const [confirmedFifteenDays, setConfirmedFifteenDays] = useState<Training[]>([]);
+  const [confirmedFifteenDays, setConfirmedFifteenDays] = useState<Training[]>(
+    [],
+  );
   const [showFifteenDays, setShowFifteenDays] = useState(false);
 
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
 
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
-  const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(null);
-   
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
+    null,
+  );
+
   const [popup, setPopup] = useState({
     visible: false,
     type: "success" as "success" | "error" | "confirm",
@@ -71,7 +110,6 @@ export default function TrainingScreen() {
     message: "",
     onConfirm: undefined as (() => void) | undefined,
   });
-  
 
   useEffect(() => {
     loadData();
@@ -91,7 +129,7 @@ export default function TrainingScreen() {
 
   useEffect(() => {
     const fetchAthletes = async () => {
-      if (user.role !== 'atleta') {
+      if (user.role !== "atleta") {
         // Carregar os atletas do treinador
         const athletes = await userService.getMyAthletes(user.id);
         athletes.push(trainer);
@@ -108,13 +146,13 @@ export default function TrainingScreen() {
       const userData = await userService.getById(user.id);
       if (userData.coach && userData.coach.length > 0) {
         setTrainer(userData.coach[0]); // já é o coach completo
-      } else if (userData.role === 'Admin' || userData.role === 'PT') {
+      } else if (userData.role === "Admin" || userData.role === "PT") {
         setTrainer(userData);
       }
 
       await loadAllTrainings();
     } catch {
-      Alert.alert('Erro', 'Não foi possível carregar os dados');
+      Alert.alert("Erro", "Não foi possível carregar os dados");
     } finally {
       setLoading(false);
     }
@@ -125,19 +163,23 @@ export default function TrainingScreen() {
       const trainerAvailability = await availabilityService.getByPT(trainerId);
       setAvailability(trainerAvailability);
     } catch {
-      Alert.alert('Erro', 'Não foi possível carregar a disponibilidade do treinador');
+      Alert.alert(
+        "Erro",
+        "Não foi possível carregar a disponibilidade do treinador",
+      );
     }
   };
 
   const loadAllTrainings = async () => {
     try {
-      
       const [pending, upcoming] = await Promise.all([
         trainingService.getPending(user.id),
-        trainingService.getUpcoming(user.id)
+        trainingService.getUpcoming(user.id),
       ]);
 
-      const confirmedFifteenDays = await trainingService.getNextFifteenDays(user.id);
+      const confirmedFifteenDays = await trainingService.getNextFifteenDays(
+        user.id,
+      );
 
       // Separar os treinos nas três categorias
       const needsAction: Training[] = [];
@@ -146,11 +188,13 @@ export default function TrainingScreen() {
       // Treinos confirmados (já aceites por ambos)
 
       // Treinos pendentes - separar por quem precisa de aceitar
-      pending.forEach(training => {
-        if (training.overallStatus === 'pending') {
+      pending.forEach((training) => {
+        if (training.overallStatus === "pending") {
           // Verificar se sou eu que preciso de aceitar
-          if ((user.role === 'atleta' && training.proposedBy === 'PT') ||
-              (user.role !== 'atleta' && training.proposedBy === 'Athlete')) {
+          if (
+            (user.role === "atleta" && training.proposedBy === "PT") ||
+            (user.role !== "atleta" && training.proposedBy === "Athlete")
+          ) {
             needsAction.push(training);
           } else {
             pendingOthers.push(training);
@@ -163,7 +207,7 @@ export default function TrainingScreen() {
       setPendingOtherPerson(pendingOthers);
       setConfirmedFifteenDays(confirmedFifteenDays);
     } catch {
-      Alert.alert('Erro', 'Não foi possível carregar os treinos');
+      Alert.alert("Erro", "Não foi possível carregar os treinos");
     }
   };
 
@@ -171,7 +215,9 @@ export default function TrainingScreen() {
     if (!selectedDay || !availability) return;
 
     const dayOfWeek = getDayOfWeek(selectedDay);
-    const dayAvailability = availability[dayOfWeek as keyof Availability] as DayAvailability;
+    const dayAvailability = availability[
+      dayOfWeek as keyof Availability
+    ] as DayAvailability;
 
     if (!dayAvailability.working) {
       setMorningSlots([]);
@@ -182,16 +228,16 @@ export default function TrainingScreen() {
     const morning: TimeSlot[] = [];
     const afternoon: TimeSlot[] = [];
 
-    dayAvailability.intervals.forEach(interval => {
-      const startHour = parseInt(interval.start.split(':')[0]);
-      const endHour = parseInt(interval.end.split(':')[0]);
-      
+    dayAvailability.intervals.forEach((interval) => {
+      const startHour = parseInt(interval.start.split(":")[0]);
+      const endHour = parseInt(interval.end.split(":")[0]);
+
       // Gerar todos os slots de 15 em 15 minutos para este intervalo
       for (let hour = startHour; hour < endHour; hour++) {
         for (let minute = 0; minute < 60; minute += 15) {
-          const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+          const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
           const slot = { time, formattedTime: time };
-          
+
           if (hour < 13) {
             morning.push(slot);
           } else {
@@ -211,43 +257,55 @@ export default function TrainingScreen() {
 
   const getDayOfWeek = (dateString: string): string => {
     const date = new Date(dateString);
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
     return days[date.getDay()];
   };
 
   const handleScheduleTraining = async () => {
     if (selectedDay && selectedHour && trainer) {
       if (isPastSlot(selectedDay, selectedHour)) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Data Inválida",
-        message: "Não é possível marcar um treino num dia/hora que já passou.",
-        onConfirm: undefined,
-      });
-      return;
-    }
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Data Inválida",
+          message:
+            "Não é possível marcar um treino num dia/hora que já passou.",
+          onConfirm: undefined,
+        });
+        return;
+      }
       try {
         const trainingData: Partial<TrainingRequest> = {
           date: selectedDay,
           hour: selectedHour,
           PT: trainer._id,
           athlete: user.role === "atleta" ? user.id : selectedAthleteId, // Se for atleta, é ele próprio. Se for PT/Admin, é o atleta selecionado
-          proposedBy: user.role === 'atleta' ? 'Athlete' : 'PT',
+          proposedBy: user.role === "atleta" ? "Athlete" : "PT",
         };
 
         const res = await trainingService.create(trainingData);
 
-        const membro = user.role === 'atleta' ? 'treinador' : 'atleta';
+        const membro = user.role === "atleta" ? "treinador" : "atleta";
         if (res && res._id) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Treino agendado com sucesso! Aguarda a confirmação do " + membro + ".",
-          onConfirm: undefined,
-        });
-      } 
+          setPopup({
+            visible: true,
+            type: "success",
+            title: "Sucesso",
+            message:
+              "Treino agendado com sucesso! Aguarda a confirmação do " +
+              membro +
+              ".",
+            onConfirm: undefined,
+          });
+        }
         // Recarregar todos os treinos para atualizar as listas
         await loadAllTrainings();
       } catch {
@@ -280,48 +338,48 @@ export default function TrainingScreen() {
   };
 
   const handleRejectTraining = async (trainingId: string) => {
-      setPopup({
-        visible: true,
-        type: "confirm",
-        title: "Confirmar",
-        message: "Tens a certeza que queres recusar este treino?",
-        onConfirm: async () => {
-          try {
-            await trainingService.reject(trainingId, user.id);
-            await loadAllTrainings();
-            setPopup({
-              visible: false,
-              type: "success",
-              title: "Treino Recusado",
-              message: "Treino recusado com sucesso.",
-              onConfirm: undefined,
-            });
-          } catch {
-            setPopup({
-              visible: true,
-              type: "error",
-              title: "Erro",
-              message: "Não foi possível recusar o treino.",
-              onConfirm: undefined,
-            });
-            await loadAllTrainings();
-          }
-        },
-      });
+    setPopup({
+      visible: true,
+      type: "confirm",
+      title: "Confirmar",
+      message: "Tens a certeza que queres recusar este treino?",
+      onConfirm: async () => {
+        try {
+          await trainingService.reject(trainingId, user.id);
+          await loadAllTrainings();
+          setPopup({
+            visible: false,
+            type: "success",
+            title: "Treino Recusado",
+            message: "Treino recusado com sucesso.",
+            onConfirm: undefined,
+          });
+        } catch {
+          setPopup({
+            visible: true,
+            type: "error",
+            title: "Erro",
+            message: "Não foi possível recusar o treino.",
+            onConfirm: undefined,
+          });
+          await loadAllTrainings();
+        }
+      },
+    });
   };
 
   const formatDate = (dateString: string, time: string) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const weekdays = [
-      'Domingo',
-      'Segunda-feira',
-      'Terça-feira',
-      'Quarta-feira',
-      'Quinta-feira',
-      'Sexta-feira',
-      'Sábado',
+      "Domingo",
+      "Segunda-feira",
+      "Terça-feira",
+      "Quarta-feira",
+      "Quinta-feira",
+      "Sexta-feira",
+      "Sábado",
     ];
     const weekday = weekdays[date.getDay()];
     return `${day}/${month}, ${weekday} às ${time}`;
@@ -333,7 +391,6 @@ export default function TrainingScreen() {
     slotDate.setHours(hours, minutes, 0, 0);
     return slotDate.getTime() < Date.now();
   };
-
 
   const renderTimeSlot = (item: TimeSlot) => {
     if (!selectedDay) return null;
@@ -368,7 +425,6 @@ export default function TrainingScreen() {
     );
   };
 
-
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -378,7 +434,7 @@ export default function TrainingScreen() {
   }
 
   if (!trainer) {
-    console.log('User data:', user);
+    console.log("User data:", user);
     return (
       <View style={styles.container}>
         <Text style={styles.noTrainerText}>
@@ -391,11 +447,11 @@ export default function TrainingScreen() {
   const handleDeleteTraining = async (training: Training) => {
     let messageConfirmation;
     let messageAnswer;
-    if (training.overallStatus === 'confirmed') {
-      messageConfirmation = "Tens a certeza que queres cancelar este treino? O utilizador será notificado.";
+    if (training.overallStatus === "confirmed") {
+      messageConfirmation =
+        "Tens a certeza que queres cancelar este treino? O utilizador será notificado.";
       messageAnswer = "Treino cancelado com sucesso.";
-    }
-    else {
+    } else {
       messageConfirmation = "Tens a certeza que queres eliminar este treino?";
       messageAnswer = "Treino eliminado com sucesso.";
     }
@@ -439,347 +495,378 @@ export default function TrainingScreen() {
       <TouchableOpacity
         style={[
           styles.switchOption,
-          !showFifteenDays && styles.switchOptionActive
+          !showFifteenDays && styles.switchOptionActive,
         ]}
         onPress={() => setShowFifteenDays(false)}
       >
-        <Text style={[
-          styles.switchText,
-          !showFifteenDays && styles.switchTextActive
-        ]}>
+        <Text
+          style={[
+            styles.switchText,
+            !showFifteenDays && styles.switchTextActive,
+          ]}
+        >
           7 dias
         </Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity
         style={[
           styles.switchOption,
-          showFifteenDays && styles.switchOptionActive
+          showFifteenDays && styles.switchOptionActive,
         ]}
         onPress={() => setShowFifteenDays(true)}
       >
-        <Text style={[
-          styles.switchText,
-          showFifteenDays && styles.switchTextActive
-        ]}>
+        <Text
+          style={[
+            styles.switchText,
+            showFifteenDays && styles.switchTextActive,
+          ]}
+        >
           15 dias
         </Text>
       </TouchableOpacity>
     </View>
   );
-  
+
   const MainTabSwitch = () => (
     <View style={styles.mainSwitchContainer}>
       <TouchableOpacity
         style={[
           styles.mainSwitchOption,
-          activeTab === 'schedule' && styles.mainSwitchOptionActive
+          activeTab === "schedule" && styles.mainSwitchOptionActive,
         ]}
-        onPress={() => setActiveTab('schedule')}
+        onPress={() => setActiveTab("schedule")}
       >
-        <Ionicons 
-          name="calendar-outline" 
-          size={20} 
-          color={activeTab === 'schedule' ? '#2563eb' : '#6b7280'} 
+        <Ionicons
+          name="calendar-outline"
+          size={20}
+          color={activeTab === "schedule" ? "#2563eb" : "#6b7280"}
         />
-        <Text style={[
-          styles.mainSwitchText,
-          activeTab === 'schedule' && styles.mainSwitchTextActive
-        ]}>
+        <Text
+          style={[
+            styles.mainSwitchText,
+            activeTab === "schedule" && styles.mainSwitchTextActive,
+          ]}
+        >
           Marcar Treino
         </Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity
         style={[
           styles.mainSwitchOption,
-          activeTab === 'exercises' && styles.mainSwitchOptionActive
+          activeTab === "exercises" && styles.mainSwitchOptionActive,
         ]}
-        onPress={() => setActiveTab('exercises')}
+        onPress={() => setActiveTab("exercises")}
       >
-        <Ionicons 
-          name="barbell-outline" 
-          size={20} 
-          color={activeTab === 'exercises' ? '#2563eb' : '#6b7280'} 
+        <Ionicons
+          name="barbell-outline"
+          size={20}
+          color={activeTab === "exercises" ? "#2563eb" : "#6b7280"}
         />
-        <Text style={[
-          styles.mainSwitchText,
-          activeTab === 'exercises' && styles.mainSwitchTextActive
-        ]}>
+        <Text
+          style={[
+            styles.mainSwitchText,
+            activeTab === "exercises" && styles.mainSwitchTextActive,
+          ]}
+        >
           Exercícios
         </Text>
       </TouchableOpacity>
     </View>
   );
 
-return (
-  <ScrollView contentContainerStyle={styles.container}>
-    <View style={styles.header}>
-      <Text style={styles.headerTitle}>Treino</Text>
-      <TouchableOpacity 
-        onPress={async () => await loadAllTrainings()}
-      >
-        <Ionicons name="refresh-circle-outline" size={40} color="#1e293b" />
-      </TouchableOpacity>
-    </View>
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Treino</Text>
+        <TouchableOpacity onPress={async () => await loadAllTrainings()}>
+          <Ionicons name="refresh-circle-outline" size={40} color="#1e293b" />
+        </TouchableOpacity>
+      </View>
 
-    {/* Switch Principal */}
-    <MainTabSwitch />
+      {/* Switch Principal */}
+      <MainTabSwitch />
 
-    {/* Conteúdo baseado na tab ativa */}
-    {activeTab === 'schedule' ? (
-      <>
-        {/* Calendar */}
-        <Calendar
-          onDayPress={(day) => setSelectedDay(day.dateString)}
-          markedDates={
-            selectedDay
-              ? {
-                  [selectedDay]: { 
-                    selected: true, 
-                    selectedColor: '#2563eb',
-                    selectedTextColor: '#ffffff'
-                  },
-                }
-              : {}
-          }
-          theme={{
-            todayTextColor: '#2563eb',
-            arrowColor: '#2563eb',
-            selectedDayBackgroundColor: '#2563eb',
-            selectedDayTextColor: '#ffffff',
-            monthTextColor: '#1e293b',
-            textDayFontWeight: '500',
-            textMonthFontWeight: '700',
-            textDayHeaderFontWeight: '600',
-          }}
-          style={styles.calendar}
-        />
+      {/* Conteúdo baseado na tab ativa */}
+      {activeTab === "schedule" ? (
+        <>
+          {/* Calendar */}
+          <Calendar
+            onDayPress={(day) => setSelectedDay(day.dateString)}
+            markedDates={
+              selectedDay
+                ? {
+                    [selectedDay]: {
+                      selected: true,
+                      selectedColor: "#2563eb",
+                      selectedTextColor: "#ffffff",
+                    },
+                  }
+                : {}
+            }
+            theme={{
+              todayTextColor: "#2563eb",
+              arrowColor: "#2563eb",
+              selectedDayBackgroundColor: "#2563eb",
+              selectedDayTextColor: "#ffffff",
+              monthTextColor: "#1e293b",
+              textDayFontWeight: "500",
+              textMonthFontWeight: "700",
+              textDayHeaderFontWeight: "600",
+            }}
+            style={styles.calendar}
+          />
 
-        {/* Lista de horários disponíveis */}
-        {selectedDay && (morningSlots.length > 0 || afternoonSlots.length > 0) && (
-          <View style={styles.hoursContainer}>
-            {/* Horários da Manhã */}
-            {morningSlots.length > 0 && (
-              <View style={styles.timeSection}>
-                <Text style={styles.timeSectionHeader}>Manhã</Text>
-                <ScrollView 
-                  horizontal 
-                  showsHorizontalScrollIndicator={false}
-                  nestedScrollEnabled
-                  scrollEnabled={true}
-                  style={styles.timeRow}
-                  onStartShouldSetResponderCapture={() => true}
-                >
-                  {morningSlots.map(renderTimeSlot)}
-                </ScrollView>
-              </View>
-            )}
-
-            {/* Horários da Tarde */}
-            {afternoonSlots.length > 0 && (
-              <View style={styles.timeSection}>
-                <Text style={styles.timeSectionHeader}>Tarde</Text>
-                <ScrollView 
-                  horizontal 
-                  showsHorizontalScrollIndicator={false}
-                  style={styles.timeRow}
-                >
-                  {afternoonSlots.map(renderTimeSlot)}
-                </ScrollView>
-              </View>
-            )}
-
-            {/* Se for Admin ou PT, mostrar dropdown de atletas */}
-            {(user.role === "Admin" || user.role === "PT") && (
-              <View style={styles.dropdownSection}>
-                <Text style={styles.dropdownLabel}>Selecionar Atleta</Text>
-                <TouchableOpacity
-                  style={styles.dropdownButton}
-                  onPress={() => setShowAthleteDropdown(!showAthleteDropdown)}
-                >
-                  <Text style={styles.dropdownButtonText}>
-                    {selectedAthleteId 
-                      ? mineAthletes.find(a => a._id === selectedAthleteId)?.name 
-                      : 'Escolher atleta...'
-                    }
-                  </Text>
-                  <Text style={styles.dropdownArrow}>
-                    {showAthleteDropdown ? '▲' : '▼'}
-                  </Text>
-                </TouchableOpacity>
-                
-                {showAthleteDropdown && (
-                  <View style={styles.dropdownList}>
-                    {mineAthletes.map((athlete) => (
-                      <TouchableOpacity
-                        key={athlete._id}
-                        style={[
-                          styles.dropdownItem,
-                          selectedAthleteId === athlete._id && styles.dropdownItemSelected
-                        ]}
-                        onPress={() => {
-                          setSelectedAthleteId(athlete._id);
-                          setShowAthleteDropdown(false);
-                        }}
-                      >
-                        <Text style={[
-                          styles.dropdownItemText,
-                          selectedAthleteId === athlete._id && styles.dropdownItemTextSelected
-                        ]}>
-                          {athlete.name}
-                        </Text>
-                        {selectedAthleteId === athlete._id && (
-                          <Text style={styles.checkmark}>✓</Text>
-                        )}
-                      </TouchableOpacity>
-                    ))}
+          {/* Lista de horários disponíveis */}
+          {selectedDay &&
+            (morningSlots.length > 0 || afternoonSlots.length > 0) && (
+              <View style={styles.hoursContainer}>
+                {/* Horários da Manhã */}
+                {morningSlots.length > 0 && (
+                  <View style={styles.timeSection}>
+                    <Text style={styles.timeSectionHeader}>Manhã</Text>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      nestedScrollEnabled
+                      scrollEnabled={true}
+                      style={styles.timeRow}
+                      onStartShouldSetResponderCapture={() => true}
+                    >
+                      {morningSlots.map(renderTimeSlot)}
+                    </ScrollView>
                   </View>
+                )}
+
+                {/* Horários da Tarde */}
+                {afternoonSlots.length > 0 && (
+                  <View style={styles.timeSection}>
+                    <Text style={styles.timeSectionHeader}>Tarde</Text>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      style={styles.timeRow}
+                    >
+                      {afternoonSlots.map(renderTimeSlot)}
+                    </ScrollView>
+                  </View>
+                )}
+
+                {/* Se for Admin ou PT, mostrar dropdown de atletas */}
+                {(user.role === "Admin" || user.role === "PT") && (
+                  <View style={styles.dropdownSection}>
+                    <Text style={styles.dropdownLabel}>Selecionar Atleta</Text>
+                    <TouchableOpacity
+                      style={styles.dropdownButton}
+                      onPress={() =>
+                        setShowAthleteDropdown(!showAthleteDropdown)
+                      }
+                    >
+                      <Text style={styles.dropdownButtonText}>
+                        {selectedAthleteId
+                          ? mineAthletes.find(
+                              (a) => a._id === selectedAthleteId,
+                            )?.name
+                          : "Escolher atleta..."}
+                      </Text>
+                      <Text style={styles.dropdownArrow}>
+                        {showAthleteDropdown ? "▲" : "▼"}
+                      </Text>
+                    </TouchableOpacity>
+
+                    {showAthleteDropdown && (
+                      <View style={styles.dropdownList}>
+                        {mineAthletes.map((athlete) => (
+                          <TouchableOpacity
+                            key={athlete._id}
+                            style={[
+                              styles.dropdownItem,
+                              selectedAthleteId === athlete._id &&
+                                styles.dropdownItemSelected,
+                            ]}
+                            onPress={() => {
+                              setSelectedAthleteId(athlete._id);
+                              setShowAthleteDropdown(false);
+                            }}
+                          >
+                            <Text
+                              style={[
+                                styles.dropdownItemText,
+                                selectedAthleteId === athlete._id &&
+                                  styles.dropdownItemTextSelected,
+                              ]}
+                            >
+                              {athlete.name}
+                            </Text>
+                            {selectedAthleteId === athlete._id && (
+                              <Text style={styles.checkmark}>✓</Text>
+                            )}
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                )}
+
+                {/* Botão de confirmação */}
+                {selectedHour && (
+                  <TouchableOpacity
+                    style={[
+                      styles.actionButton,
+                      user.role !== "atleta" &&
+                        !selectedAthleteId && { opacity: 0.5 },
+                    ]}
+                    onPress={handleScheduleTraining}
+                    disabled={user.role !== "atleta" && !selectedAthleteId}
+                  >
+                    <Text style={styles.actionButtonText}>Marcar Treino</Text>
+                  </TouchableOpacity>
                 )}
               </View>
             )}
 
-            {/* Botão de confirmação */}
-            {selectedHour && (
-              <TouchableOpacity 
-                style={[
-                  styles.actionButton,
-                  (user.role !== "atleta" && !selectedAthleteId) && { opacity: 0.5 }
-                ]}
-                onPress={handleScheduleTraining}
-                disabled={user.role !== "atleta" && !selectedAthleteId}
-              >
-                <Text style={styles.actionButtonText}>Marcar Treino</Text>
-              </TouchableOpacity>
+          {selectedDay &&
+            morningSlots.length === 0 &&
+            afternoonSlots.length === 0 && (
+              <Text style={styles.noAvailabilityText}>
+                Nenhum horário disponível neste dia
+              </Text>
             )}
-          </View>
-        )}
 
-        {selectedDay && morningSlots.length === 0 && afternoonSlots.length === 0 && (
-          <Text style={styles.noAvailabilityText}>
-            Nenhum horário disponível neste dia
-          </Text>
-        )}
-        
-        {/* SECÇÃO 1: Treinos que Precisam da Minha Ação */}
-        {trainingsNeedMyAction.length > 0 && (
-          <>
-            <Text style={styles.sectionTitle}>Precisas de Confirmar</Text>
-            <View style={styles.actionNeededContainer}>
-              {trainingsNeedMyAction.map((training) => (
-                <View key={training._id} style={styles.actionNeededCard}>
-                  <Text style={styles.trainingText}>
-                    {formatDate(training.date, training.hour)}{"\n"}
-                    {user.role === "atleta"
-                      ? training.PT.name
-                      : training.athlete.name}
-                  </Text>
-                  
-                  <View style={styles.confirmedCardFooter}>
-                    <Text style={styles.actionNeededBadge}>Aguarda Confirmação</Text>
-                  </View>
-                  
-                  <View style={styles.pendingActions}>
-                    <TouchableOpacity 
-                      style={styles.acceptButton}
-                      onPress={() => handleAcceptTraining(training._id)}
-                    >
-                      <Text style={styles.buttonText}>Aceitar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                      style={styles.rejectButton}
-                      onPress={() => handleRejectTraining(training._id)}
-                    >
-                      <Text style={styles.rejectButtonText}>Recusar</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </View>
-          </>
-        )}
+          {/* SECÇÃO 1: Treinos que Precisam da Minha Ação */}
+          {trainingsNeedMyAction.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>Precisas de Confirmar</Text>
+              <View style={styles.actionNeededContainer}>
+                {trainingsNeedMyAction.map((training) => (
+                  <View key={training._id} style={styles.actionNeededCard}>
+                    <Text style={styles.trainingText}>
+                      {formatDate(training.date, training.hour)}
+                      {"\n"}
+                      {user.role === "atleta"
+                        ? training.PT.name
+                        : training.athlete.name}
+                    </Text>
 
-        {/* SECÇÃO 2: Próximos Treinos Confirmados */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Próximos Treinos Confirmados</Text>
-          <DaysSwitch />
-        </View>
-        
-        <View style={styles.confirmedContainer}>
-          {getTrainingsToShow().length > 0 ? (
-            getTrainingsToShow().map((training) => (
-              <View key={training._id} style={styles.confirmedCard}>
-                <Text style={styles.trainingText}>
-                  {formatDate(training.date, training.hour)}{"\n"}
-                  {user.role === "atleta"
-                    ? training.PT.name
-                    : training.athlete.name}
-                </Text>
-                
-                <View style={styles.confirmedCardFooter}>
-                  <Text style={styles.confirmedBadge}>Confirmado</Text>
-                  <TouchableOpacity 
-                    onPress={() => handleDeleteTraining(training)}
-                    style={styles.deleteButtonContainer}
-                  >
-                    <Ionicons name="close-outline" size={18} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
+                    <View style={styles.confirmedCardFooter}>
+                      <Text style={styles.actionNeededBadge}>
+                        Aguarda Confirmação
+                      </Text>
+                    </View>
+
+                    <View style={styles.pendingActions}>
+                      <TouchableOpacity
+                        style={styles.acceptButton}
+                        onPress={() => handleAcceptTraining(training._id)}
+                      >
+                        <Text style={styles.buttonText}>Aceitar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.rejectButton}
+                        onPress={() => handleRejectTraining(training._id)}
+                      >
+                        <Text style={styles.rejectButtonText}>Recusar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
               </View>
-            ))
-          ) : (
-            <Text style={styles.emptyStateText}>
-              {showFifteenDays 
-                ? "Não existem treinos para os próximos 15 dias."
-                : "Não existem treinos para os próximos 7 dias."
-              }
-            </Text>
+            </>
           )}
-        </View>
 
-        {/* SECÇÃO 3: À Espera de Confirmação */}
-        {pendingOtherPerson.length > 0 && (
-          <>
-            <Text style={styles.sectionTitle}>À Espera de Confirmação</Text>
-            <View style={styles.pendingContainer}>
-              {pendingOtherPerson.map((training) => (
-                <View key={training._id} style={styles.pendingCard}>
+          {/* SECÇÃO 2: Próximos Treinos Confirmados */}
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>
+              Próximos Treinos Confirmados
+            </Text>
+            <DaysSwitch />
+          </View>
+
+          <View style={styles.confirmedContainer}>
+            {getTrainingsToShow().length > 0 ? (
+              getTrainingsToShow().map((training) => (
+                <View key={training._id} style={styles.confirmedCard}>
                   <Text style={styles.trainingText}>
-                    {formatDate(training.date, training.hour)}{"\n"}
+                    {formatDate(training.date, training.hour)}
+                    {"\n"}
                     {user.role === "atleta"
                       ? training.PT.name
                       : training.athlete.name}
                   </Text>
-                  
+
                   <View style={styles.confirmedCardFooter}>
-                    <Text style={styles.pendingBadge}>Pendente</Text>
-                    <TouchableOpacity 
+                    <Text style={styles.confirmedBadge}>Confirmado</Text>
+                    <TouchableOpacity
                       onPress={() => handleDeleteTraining(training)}
                       style={styles.deleteButtonContainer}
                     >
-                      <Ionicons name="trash-outline" size={18} color="#ef4444" />
+                      <Ionicons
+                        name="close-outline"
+                        size={18}
+                        color="#ef4444"
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>
-              ))}
-            </View>
-          </>
-        )}
-      </>
-    ) : (
-      // Tab de Exercícios
-      <ExerciseScreen />
-    )}
+              ))
+            ) : (
+              <Text style={styles.emptyStateText}>
+                {showFifteenDays
+                  ? "Não existem treinos para os próximos 15 dias."
+                  : "Não existem treinos para os próximos 7 dias."}
+              </Text>
+            )}
+          </View>
 
-    <Popup
-      visible={popup.visible}
-      type={popup.type as any}
-      title={popup.title}
-      message={popup.message}
-      onConfirm={popup.onConfirm}
-      onCancel={() => setPopup(p => ({ ...p, visible: false }))}
-      onClose={() => setPopup(p => ({ ...p, visible: false }))}
-    />
-  </ScrollView>
-);
- }
+          {/* SECÇÃO 3: À Espera de Confirmação */}
+          {pendingOtherPerson.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>À Espera de Confirmação</Text>
+              <View style={styles.pendingContainer}>
+                {pendingOtherPerson.map((training) => (
+                  <View key={training._id} style={styles.pendingCard}>
+                    <Text style={styles.trainingText}>
+                      {formatDate(training.date, training.hour)}
+                      {"\n"}
+                      {user.role === "atleta"
+                        ? training.PT.name
+                        : training.athlete.name}
+                    </Text>
+
+                    <View style={styles.confirmedCardFooter}>
+                      <Text style={styles.pendingBadge}>Pendente</Text>
+                      <TouchableOpacity
+                        onPress={() => handleDeleteTraining(training)}
+                        style={styles.deleteButtonContainer}
+                      >
+                        <Ionicons
+                          name="trash-outline"
+                          size={18}
+                          color="#ef4444"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
+        </>
+      ) : (
+        // Tab de Exercícios
+        <ExerciseScreen />
+      )}
+
+      <Popup
+        visible={popup.visible}
+        type={popup.type as any}
+        title={popup.title}
+        message={popup.message}
+        onConfirm={popup.onConfirm}
+        onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
+        onClose={() => setPopup((p) => ({ ...p, visible: false }))}
+      />
+    </ScrollView>
+  );
+}

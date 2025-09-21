@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,17 +11,17 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { userService } from '../services/usersService';
-import { styles } from './styles/LoginScreen.styles';
-import Popup from '../componentes/Popup';
-import avvbLogo from '../../assets/avvb.png';
-import LoginTransition from './LoginTransition';
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userService } from "../services/usersService";
+import { styles } from "./styles/LoginScreen.styles";
+import Popup from "../componentes/Popup";
+import avvbLogo from "../../assets/avvb.png";
+import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
 
@@ -35,59 +35,68 @@ interface PopupState {
 
 export default function LoginScreen() {
   const [isRegistering, setIsRegistering] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhone] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [popup, setPopup] = useState<PopupState>({
     visible: false,
-    message: '',
-    type: 'success'
+    message: "",
+    type: "success",
   });
 
   const { login } = useAuth();
   const navigation = useNavigation<any>();
 
-  const showPopup = (message: string, type: "success" | "error" | "confirm" = "success", title?: string, onConfirm?: () => void) => {
+  const showPopup = (
+    message: string,
+    type: "success" | "error" | "confirm" = "success",
+    title?: string,
+    onConfirm?: () => void,
+  ) => {
     setPopup({
       visible: true,
       title,
       message,
       type,
-      onConfirm
+      onConfirm,
     });
   };
 
   const hidePopup = () => {
-    setPopup(prev => ({ ...prev, visible: false }));
+    setPopup((prev) => ({ ...prev, visible: false }));
   };
 
   // Estados do reset password
-  const [resetEmail, setResetEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [resetStep, setResetStep] = useState<'none' | 'email' | 'code'>('none');
+  const [resetEmail, setResetEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [resetStep, setResetStep] = useState<"none" | "email" | "code">("none");
 
   // Pedir código por email
   const handleRequestReset = async () => {
     if (!resetEmail) {
-      showPopup('Insira seu email', 'error', 'Email necessário');
+      showPopup("Insira seu email", "error", "Email necessário");
       return;
     }
     setLoading(true);
     try {
       await userService.requestPasswordReset(resetEmail);
-      showPopup('Código enviado por email!', 'success', 'Sucesso');
-      setResetStep('code');
+      showPopup("Código enviado por email!", "success", "Sucesso");
+      setResetStep("code");
     } catch (err: any) {
-      showPopup(err.response?.data?.message || 'Erro ao solicitar redefinição', 'error', 'Erro');
+      showPopup(
+        err.response?.data?.message || "Erro ao solicitar redefinição",
+        "error",
+        "Erro",
+      );
     } finally {
       setLoading(false);
     }
@@ -96,21 +105,25 @@ export default function LoginScreen() {
   // Confirmar código e nova senha
   const handleResetWithCode = async () => {
     if (newPassword !== confirmNewPassword) {
-      showPopup('As senhas não coincidem', 'error', 'Erro de validação');
+      showPopup("As senhas não coincidem", "error", "Erro de validação");
       return;
     }
     setLoading(true);
     try {
       await userService.resetPasswordWithCode(resetEmail, code, newPassword);
-      showPopup('Senha alterada com sucesso!', 'success', 'Sucesso', () => {
-        setResetStep('none');
-        setResetEmail('');
-        setCode('');
-        setNewPassword('');
-        setConfirmNewPassword('');
+      showPopup("Senha alterada com sucesso!", "success", "Sucesso", () => {
+        setResetStep("none");
+        setResetEmail("");
+        setCode("");
+        setNewPassword("");
+        setConfirmNewPassword("");
       });
     } catch (err: any) {
-      showPopup(err.response?.data?.message || 'Código inválido ou expirado', 'error', 'Erro');
+      showPopup(
+        err.response?.data?.message || "Código inválido ou expirado",
+        "error",
+        "Erro",
+      );
     } finally {
       setLoading(false);
     }
@@ -120,53 +133,67 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      showPopup('Preencha email e senha', 'error', 'Campos obrigatórios');
+      showPopup("Preencha email e senha", "error", "Campos obrigatórios");
       return;
     }
 
     setLoading(true);
     try {
-      const response = await api.post(`${API_BASE_URL}/users/login`, { 
+      const response = await api.post(`${API_BASE_URL}/users/login`, {
         login: email.trim(),
-        password 
+        password,
       });
 
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token); // interceptor usa este token
       login(user, rememberMe); // salva user no context
-      console.log('User data:', user);
+      console.log("User data:", user);
       if (!user.verified) {
         showPopup(
-          'Utilizador à espera de autenticação',
-          'confirm',
-          'Conta não verificada',
+          "Utilizador à espera de autenticação",
+          "confirm",
+          "Conta não verificada",
           async () => {
             try {
-              await api.post(`${API_BASE_URL}/users/resend-verification`, { email: user.email });
-              showPopup('Email de verificação reenviado!', 'success', 'Sucesso');
+              await api.post(`${API_BASE_URL}/users/resend-verification`, {
+                email: user.email,
+              });
+              showPopup(
+                "Email de verificação reenviado!",
+                "success",
+                "Sucesso",
+              );
             } catch (err: any) {
-              showPopup(err.response?.data?.message || 'Erro ao reenviar email', 'error', 'Erro');
+              showPopup(
+                err.response?.data?.message || "Erro ao reenviar email",
+                "error",
+                "Erro",
+              );
             }
-          }
+          },
         );
         return;
       }
 
       if (!user.active) {
-        showPopup('Conta desativada. Contacte o suporte.', 'error', 'Conta desativada');
+        showPopup(
+          "Conta desativada. Contacte o suporte.",
+          "error",
+          "Conta desativada",
+        );
         return;
       }
 
       login(user, rememberMe);
       if (rememberMe) {
-        await AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem("user", JSON.stringify(user));
       }
 
       setShowTransition(true);
-      
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Credenciais inválidas';
-      showPopup(errorMessage, 'error', 'Erro de Login');
+      const errorMessage =
+        err.response?.data?.message || "Credenciais inválidas";
+      showPopup(errorMessage, "error", "Erro de Login");
     } finally {
       setLoading(false);
     }
@@ -174,47 +201,65 @@ export default function LoginScreen() {
 
   const handleRegister = async () => {
     if (!email || !password || !name || !phoneNumber) {
-      showPopup('Preencha todos os campos', 'error', 'Campos obrigatórios');
+      showPopup("Preencha todos os campos", "error", "Campos obrigatórios");
       return;
     }
     if (password !== confirmPassword) {
-      showPopup('As senhas não coincidem', 'error', 'Erro de validação');
+      showPopup("As senhas não coincidem", "error", "Erro de validação");
       return;
     }
     if (password.length < 6) {
-      showPopup('A senha deve ter pelo menos 6 caracteres', 'error', 'Senha inválida');
+      showPopup(
+        "A senha deve ter pelo menos 6 caracteres",
+        "error",
+        "Senha inválida",
+      );
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      showPopup('Por favor, insira um email válido', 'error', 'Email inválido');
+      showPopup("Por favor, insira um email válido", "error", "Email inválido");
       return;
     }
 
     setLoading(true);
     try {
-      await userService.register({ 
-        name, 
-        email, 
-        password, 
+      await userService.register({
+        name,
+        email,
+        password,
         phoneNumber,
-        role: 'atleta' 
+        role: "atleta",
       });
-      
+
       showPopup(
-        'Conta criada com sucesso! Verifique o seu email para confirmar a conta. O email pode estar na pasta de spam.', 
-        'success', 
-        'Conta criada'
+        "Conta criada com sucesso! Verifique o seu email para confirmar a conta. O email pode estar na pasta de spam.",
+        "success",
+        "Conta criada",
       );
       setIsRegistering(false);
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Erro ao criar conta';
-      if (errorMessage.toLowerCase().includes('email') && errorMessage.toLowerCase().includes('já existe')) {
-        showPopup('Este email já está registado. Tente login ou outro email.', 'error', 'Email já existe');
-      } else if (errorMessage.toLowerCase().includes('telefone') || errorMessage.toLowerCase().includes('telemóvel')) {
-        showPopup('Este número já está registado. Tente outro.', 'error', 'Telemóvel já existe');
+      const errorMessage = err.response?.data?.message || "Erro ao criar conta";
+      if (
+        errorMessage.toLowerCase().includes("email") &&
+        errorMessage.toLowerCase().includes("já existe")
+      ) {
+        showPopup(
+          "Este email já está registado. Tente login ou outro email.",
+          "error",
+          "Email já existe",
+        );
+      } else if (
+        errorMessage.toLowerCase().includes("telefone") ||
+        errorMessage.toLowerCase().includes("telemóvel")
+      ) {
+        showPopup(
+          "Este número já está registado. Tente outro.",
+          "error",
+          "Telemóvel já existe",
+        );
       } else {
-        showPopup(errorMessage, 'error', 'Erro no registo');
+        showPopup(errorMessage, "error", "Erro no registo");
       }
     } finally {
       setLoading(false);
@@ -222,11 +267,11 @@ export default function LoginScreen() {
   };
 
   const clearForm = () => {
-    setName('');
-    setEmail('');
-    setPassword('');
-    setPhone('');
-    setConfirmPassword('');
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPhone("");
+    setConfirmPassword("");
     setShowPassword(false);
     setShowConfirmPassword(false);
   };
@@ -241,20 +286,23 @@ export default function LoginScreen() {
     <SafeAreaView style={styles.safeArea}>
       {/* Transição de login */}
       {showTransition && (
-        <LoginTransition 
+        <LoginTransition
           onFinish={() => {
-            console.log('Transição terminou - navegando');
+            console.log("Transição terminou - navegando");
             setShowTransition(false);
-            navigation.reset({ index: 0, routes: [{ name: 'Athlete' }] });
+            navigation.reset({ index: 0, routes: [{ name: "Athlete" }] });
           }}
         />
       )}
-      <LinearGradient colors={['#1a1a1a', '#2d2d2d', '#1a1a1a']} style={styles.gradient}>
+      <LinearGradient
+        colors={["#1a1a1a", "#2d2d2d", "#1a1a1a"]}
+        style={styles.gradient}
+      >
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.keyboardView}
         >
-          <ScrollView 
+          <ScrollView
             contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
@@ -263,32 +311,44 @@ export default function LoginScreen() {
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <Image source={avvbLogo} style={styles.logo} resizeMode="contain" />
+                <Image
+                  source={avvbLogo}
+                  style={styles.logo}
+                  resizeMode="contain"
+                />
               </View>
               <Text style={styles.title}>
-                {resetStep !== 'none' 
-                  ? 'Recuperar Senha' 
-                  : isRegistering ? 'Criar Conta' : 'Bem-vindo'}
+                {resetStep !== "none"
+                  ? "Recuperar Senha"
+                  : isRegistering
+                    ? "Criar Conta"
+                    : "Bem-vindo"}
               </Text>
               <Text style={styles.subtitle}>
-                {resetStep === 'email' && 'Digite o seu email para receber o código'}
-                {resetStep === 'code' && 'Insira o código e defina a nova senha'}
-                {resetStep === 'none' && (
-                  isRegistering 
-                    ? 'Preencha os dados para criar sua conta' 
-                    : 'Coloque as suas credenciais para continuar'
-                )}
+                {resetStep === "email" &&
+                  "Digite o seu email para receber o código"}
+                {resetStep === "code" &&
+                  "Insira o código e defina a nova senha"}
+                {resetStep === "none" &&
+                  (isRegistering
+                    ? "Preencha os dados para criar sua conta"
+                    : "Coloque as suas credenciais para continuar")}
               </Text>
             </View>
 
             {/* Form */}
-            {resetStep === 'none' && (
+            {resetStep === "none" && (
               <View style={styles.formContainer}>
                 {isRegistering && (
                   <>
                     <View style={styles.inputContainer}>
                       <View style={styles.inputWrapper}>
-                        <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                        <Ionicons
+                          name="person-outline"
+                          size={20}
+                          color="#666"
+                          style={styles.inputIcon}
+                        />
                         <TextInput
                           placeholder="Nome completo"
                           placeholderTextColor="#999"
@@ -300,7 +360,12 @@ export default function LoginScreen() {
                     </View>
                     <View style={styles.inputContainer}>
                       <View style={styles.inputWrapper}>
-                        <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                        <Ionicons
+                          name="call-outline"
+                          size={20}
+                          color="#666"
+                          style={styles.inputIcon}
+                        />
                         <TextInput
                           placeholder="Número de Telemóvel"
                           placeholderTextColor="#999"
@@ -318,7 +383,12 @@ export default function LoginScreen() {
                 {/* Email */}
                 <View style={styles.inputContainer}>
                   <View style={styles.inputWrapper}>
-                    <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <Ionicons
+                      name="mail-outline"
+                      size={20}
+                      color="#666"
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="Email"
                       placeholderTextColor="#999"
@@ -334,7 +404,12 @@ export default function LoginScreen() {
                 {/* Password */}
                 <View style={styles.inputContainer}>
                   <View style={styles.passwordWrapper}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color="#666"
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="Senha"
                       placeholderTextColor="#999"
@@ -343,8 +418,15 @@ export default function LoginScreen() {
                       secureTextEntry={!showPassword}
                       style={styles.input}
                     />
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
-                      <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                      style={styles.eyeIcon}
+                    >
+                      <Ionicons
+                        name={showPassword ? "eye-outline" : "eye-off-outline"}
+                        size={20}
+                        color="#666"
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -353,7 +435,12 @@ export default function LoginScreen() {
                 {isRegistering && (
                   <View style={styles.inputContainer}>
                     <View style={styles.passwordWrapper}>
-                      <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                      <Ionicons
+                        name="lock-closed-outline"
+                        size={20}
+                        color="#666"
+                        style={styles.inputIcon}
+                      />
                       <TextInput
                         placeholder="Confirmar senha"
                         placeholderTextColor="#999"
@@ -362,8 +449,21 @@ export default function LoginScreen() {
                         secureTextEntry={!showConfirmPassword}
                         style={styles.input}
                       />
-                      <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeIcon}>
-                        <Ionicons name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
+                      <TouchableOpacity
+                        onPress={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        style={styles.eyeIcon}
+                      >
+                        <Ionicons
+                          name={
+                            showConfirmPassword
+                              ? "eye-outline"
+                              : "eye-off-outline"
+                          }
+                          size={20}
+                          color="#666"
+                        />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -371,7 +471,10 @@ export default function LoginScreen() {
 
                 {/* Botão Login/Register */}
                 <TouchableOpacity
-                  style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                  style={[
+                    styles.loginButton,
+                    loading && styles.loginButtonDisabled,
+                  ]}
                   onPress={isRegistering ? handleRegister : handleLogin}
                   disabled={loading}
                 >
@@ -379,22 +482,28 @@ export default function LoginScreen() {
                     <ActivityIndicator color="#1a1a1a" size="small" />
                   ) : (
                     <Text style={styles.loginButtonText}>
-                      {isRegistering ? 'Criar Conta' : 'Entrar'}
+                      {isRegistering ? "Criar Conta" : "Entrar"}
                     </Text>
                   )}
                 </TouchableOpacity>
                 {!isRegistering && (
                   <View style={styles.rememberMeContainer}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       style={styles.rememberMeButton}
                       onPress={() => setRememberMe(!rememberMe)}
                     >
-                      <View style={[
-                        styles.checkboxContainer,
-                        rememberMe && styles.checkboxSelected
-                      ]}>
+                      <View
+                        style={[
+                          styles.checkboxContainer,
+                          rememberMe && styles.checkboxSelected,
+                        ]}
+                      >
                         {rememberMe && (
-                          <Ionicons name="checkmark" size={12} color="#1a1a1a" />
+                          <Ionicons
+                            name="checkmark"
+                            size={12}
+                            color="#1a1a1a"
+                          />
                         )}
                       </View>
                       <Text style={styles.rememberMeText}>Lembrar-me</Text>
@@ -403,19 +512,29 @@ export default function LoginScreen() {
                 )}
                 {/* Esqueci senha */}
                 {!isRegistering && (
-                  <TouchableOpacity style={styles.forgotPassword} onPress={() => setResetStep('email')}>
-                    <Text style={styles.forgotPasswordText}>Esqueceu a senha?</Text>
+                  <TouchableOpacity
+                    style={styles.forgotPassword}
+                    onPress={() => setResetStep("email")}
+                  >
+                    <Text style={styles.forgotPasswordText}>
+                      Esqueceu a senha?
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
             )}
 
             {/* Fluxo Reset: Email */}
-            {resetStep === 'email' && (
+            {resetStep === "email" && (
               <View style={styles.formContainer}>
                 <View style={styles.inputContainer}>
                   <View style={styles.inputWrapper}>
-                    <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <Ionicons
+                      name="mail-outline"
+                      size={20}
+                      color="#666"
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="Email"
                       placeholderTextColor="#999"
@@ -428,24 +547,39 @@ export default function LoginScreen() {
                   </View>
                 </View>
                 <TouchableOpacity
-                  style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                  style={[
+                    styles.loginButton,
+                    loading && styles.loginButtonDisabled,
+                  ]}
                   onPress={handleRequestReset}
                   disabled={loading}
                 >
-                  {loading ? <ActivityIndicator color="#1a1a1a" size="small" /> : <Text style={styles.loginButtonText}>Enviar Código</Text>}
+                  {loading ? (
+                    <ActivityIndicator color="#1a1a1a" size="small" />
+                  ) : (
+                    <Text style={styles.loginButtonText}>Enviar Código</Text>
+                  )}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.switchModeButton} onPress={() => setResetStep('none')}>
+                <TouchableOpacity
+                  style={styles.switchModeButton}
+                  onPress={() => setResetStep("none")}
+                >
                   <Text style={styles.switchModeText}>Voltar ao Login</Text>
                 </TouchableOpacity>
               </View>
             )}
 
             {/* Fluxo Reset: Código + Nova Senha */}
-            {resetStep === 'code' && (
+            {resetStep === "code" && (
               <View style={styles.formContainer}>
                 <View style={styles.inputContainer}>
                   <View style={styles.inputWrapper}>
-                    <Ionicons name="key-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <Ionicons
+                      name="key-outline"
+                      size={20}
+                      color="#666"
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="Código recebido"
                       placeholderTextColor="#999"
@@ -457,7 +591,12 @@ export default function LoginScreen() {
                 </View>
                 <View style={styles.inputContainer}>
                   <View style={styles.passwordWrapper}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color="#666"
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="Nova Senha"
                       placeholderTextColor="#999"
@@ -470,7 +609,12 @@ export default function LoginScreen() {
                 </View>
                 <View style={styles.inputContainer}>
                   <View style={styles.passwordWrapper}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color="#666"
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="Confirmar Nova Senha"
                       placeholderTextColor="#999"
@@ -482,24 +626,39 @@ export default function LoginScreen() {
                   </View>
                 </View>
                 <TouchableOpacity
-                  style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+                  style={[
+                    styles.loginButton,
+                    loading && styles.loginButtonDisabled,
+                  ]}
                   onPress={handleResetWithCode}
                   disabled={loading}
                 >
-                  {loading ? <ActivityIndicator color="#1a1a1a" size="small" /> : <Text style={styles.loginButtonText}>Alterar Senha</Text>}
+                  {loading ? (
+                    <ActivityIndicator color="#1a1a1a" size="small" />
+                  ) : (
+                    <Text style={styles.loginButtonText}>Alterar Senha</Text>
+                  )}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.switchModeButton} onPress={() => setResetStep('none')}>
+                <TouchableOpacity
+                  style={styles.switchModeButton}
+                  onPress={() => setResetStep("none")}
+                >
                   <Text style={styles.switchModeText}>Voltar ao Login</Text>
                 </TouchableOpacity>
               </View>
             )}
 
             {/* Switch Mode */}
-            {resetStep === 'none' && (
+            {resetStep === "none" && (
               <View style={styles.switchModeContainer}>
-                <TouchableOpacity style={styles.switchModeButton} onPress={handleSwitchMode}>
+                <TouchableOpacity
+                  style={styles.switchModeButton}
+                  onPress={handleSwitchMode}
+                >
                   <Text style={styles.switchModeText}>
-                    {isRegistering ? 'Já tem conta? Entrar' : 'Não tem conta? Criar Conta'}
+                    {isRegistering
+                      ? "Já tem conta? Entrar"
+                      : "Não tem conta? Criar Conta"}
                   </Text>
                 </TouchableOpacity>
               </View>
