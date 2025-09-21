@@ -12,11 +12,19 @@ interface Props {
   selected: string[];
 }
 
-export default function ChangeAthletesModal({ visible, onClose, onConfirm, users, selected }: Props) {
+export default function ChangeAthletesModal({
+  visible,
+  onClose,
+  onConfirm,
+  users,
+  selected,
+}: Props) {
   const [selectedAthletes, setSelectedAthletes] = useState<string[]>(selected);
   const toggleSelection = (id: string) => {
     setSelectedAthletes((prev) =>
-      prev.includes(id) ? prev.filter((athlete) => athlete !== id) : [...prev, id]
+      prev.includes(id)
+        ? prev.filter((athlete) => athlete !== id)
+        : [...prev, id],
     );
   };
 
@@ -26,7 +34,7 @@ export default function ChangeAthletesModal({ visible, onClose, onConfirm, users
       setSelectedAthletes(selected);
     }
   }, [selected, visible]);
-  
+
   return (
     <Modal visible={visible} transparent>
       <View style={styles.overlay}>
@@ -40,10 +48,13 @@ export default function ChangeAthletesModal({ visible, onClose, onConfirm, users
                 style={styles.checkboxOption}
                 onPress={() => toggleSelection(athlete._id)}
               >
-                <View style={[
-                  styles.checkboxBox,
-                  selectedAthletes.includes(athlete._id) && styles.checkboxSelected
-                ]}>
+                <View
+                  style={[
+                    styles.checkboxBox,
+                    selectedAthletes.includes(athlete._id) &&
+                      styles.checkboxSelected,
+                  ]}
+                >
                   {selectedAthletes.includes(athlete._id) && (
                     <Ionicons name="checkmark" size={12} color="white" />
                   )}
@@ -54,8 +65,8 @@ export default function ChangeAthletesModal({ visible, onClose, onConfirm, users
           </ScrollView>
 
           <View style={styles.actionRow}>
-            <TouchableOpacity 
-              style={[styles.actionButton, styles.cancelButton]} 
+            <TouchableOpacity
+              style={[styles.actionButton, styles.cancelButton]}
               onPress={onClose}
             >
               <Text style={styles.cancelText}>Cancelar</Text>

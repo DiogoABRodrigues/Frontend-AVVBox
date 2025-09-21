@@ -39,10 +39,7 @@ export default function Popup({
                 </TouchableOpacity>
               </>
             ) : (
-              <TouchableOpacity
-                style={styles.confirmBtn}
-                onPress={onClose}
-              >
+              <TouchableOpacity style={styles.confirmBtn} onPress={onClose}>
                 <Text style={styles.confirmText}>
                   {type === "success" ? "OK" : "Fechar"}
                 </Text>
@@ -54,4 +51,3 @@ export default function Popup({
     </Modal>
   );
 }
-

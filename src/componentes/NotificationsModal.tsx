@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Modal, TextInput, TouchableOpacity, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { styles } from "./styles/NotificationsModal.styles";
 import { userService } from "../services/usersService";
 import { useAuth } from "../context/AuthContext";
@@ -41,13 +48,15 @@ export default function NotificationModal({
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if(user.role === 'atleta') return;
+      if (user.role === "atleta") return;
       try {
         const usersFromApi = await userService.getAll();
-        const usersToShow = usersFromApi.map((u: { _id: string; name: string }) => ({
-          id: u._id,
-          name: u.name,
-        }));
+        const usersToShow = usersFromApi.map(
+          (u: { _id: string; name: string }) => ({
+            id: u._id,
+            name: u.name,
+          }),
+        );
         usersToShow.sort((a, b) => a.name.localeCompare(b.name));
         setUsers(usersToShow);
       } catch (error) {
@@ -78,7 +87,6 @@ export default function NotificationModal({
     });
     setRecipientOption("all");
   };
-
 
   return (
     <Modal visible={visible} transparent>
@@ -166,12 +174,11 @@ export default function NotificationModal({
                   notification.body,
                   recipientOption === "individual"
                     ? notification.target
-                    : [recipientOption]
-                )
-              resetNotification();
-              onClose();
-              }
-              }
+                    : [recipientOption],
+                );
+                resetNotification();
+                onClose();
+              }}
               style={[styles.actionButton, styles.actionLeft]}
             >
               <Text style={styles.actionButtonText}>Enviar</Text>
