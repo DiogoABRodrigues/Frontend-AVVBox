@@ -313,12 +313,12 @@ import { Availability } from "../models/Availability";
           });
         } 
         fetchUserData();
-      } catch {
+      } catch (err) {
         setPopup({
           visible: true,
           type: "error",
           title: "Erro",
-          message: "Ocorreu um erro ao guardar a alteração, verifique os dados ou tente novamente mais tarde.",
+          message: `Ocorreu um erro ao guardar a alteração: ${err.response?.data?.message || err.message || err}.`,
           onConfirm: undefined,
         });
       }
