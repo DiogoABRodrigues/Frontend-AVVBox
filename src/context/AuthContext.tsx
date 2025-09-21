@@ -1,10 +1,16 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface User {
   id: string;
   name: string;
-  role: 'atleta' | 'PT' | 'Admin';
+  role: "atleta" | "PT" | "Admin";
 }
 
 interface AuthContextType {
@@ -22,10 +28,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem('user');
+        const storedUser = await AsyncStorage.getItem("user");
         if (storedUser) setUser(JSON.parse(storedUser));
       } catch (err) {
-        console.log('Erro ao carregar usuário localmente:', err);
+        console.log("Erro ao carregar usuário localmente:", err);
       }
     };
     loadUser();
@@ -35,9 +41,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(userData);
     if (rememberMe) {
       try {
-        await AsyncStorage.setItem('user', JSON.stringify(userData));
+        await AsyncStorage.setItem("user", JSON.stringify(userData));
       } catch (err) {
-        console.log('Erro ao salvar usuário localmente:', err);
+        console.log("Erro ao salvar usuário localmente:", err);
       }
     }
   };
@@ -45,9 +51,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setUser(null);
     try {
-      await AsyncStorage.removeItem('user');
+      await AsyncStorage.removeItem("user");
     } catch (err) {
-      console.log('Erro ao remover usuário localmente:', err);
+      console.log("Erro ao remover usuário localmente:", err);
     }
   };
 
@@ -61,6 +67,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 // Hook para acessar o contexto
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 };

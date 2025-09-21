@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AuthProvider, useAuth } from './src/context/AuthContext';
-import AthleteTabs from './src/screens/Navigator';
-import LoginScreen from './src/screens/LoginScreen';
-import { NotificationsProvider } from './src/context/NotificationsContext';
-import { Provider as PaperProvider } from 'react-native-paper';
+import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AuthProvider, useAuth } from "./src/context/AuthContext";
+import AthleteTabs from "./src/screens/Navigator";
+import LoginScreen from "./src/screens/LoginScreen";
+import { NotificationsProvider } from "./src/context/NotificationsContext";
+import { Provider as PaperProvider } from "react-native-paper";
 
 const Stack = createNativeStackNavigator();
 
