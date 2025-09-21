@@ -28,7 +28,7 @@ export interface Weights {
   legs: MuscleGroup;
   abs: MuscleGroup;
   cardio: MuscleGroup;
-  extra: ExtraGroup; 
+  extra: ExtraGroup;
   createdAt?: string;
   updatedAt?: string;
 }

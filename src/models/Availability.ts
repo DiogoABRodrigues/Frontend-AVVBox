@@ -1,11 +1,11 @@
 export interface TimeRange {
   start: string; // ex: "08:00"
-  end: string;   // ex: "12:00"
+  end: string; // ex: "12:00"
 }
 
 // Novo tipo para cada dia da semana
 export interface DayAvailability {
-  working: boolean;       // indica se o dia é de trabalho
+  working: boolean; // indica se o dia é de trabalho
   intervals: TimeRange[]; // horários do dia
 }
 
