@@ -247,7 +247,10 @@ export default function TrainingScreen() {
           message: "Treino agendado com sucesso! Aguarda a confirmação do " + membro + ".",
           onConfirm: undefined,
         });
-      } else { 
+      } 
+        // Recarregar todos os treinos para atualizar as listas
+        await loadAllTrainings();
+      } catch {
         setPopup({
           visible: true,
           type: "error",
@@ -255,12 +258,7 @@ export default function TrainingScreen() {
           message: "Ocorreu um erro ao agendar o treino.",
           onConfirm: undefined,
         });
-      }
-        
-        // Recarregar todos os treinos para atualizar as listas
         await loadAllTrainings();
-      } catch {
-        Alert.alert('Erro', 'Não foi possível marcar o treino');
       }
     }
   };
@@ -270,12 +268,18 @@ export default function TrainingScreen() {
       await trainingService.accept(trainingId, user.id);
       await loadAllTrainings();
     } catch {
-      Alert.alert('Erro', 'Não foi possível confirmar o treino');
+      await loadAllTrainings();
+      setPopup({
+        visible: true,
+        type: "error",
+        title: "Erro",
+        message: "Não foi possível confirmar o treino.",
+        onConfirm: undefined,
+      });
     }
   };
 
   const handleRejectTraining = async (trainingId: string) => {
-    try {
       setPopup({
         visible: true,
         type: "confirm",
@@ -300,12 +304,10 @@ export default function TrainingScreen() {
               message: "Não foi possível recusar o treino.",
               onConfirm: undefined,
             });
+            await loadAllTrainings();
           }
         },
       });
-    } catch {
-      Alert.alert('Erro', 'Não foi possível recusar o treino');
-    }
   };
 
   const formatDate = (dateString: string, time: string) => {
@@ -422,6 +424,7 @@ export default function TrainingScreen() {
             message: "Não foi possível eliminar o treino.",
             onConfirm: undefined,
           });
+          await loadAllTrainings();
         }
       },
     });

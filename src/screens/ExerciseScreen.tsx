@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
  // ExerciseScreen.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
@@ -8,6 +9,7 @@ import { User } from '../models/User';
 import { userService } from '../services/usersService';
 import { Weights, Exercise } from "../models/Exercise";
 import { exerciseService } from '../services/exerciseService';
+import Popup from "../componentes/Popup";
 
 interface LocalMuscleGroup {
   key: string;
@@ -24,6 +26,14 @@ export default function ExerciseScreen() {
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
   const isPT = user?.role === "PT" || user?.role === "Admin";
   const [userWeights, setUserWeights] = useState<Weights | null>(null);
+  
+  const [popup, setPopup] = useState({
+    visible: false,
+    type: "success" as "success" | "error" | "confirm",
+    title: "",
+    message: "",
+    onConfirm: undefined as (() => void) | undefined,
+  });
 
   const muscleGroups: LocalMuscleGroup[] = [
     { key: "chest", label: "Peito"},
@@ -75,8 +85,6 @@ export default function ExerciseScreen() {
 
       setUserWeights(weights);
       setExercisesByGroup(initialExercises);
-      console.log("Fetched weights:", weights);
-      console.log("Exercises by group:", initialExercises);
     } catch (error) {
       console.error("Error fetching user weights:", error);
     }
@@ -118,12 +126,55 @@ export default function ExerciseScreen() {
     setEditingExerciseId(newExercise._id);
   };
 
-  const removeExercise = (groupKey: string, exerciseId: string) => {
-    setExercisesByGroup(prev => ({
-      ...prev,
-      [groupKey]: prev[groupKey]?.filter(ex => ex._id !== exerciseId) || []
-    }));
+  const confirmDelete = (groupKey: string, exercise: Exercise) => {
+    setPopup({
+      visible: true,
+      type: "confirm",
+      title: "Confirmar eliminação",
+      message: "Tens a certeza que queres eliminar este exercício? Esta ação é permanente e não pode ser desfeita.",
+      onConfirm: () => {
+        removeExercise(groupKey, exercise);
+        setPopup((p) => ({ ...p, visible: false }));
+      },
+    });
   };
+
+  const removeExercise = (groupKey: string, exercise: Exercise) => {
+    try{
+      if(!exercise._id || exercise._id.startsWith("temp-")) {
+        // Se for um exercício temporário (não salvo), apenas remove localmente
+        setExercisesByGroup(prev => ({
+          ...prev,
+          [exercise.group]: prev[exercise.group]?.filter(ex => ex._id !== exercise._id) || []
+        }));
+      } else {
+        // Se for um exercício existente, chama a API para remover
+        exerciseService.delete(exercise._id, { athleteId: selectedAthleteId, group: groupKey, _id: exercise._id });
+        // Depois de remover da API, atualiza localmente
+        setExercisesByGroup(prev => ({
+          ...prev,
+          [groupKey]: prev[groupKey]?.filter(ex => ex._id !== exercise._id) || []
+        }));
+      }
+      setEditingExerciseId(null);
+       setPopup({
+          visible: true,
+          type: "success",
+          title: "Sucesso",
+          message: "Exercício removido com sucesso.",
+          onConfirm: undefined,
+        });
+    }
+    catch {
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Ocorreu um erro ao remover o exercício, tente novamente mais tarde.",
+          onConfirm: undefined,
+        });
+      }
+    };
 
   const updateExercise = (groupKey: string, exerciseId: string, field: keyof Exercise, value: string | number) => {
     setExercisesByGroup(prev => ({
@@ -143,8 +194,7 @@ export default function ExerciseScreen() {
 
     try {
       if (exercise._id.startsWith("temp-")) {
-        console.log("Creating exercise:", exercise);
-        const res = await exerciseService.create(exercise);
+        await exerciseService.create(exercise);
       } else {
         const payload = {
           _id: exercise._id,
@@ -161,10 +211,17 @@ export default function ExerciseScreen() {
         fetchUserWeights(selectedAthleteId);
       }
     } catch (error) {
-      console.error("Error saving exercise:", error);
-    }
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: `Ocorreu um erro ao realizar a ação: ${error.response?.data?.message || error.message || error}`,
+          onConfirm: undefined,
+        });
+      }
     setEditingExerciseId(null);
-  };
+    fetchUserWeights(selectedAthleteId);
+    };
 
   const clearExercise = (groupKey: string) => {
     if (editingExerciseId) {
@@ -393,7 +450,7 @@ export default function ExerciseScreen() {
 
                               <TouchableOpacity
                                 style={styles.deleteButton}
-                                onPress={() => removeExercise(group.key, exercise._id)}
+                                onPress={() => confirmDelete(group.key,exercise)}
                               >
                                 <Ionicons name="trash-outline" size={18} color="#dc2626" />
                               </TouchableOpacity>
@@ -423,7 +480,7 @@ export default function ExerciseScreen() {
 
                               <TouchableOpacity
                                 style={styles.deleteButton}
-                                onPress={() => removeExercise(group.key, exercise._id)}
+                                onPress={() => confirmDelete(group.key, exercise)}
                               >
                                 <Ionicons name="trash-outline" size={18} color="#dc2626" />
                               </TouchableOpacity>
@@ -450,6 +507,15 @@ export default function ExerciseScreen() {
           )}
         </View>
       ))}
+      <Popup
+        visible={popup.visible}
+        type={popup.type as any}
+        title={popup.title}
+        message={popup.message}
+        onConfirm={popup.onConfirm}
+        onCancel={() => setPopup(p => ({ ...p, visible: false }))}
+        onClose={() => setPopup(p => ({ ...p, visible: false }))}
+      />
     </ScrollView>
   </View>
 );

@@ -88,24 +88,15 @@ export default function NotificationsScreen() {
           message: "Notificação enviada com sucesso!",
           onConfirm: undefined,
         });
-      } else { 
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Ocorreu um erro ao enviar a notificação. Por favor verifique os dados e tente novamente.",
-          onConfirm: undefined,
-        });
-      }
-
+      } 
       fetchNotifications();
       setModalVisible(false);
-    } catch {
+    } catch (err){
       setPopup({
           visible: true,
           type: "error",
           title: "Erro",
-          message: "Ocorreu um erro ao enviar a notificação. Por favor verifique os dados e tente novamente.",
+          message: `Ocorreu um erro ao enviar a notificação: ${err.response?.data?.message || err.message || err}`,
           onConfirm: undefined,
         });
     }
