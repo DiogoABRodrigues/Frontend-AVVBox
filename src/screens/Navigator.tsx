@@ -14,6 +14,7 @@ import { useNotifications } from "../context/NotificationsContext";
 const Tab = createMaterialTopTabNavigator();
 
 export default function AthleteTabs() {
+  console.log("Rendering AthleteTabs");
   const { notifications } = useNotifications();
 
   // Badge: quantidade de notificações não lidas
@@ -49,7 +50,7 @@ export default function AthleteTabs() {
           return (
             <View style={styles.headerContainer}>
               <Ionicons
-                name={titleIcon as keyof typeof Ionicons.glyphMap}
+                name={titleIcon as keyof typeof Ionicons}
                 size={24}
                 style={styles.headerIcon}
               />
@@ -67,7 +68,7 @@ export default function AthleteTabs() {
               ]}
             >
               <Ionicons
-                name={iconName as keyof typeof Ionicons.glyphMap}
+                name={iconName as keyof typeof Ionicons}
                 size={24}
                 color={focused ? "#1E293B" : "#64748b"}
               />

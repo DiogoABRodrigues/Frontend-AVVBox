@@ -5,12 +5,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import NotificationModal from "../componentes/NotificationsModal";
 import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationsContext";
-import {
-  getUserNotifications,
-  deleteNotificationForUser,
-  markNotificationAsRead,
-  createNotification,
-} from "../services/notificationService";
+import { notificationService } from "../services/notificationService";
 import { styles } from "./styles/NotificationsScreen.styles";
 import Popup from "../componentes/Popup";
 
@@ -24,6 +19,7 @@ interface Notification {
 }
 
 export default function NotificationsScreen() {
+  console.log("Rendering NotificationsScreen");
   const { user } = useAuth();
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
@@ -46,8 +42,8 @@ export default function NotificationsScreen() {
   // FETCH
   const fetchNotifications = async () => {
     try {
-      const fetched = await getUserNotifications(user.id);
-      refreshNotifications(fetched, user.id);
+      const fetched = await notificationService.getUserNotifications(user._id);
+      refreshNotifications(fetched, user._id);
     } catch (err) {
       console.error("Erro ao buscar notificações:", err);
     }
@@ -63,10 +59,10 @@ export default function NotificationsScreen() {
       await Promise.all(
         notifications
           .filter((n) => !n.read)
-          .map((n) => markNotificationAsRead(n.id, user.id)),
+          .map((n) => notificationService.markNotificationAsRead(n.id, user._id)),
       );
       notifications.forEach((n) => {
-        if (!n.read) markAsRead(user.id, n.id);
+        if (!n.read) markAsRead(user._id, n.id);
       });
     } catch {
       console.error(
@@ -80,7 +76,7 @@ export default function NotificationsScreen() {
     try {
       await handleMarkAllAsRead();
       await Promise.all(
-        notifications.map((n) => deleteNotificationForUser(n.id, user.id)),
+        notifications.map((n) => notificationService.deleteNotificationForUser(n.id, user._id)),
       );
       fetchNotifications();
     } catch (err) {
@@ -95,7 +91,7 @@ export default function NotificationsScreen() {
     target: string[],
   ) => {
     try {
-      const res = await createNotification(user.id, { title, body, target });
+      const res = await notificationService.createNotification(user._id, { title, body, target });
       if (res && res.notification && res.notification._id) {
         setPopup({
           visible: true,
@@ -121,8 +117,8 @@ export default function NotificationsScreen() {
   // MARCAR INDIVIDUAL COMO LIDA
   const handleMarkAsRead = async (notification: Notification) => {
     if (!notification.read) {
-      await markNotificationAsRead(notification.id, user.id);
-      markAsRead(user.id, notification.id);
+      await notificationService.markNotificationAsRead(notification.id, user._id);
+      markAsRead(user._id, notification.id);
     }
   };
 
@@ -188,7 +184,7 @@ export default function NotificationsScreen() {
                       padding: 12,
                     }}
                     onPress={async () => {
-                      await deleteNotificationForUser(n.id, user.id);
+                      await notificationService.deleteNotificationForUser(n.id, user._id);
                       fetchNotifications();
                     }}
                   >

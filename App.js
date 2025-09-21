@@ -8,6 +8,8 @@ import AthleteTabs from "./src/screens/Navigator";
 import LoginScreen from "./src/screens/LoginScreen";
 import { NotificationsProvider } from "./src/context/NotificationsContext";
 import { Provider as PaperProvider } from "react-native-paper";
+import { store } from "./src/store/index";
+import { Provider } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,15 +41,17 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <AuthProvider>
-        <NotificationsProvider>
-          <NavigationContainer>
-            <PaperProvider>
-              <AppNavigator />
-            </PaperProvider>
-          </NavigationContainer>
-        </NotificationsProvider>
-      </AuthProvider>
+      <Provider store={store}>
+        <AuthProvider>
+          <NotificationsProvider>
+            <NavigationContainer>
+              <PaperProvider>
+                <AppNavigator />
+              </PaperProvider>
+            </NavigationContainer>
+          </NotificationsProvider>
+        </AuthProvider>
+      </Provider>
     </GestureHandlerRootView>
   );
 }
