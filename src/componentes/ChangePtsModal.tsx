@@ -12,11 +12,19 @@ interface Props {
   selected: string[];
 }
 
-export default function ChangePtsModal({ visible, onClose, onConfirm, users, selected }: Props) {
-  const [selectedPt, setSelectedPt] = useState<string | null>(selected[0] || null); // apenas 1 coach
+export default function ChangePtsModal({
+  visible,
+  onClose,
+  onConfirm,
+  users,
+  selected,
+}: Props) {
+  const [selectedPt, setSelectedPt] = useState<string | null>(
+    selected[0] || null,
+  ); // apenas 1 coach
 
   const toggleSelection = (id: string) => {
-    setSelectedPt(prev => (prev === id ? null : id)); // seleciona ou desmarca
+    setSelectedPt((prev) => (prev === id ? null : id)); // seleciona ou desmarca
   };
 
   useEffect(() => {
@@ -37,10 +45,12 @@ export default function ChangePtsModal({ visible, onClose, onConfirm, users, sel
                 style={styles.checkboxOption}
                 onPress={() => toggleSelection(pt._id)}
               >
-                <View style={[
-                  styles.checkboxBox,
-                  selectedPt === pt._id && styles.checkboxSelected
-                ]}>
+                <View
+                  style={[
+                    styles.checkboxBox,
+                    selectedPt === pt._id && styles.checkboxSelected,
+                  ]}
+                >
                   {selectedPt === pt._id && (
                     <Ionicons name="checkmark" size={12} color="white" />
                   )}
@@ -51,8 +61,8 @@ export default function ChangePtsModal({ visible, onClose, onConfirm, users, sel
           </ScrollView>
 
           <View style={styles.actionRow}>
-            <TouchableOpacity 
-              style={[styles.actionButton, styles.cancelButton]} 
+            <TouchableOpacity
+              style={[styles.actionButton, styles.cancelButton]}
               onPress={onClose}
             >
               <Text style={styles.cancelText}>Cancelar</Text>

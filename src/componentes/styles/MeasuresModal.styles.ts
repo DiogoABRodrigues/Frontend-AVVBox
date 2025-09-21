@@ -88,36 +88,35 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   radioRow: {
-  flexDirection: "row",
-  justifyContent: "space-around",
-  marginVertical: 12,
-},
-radioButtonRow: {
-  flexDirection: "row",
-  alignItems: "center",
-},
-radioOuter: {
-  width: 20,
-  height: 20,
-  borderRadius: 10,
-  borderWidth: 2,
-  borderColor: "#999",
-  justifyContent: "center",
-  alignItems: "center",
-  marginRight: 8,
-},
-radioOuterSelected: {
-  borderColor: "#2563eb",
-},
-radioInner: {
-  width: 12,
-  height: 12,
-  borderRadius: 6,
-  backgroundColor: "#2563eb",
-},
-radioLabel: {
-  fontSize: 16,
-  color: "#333",
-},
-
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 12,
+  },
+  radioButtonRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  radioOuter: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#999",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+  },
+  radioOuterSelected: {
+    borderColor: "#2563eb",
+  },
+  radioInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#2563eb",
+  },
+  radioLabel: {
+    fontSize: 16,
+    color: "#333",
+  },
 });
