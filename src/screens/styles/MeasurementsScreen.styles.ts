@@ -1,30 +1,28 @@
-
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   // Container Principal
-  container: { 
-    flex: 1, 
-    paddingHorizontal: 16, 
-    backgroundColor: '#f8fafc',
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: "#f8fafc",
   },
 
   // Header
-  header: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'space-between',
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 24,
     paddingTop: 8,
   },
-  teste: { 
+  teste: {
     flex: 1,
-    
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '700',
-    color: '#1e293b',
+    fontWeight: "700",
+    color: "#1e293b",
   },
 
   // Filter Row (Dropdowns e botões)
@@ -42,12 +40,12 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderWidth: 2,
     borderColor: "#e2e8f0",
     borderRadius: 16,
     overflow: "hidden",
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
@@ -55,22 +53,22 @@ export const styles = StyleSheet.create({
   },
   dropdownUsersWrapper: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
     overflow: "hidden",
     marginBottom: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   dropdownHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 4,
@@ -79,19 +77,19 @@ export const styles = StyleSheet.create({
   picker: {
     height: 56,
     width: "100%",
-    color: '#1e293b',
+    color: "#1e293b",
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 
   // Action Button Melhorado
   actionButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: "#2563eb",
     borderRadius: 16,
     width: 51,
     height: 51,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     shadowOpacity: 0.4,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
@@ -108,39 +106,38 @@ export const styles = StyleSheet.create({
   },
   chipRowLabel: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
+    fontWeight: "600",
+    color: "#374151",
     marginBottom: 8,
     marginLeft: 4,
   },
   chipScrollView: {
     flexGrow: 0,
-    
   },
   chipGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     marginBottom: 4,
   },
   chip: {
-    backgroundColor: '#ffffffff',
+    backgroundColor: "#ffffffff",
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginRight: 8,
     marginBottom: 8,
     borderWidth: 1.5,
-    borderColor: 'transparent',
-    shadowColor: '#000',
+    borderColor: "transparent",
+    shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   chipActive: {
-    backgroundColor: '#2563eb',
-    borderColor: '#1d4ed8',
-    shadowColor: '#2563eb',
+    backgroundColor: "#2563eb",
+    borderColor: "#1d4ed8",
+    shadowColor: "#2563eb",
     shadowOpacity: 0.3,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
@@ -148,140 +145,139 @@ export const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#29528bff',
+    fontWeight: "500",
+    color: "#29528bff",
   },
   chipTextActive: {
-    color: '#ffffff',
-    fontWeight: '600',
+    color: "#ffffff",
+    fontWeight: "600",
   },
 
   // Medidas Atuais
-  currentMeasurements: { 
-    flexDirection: 'row', 
-    flexWrap: 'wrap', 
-    justifyContent: 'space-between', 
+  currentMeasurements: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     elevation: 0,
     zIndex: 0,
-
   },
-  measureItem: { 
-    width: '48%', 
-    backgroundColor: '#ffffff', 
-    borderRadius: 16, 
-    padding: 16, 
+  measureItem: {
+    width: "48%",
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    shadowColor: '#000',
+    borderColor: "#e2e8f0",
+    shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
-  measureLabel: { 
-    fontSize: 13, 
-    color: '#64748b',
-    fontWeight: '600',
-    textTransform: 'uppercase',
+  measureLabel: {
+    fontSize: 13,
+    color: "#64748b",
+    fontWeight: "600",
+    textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 8,
   },
-  measureValueContainer: { 
-    flexDirection: 'row', 
-    alignItems: 'center',
+  measureValueContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  measureValue: { 
-    fontSize: 20, 
-    fontWeight: '700',
-    color: '#1e293b',
+  measureValue: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#1e293b",
   },
-  deltaText: { 
-    marginLeft: 2, 
+  deltaText: {
+    marginLeft: 2,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   // Subtítulos
-  subTitle: { 
-    fontSize: 22, 
-    fontWeight: '700', 
-    color: '#1e293b',
-    marginTop: 10, 
+  subTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1e293b",
+    marginTop: 10,
     marginBottom: 16,
   },
 
   // Histórico Box
   historyBox: {
-    maxHeight: 300, 
-    backgroundColor: '#ffffff',
+    maxHeight: 300,
+    backgroundColor: "#ffffff",
     borderRadius: 16,
     padding: 16,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    shadowColor: '#000',
+    borderColor: "#e2e8f0",
+    shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
-  historyItem: { 
-    backgroundColor: '#f8fafc', 
-    borderRadius: 12, 
-    padding: 16, 
+  historyItem: {
+    backgroundColor: "#f8fafc",
+    borderRadius: 12,
+    padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
-  historyDate: { 
-    fontSize: 16, 
-    fontWeight: '700',
-    color: '#374151',
+  historyDate: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#374151",
   },
-  historyDetails: { 
-    marginTop: 12, 
+  historyDetails: {
+    marginTop: 12,
     paddingLeft: 16,
     paddingTop: 12,
   },
   historyDetailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 4,
   },
   historyDetailLabel: {
     fontSize: 14,
-    color: '#64748b',
-    fontWeight: '500',
+    color: "#64748b",
+    fontWeight: "500",
   },
   historyDetailValue: {
     fontSize: 14,
-    color: '#374151',
-    fontWeight: '600',
+    color: "#374151",
+    fontWeight: "600",
   },
 
   // Estados vazios
   emptyStateContainer: {
-    alignItems: "center", 
+    alignItems: "center",
     paddingVertical: 32,
     paddingHorizontal: 20,
   },
-  emptyStateText: { 
-    color: "#94a3b8", 
+  emptyStateText: {
+    color: "#94a3b8",
     fontSize: 16,
     fontStyle: "italic",
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 22,
   },
 
   // Estilos para o gráfico container
   chartContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    shadowColor: '#000',
+    borderColor: "#e2e8f0",
+    shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -289,12 +285,12 @@ export const styles = StyleSheet.create({
   },
   chartInfo: {
     marginTop: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   chartInfoText: {
     fontSize: 12,
-    color: '#64748b',
-    fontWeight: '500',
+    color: "#64748b",
+    fontWeight: "500",
   },
 
   // Seletores de Métrica (não usado no código atual, mas incluído para completude)
@@ -303,7 +299,7 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     marginVertical: 16,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: "#f1f5f9",
     borderRadius: 12,
     padding: 8,
   },
@@ -316,7 +312,7 @@ export const styles = StyleSheet.create({
   },
   metricButtonActive: {
     backgroundColor: "#2563eb",
-    shadowColor: '#2563eb',
+    shadowColor: "#2563eb",
     shadowOpacity: 0.3,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -325,7 +321,7 @@ export const styles = StyleSheet.create({
   metricText: {
     color: "#64748b",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   metricTextActive: {
     color: "#ffffff",
@@ -335,7 +331,7 @@ export const styles = StyleSheet.create({
   // Filtros de Tempo (não usado no código atual, mas incluído)
   filterContainer: {
     flexDirection: "row",
-    backgroundColor: '#f1f5f9',
+    backgroundColor: "#f1f5f9",
     borderRadius: 12,
     overflow: "hidden",
     marginVertical: 16,
@@ -350,7 +346,7 @@ export const styles = StyleSheet.create({
   },
   filterButtonActive: {
     backgroundColor: "#2563eb",
-    shadowColor: '#2563eb',
+    shadowColor: "#2563eb",
     shadowOpacity: 0.2,
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
@@ -359,7 +355,7 @@ export const styles = StyleSheet.create({
   filterText: {
     color: "#64748b",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   filterTextActive: {
     color: "#ffffff",
@@ -371,62 +367,62 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     marginRight: 8,
     borderWidth: 2,
-    borderColor: '#e2e8f0',
-    shadowColor: '#000',
+    borderColor: "#e2e8f0",
+    shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   athleteSelected: {
-    borderColor: '#2563eb',
-    backgroundColor: '#dbeafe',
+    borderColor: "#2563eb",
+    backgroundColor: "#dbeafe",
   },
   athleteButtonText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#64748b',
+    fontWeight: "600",
+    color: "#64748b",
   },
   athleteSelectedText: {
-    color: '#1e40af',
-    fontWeight: '700',
+    color: "#1e40af",
+    fontWeight: "700",
   },
 
   // Ações de histórico
   historyActionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: "#f1f5f9",
   },
   historyActionLeft: {
     flex: 1,
   },
   historyActionRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   deleteButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: '#fef2f2',
+    backgroundColor: "#fef2f2",
   },
 
   // Detalhes expandidos do histórico
   expandedHistoryContainer: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: "#f8fafc",
     borderRadius: 12,
     padding: 16,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: "#e5e7eb",
   },
   dropdownSection: {
     flex: 1,
@@ -438,22 +434,22 @@ export const styles = StyleSheet.create({
 
   dropdownLabel: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#475569',
+    fontWeight: "700",
+    color: "#475569",
     marginBottom: 8,
   },
 
   dropdownButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 16,
-    shadowColor: '#64748b',
+    shadowColor: "#64748b",
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -462,44 +458,44 @@ export const styles = StyleSheet.create({
 
   dropdownButtonText: {
     fontSize: 15,
-    color: '#374151',
-    fontWeight: '500',
+    color: "#374151",
+    fontWeight: "500",
     flex: 1,
   },
 
   dropdownArrow: {
     fontSize: 12,
-    color: '#64748b',
-    fontWeight: '600',
+    color: "#64748b",
+    fontWeight: "600",
   },
 
-dropdownList: {
-  position: 'absolute',
-  top: "100%", // aparece logo abaixo do botão
-  backgroundColor: '#ffffff',
-  borderWidth: 1,
-  borderColor: '#e2e8f0',
-  borderRadius: 12,
-  shadowColor: '#1e293b',
-  shadowOpacity: 0.15,
-  shadowRadius: 12,
-  shadowOffset: { width: 0, height: 4 },
-  elevation: 1001,
-  maxHeight: 200, // 👈 limite
-  overflow: 'hidden', // 👈 evita passar do container
-  left: 15,
-  right: 45,
-  zIndex: 1001,
-},
+  dropdownList: {
+    position: "absolute",
+    top: "100%", // aparece logo abaixo do botão
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    shadowColor: "#1e293b",
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 1001,
+    maxHeight: 200, // 👈 limite
+    overflow: "hidden", // 👈 evita passar do container
+    left: 15,
+    right: 45,
+    zIndex: 1001,
+  },
 
   dropdownListContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     top: 28,
-    position: 'absolute', 
+    position: "absolute",
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
     borderRadius: 12,
-    shadowColor: '#1e293b',
+    shadowColor: "#1e293b",
     shadowOpacity: 0.15,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -507,42 +503,42 @@ dropdownList: {
     maxHeight: 200,
     right: 65,
     left: 0,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 
   dropdownItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: "#f1f5f9",
   },
 
   dropdownItemSelected: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: "#eff6ff",
   },
 
   dropdownItemText: {
     fontSize: 15,
-    color: '#374151',
-    fontWeight: '500',
+    color: "#374151",
+    fontWeight: "500",
     flex: 1,
   },
 
   dropdownItemTextSelected: {
-    color: '#2563eb',
-    fontWeight: '600',
+    color: "#2563eb",
+    fontWeight: "600",
   },
   checkmark: {
-      fontSize: 14,
-      color: '#2563eb',
-      fontWeight: '700',
-    },
-  
-    dropdownOverlay: {
-    position: 'absolute',
+    fontSize: 14,
+    color: "#2563eb",
+    fontWeight: "700",
+  },
+
+  dropdownOverlay: {
+    position: "absolute",
     top: 100, // Ajuste conforme a posição do seu header
     left: 16,
     right: 16,
