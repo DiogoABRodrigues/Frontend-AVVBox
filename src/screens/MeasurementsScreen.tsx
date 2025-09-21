@@ -301,14 +301,6 @@ export default function MeasurementsScreen() {
           message: "Alteração guardada com sucesso!",
           onConfirm: undefined,
         });
-      } else { 
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
-          onConfirm: undefined,
-        });
       }
 
       fetchMeasures();
@@ -336,15 +328,7 @@ export default function MeasurementsScreen() {
           message: "Registo eliminado com sucesso!",
           onConfirm: undefined,
         });
-      } else { 
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Ocorreu um erro ao eliminar o registo, tente novamente.",
-          onConfirm: undefined,
-        });
-      }
+      } 
 
       fetchMeasures();
     } catch {
@@ -355,6 +339,7 @@ export default function MeasurementsScreen() {
         message: "Não foi possível eliminar o registo. ",
         onConfirm: undefined,
       });
+      fetchMeasures();
     }
   };
 

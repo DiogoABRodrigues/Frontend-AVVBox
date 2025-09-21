@@ -21,7 +21,7 @@ export const exerciseService = {
     return res.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await api.delete(`${API_URL}/${id}`);
-  }
+  async delete(id: string, data: Partial<Exercise>): Promise<void> {
+    await api.delete(`${API_URL}/${id}`, { data });
+  },
 };

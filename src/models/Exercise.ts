@@ -1,7 +1,7 @@
 export interface Exercise {
   _id?: string;
   athleteId?: string;
-  group?: string; // Só para grupos normais
+  group: string; // Só para grupos normais
   name?: string;
   weight?: number;
   reps?: number;

@@ -311,23 +311,14 @@ import { Availability } from "../models/Availability";
             message: "Alteração guardada com sucesso!",
             onConfirm: undefined,
           });
-        } else {
-          setPopup({
-            visible: true,
-            type: "error",
-            title: "Erro",
-            message: "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
-            onConfirm: undefined,
-          });
-        }
-
+        } 
         fetchUserData();
       } catch {
         setPopup({
           visible: true,
           type: "error",
           title: "Erro",
-          message: "Não foi possível guardar a alteração.",
+          message: "Ocorreu um erro ao guardar a alteração, verifique os dados ou tente novamente mais tarde.",
           onConfirm: undefined,
         });
       }
@@ -496,6 +487,18 @@ import { Availability } from "../models/Availability";
     };
 
     const saveRoleChange = async (newRole: "atleta" | "PT" | "Admin") => {
+      if (!roleChangeTarget) return;
+      //passar esta confirmação para o backend
+      if(roleChangeTarget._id === user.id) {
+        setPopup({
+          visible: true,
+          type: "error",
+          title: "Erro",
+          message: "Não podes alterar a tua própria role.",
+          onConfirm: undefined,
+        });
+        return;
+      }
       if (roleChangeTarget) {
         try {
           await userService.update(roleChangeTarget._id, { role: newRole });
