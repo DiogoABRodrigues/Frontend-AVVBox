@@ -55,7 +55,10 @@ export const formatMeasurements = (current: any, last: any, goal: any) => {
         // Cor depende se o delta vai na direção do goal
         if (delta === 0) {
           color = "gray";
-        } else if ((delta > 0 && wantsIncrease) || (delta < 0 && wantsDecrease)) {
+        } else if (
+          (delta > 0 && wantsIncrease) ||
+          (delta < 0 && wantsDecrease)
+        ) {
           color = "green"; // mudou na direção certa
         } else {
           color = "red"; // mudou contra a direção
@@ -64,7 +67,8 @@ export const formatMeasurements = (current: any, last: any, goal: any) => {
     }
 
     // Arredonda valores para 1 casa decimal quando não null
-    const round = (v: number | null) => (v !== null ? Number(v.toFixed(1)) : null);
+    const round = (v: number | null) =>
+      v !== null ? Number(v.toFixed(1)) : null;
 
     // Formata deltaLabel
     let deltaLabel = "";

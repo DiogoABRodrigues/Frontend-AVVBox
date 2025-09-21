@@ -17,15 +17,20 @@ export default function AthleteTabs() {
   const { notifications } = useNotifications();
 
   // Badge: quantidade de notificações não lidas
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   const renderIcon = (routeName: string) => {
     switch (routeName) {
-      case "Treino": return "barbell-outline";
-      case "Notificações": return "notifications-outline";
-      case "Medidas": return "scale-outline";
-      case "Perfil": return "person-outline";
-      default: return "home-outline";
+      case "Treino":
+        return "barbell-outline";
+      case "Notificações":
+        return "notifications-outline";
+      case "Medidas":
+        return "scale-outline";
+      case "Perfil":
+        return "person-outline";
+      default:
+        return "home-outline";
     }
   };
 
@@ -43,9 +48,9 @@ export default function AthleteTabs() {
           const titleIcon = renderIcon(route.name);
           return (
             <View style={styles.headerContainer}>
-              <Ionicons 
-                name={titleIcon as keyof typeof Ionicons.glyphMap} 
-                size={24} 
+              <Ionicons
+                name={titleIcon as keyof typeof Ionicons.glyphMap}
+                size={24}
                 style={styles.headerIcon}
               />
               <Text style={styles.headerTitle}>{route.name}</Text>
@@ -55,19 +60,20 @@ export default function AthleteTabs() {
         tabBarIcon: ({ focused }) => {
           const iconName = renderIcon(route.name);
           return (
-            <View style={[
-              styles.iconContainer,
-              focused ? styles.tabItemFocused : styles.tabItem
-            ]}>
+            <View
+              style={[
+                styles.iconContainer,
+                focused ? styles.tabItemFocused : styles.tabItem,
+              ]}
+            >
               <Ionicons
                 name={iconName as keyof typeof Ionicons.glyphMap}
                 size={24}
-                color={focused ? '#1E293B' : '#64748b'}
+                color={focused ? "#1E293B" : "#64748b"}
               />
-              <Text style={[
-                styles.tabLabel,
-                focused && styles.tabLabelFocused
-              ]}>
+              <Text
+                style={[styles.tabLabel, focused && styles.tabLabelFocused]}
+              >
                 {route.name}
               </Text>
 
@@ -75,7 +81,7 @@ export default function AthleteTabs() {
               {route.name === "Notificações" && unreadCount > 0 && (
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>
-                    {unreadCount > 99 ? '99+' : unreadCount}
+                    {unreadCount > 99 ? "99+" : unreadCount}
                   </Text>
                 </View>
               )}

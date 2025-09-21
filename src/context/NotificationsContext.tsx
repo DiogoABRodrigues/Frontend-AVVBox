@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { io } from "socket.io-client";
-import { useAuth } from './AuthContext';
+import { useAuth } from "./AuthContext";
 import { API_BASE_URL } from "../../config";
 
 interface Notification {
@@ -9,8 +15,8 @@ interface Notification {
   title: string;
   body: string;
   date: string;
-  read: boolean;      // para UI
-  readBy: string[];   // para backend
+  read: boolean; // para UI
+  readBy: string[]; // para backend
 }
 
 interface NotificationsContextType {
@@ -19,9 +25,15 @@ interface NotificationsContextType {
   refreshNotifications: (fetched: any[], userId: string) => void;
 }
 
-const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
+const NotificationsContext = createContext<
+  NotificationsContextType | undefined
+>(undefined);
 
-export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
+export const NotificationsProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
@@ -32,8 +44,8 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
     socket.emit("join", user.id);
 
     socket.on("new-notification", (newNotifications: any[]) => {
-      setNotifications(prev => [
-        ...newNotifications.map(n => ({
+      setNotifications((prev) => [
+        ...newNotifications.map((n) => ({
           id: n._id,
           title: n.title,
           body: n.body,
@@ -51,17 +63,17 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   }, [user]); // 👈 só corre quando user mudar
 
   const markAsRead = (userId: string, notificationId: string) => {
-    setNotifications(prev =>
-      prev.map(n =>
+    setNotifications((prev) =>
+      prev.map((n) =>
         n.id === notificationId
           ? { ...n, read: true, readBy: [...n.readBy, userId] }
-          : n
-      )
+          : n,
+      ),
     );
   };
 
   const refreshNotifications = (fetched: any[], userId: string) => {
-    const formatted = fetched.map(n => ({
+    const formatted = fetched.map((n) => ({
       id: n._id,
       title: n.title,
       body: n.body,
@@ -73,7 +85,9 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   };
 
   return (
-    <NotificationsContext.Provider value={{ notifications, markAsRead, refreshNotifications }}>
+    <NotificationsContext.Provider
+      value={{ notifications, markAsRead, refreshNotifications }}
+    >
       {children}
     </NotificationsContext.Provider>
   );
@@ -81,6 +95,9 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
 
 export const useNotifications = () => {
   const context = useContext(NotificationsContext);
-  if (!context) throw new Error("useNotifications must be used within NotificationsProvider");
+  if (!context)
+    throw new Error(
+      "useNotifications must be used within NotificationsProvider",
+    );
   return context;
 };

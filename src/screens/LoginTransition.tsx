@@ -13,8 +13,8 @@ export default function LoginTransition({ onFinish, style }: Props) {
   const textFadeAnim = React.useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    console.log('LoginTransition mounted - iniciando animações');
-    
+    console.log("LoginTransition mounted - iniciando animações");
+
     // Sequência de animações
     const animationSequence = Animated.sequence([
       // Fade in do container (500ms)
@@ -55,12 +55,12 @@ export default function LoginTransition({ onFinish, style }: Props) {
           duration: 400,
           useNativeDriver: true,
         }),
-      ])
+      ]),
     ]);
 
     // Inicia a sequência
     animationSequence.start((finished) => {
-      console.log('Animações terminadas:', finished);
+      console.log("Animações terminadas:", finished);
       if (finished) {
         onFinish();
       }
@@ -68,29 +68,31 @@ export default function LoginTransition({ onFinish, style }: Props) {
 
     // Cleanup - para cancelar animações se o componente for desmontado
     return () => {
-      console.log('LoginTransition unmounting - cancelando animações');
+      console.log("LoginTransition unmounting - cancelando animações");
       animationSequence.stop();
     };
   }, [fadeAnim, scaleAnim, textFadeAnim, onFinish]);
 
   return (
-    <Animated.View 
+    <Animated.View
       style={[
-        styles.container, 
+        styles.container,
         style,
-        { 
+        {
           opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }]
-        }
+          transform: [{ scale: scaleAnim }],
+        },
       ]}
     >
       <View style={styles.content}>
-        <Animated.View style={[styles.textContainer, { opacity: textFadeAnim }]}>
+        <Animated.View
+          style={[styles.textContainer, { opacity: textFadeAnim }]}
+        >
           <Text style={styles.mainText}>NO EXCUSES</Text>
           <View style={styles.divider} />
           <Text style={styles.subText}>JUST DO THE WORK</Text>
         </Animated.View>
-        
+
         {/* Elementos decorativos */}
         <Animated.View style={[styles.topLine, { opacity: textFadeAnim }]} />
         <Animated.View style={[styles.bottomLine, { opacity: textFadeAnim }]} />
@@ -101,7 +103,7 @@ export default function LoginTransition({ onFinish, style }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     justifyContent: "center",
-    position: 'relative',
+    position: "relative",
   },
   textContainer: {
     alignItems: "center",
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   topLine: {
-    position: 'absolute',
+    position: "absolute",
     top: -60,
     width: 200,
     height: 1,
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   bottomLine: {
-    position: 'absolute',
+    position: "absolute",
     bottom: -60,
     width: 200,
     height: 1,
