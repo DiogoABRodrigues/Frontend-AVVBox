@@ -41,7 +41,7 @@ export const NotificationsProvider = ({
     if (!user) return; // 🚨 só liga o socket quando user existe
 
     const socket = io(API_BASE_URL);
-    socket.emit("join", user.id);
+    socket.emit("join", user._id);
 
     socket.on("new-notification", (newNotifications: any[]) => {
       setNotifications((prev) => [
@@ -50,7 +50,7 @@ export const NotificationsProvider = ({
           title: n.title,
           body: n.body,
           date: new Date(n.date).toLocaleDateString(),
-          read: n.readBy?.includes(user.id) ?? false,
+          read: n.readBy?.includes(user._id) ?? false,
           readBy: n.readBy ?? [],
         })),
         ...prev,

@@ -72,7 +72,6 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function TrainingScreen() {
-  console.log("Rendering TrainingScreen");
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<"schedule" | "exercises">(
     "schedule",
@@ -100,7 +99,7 @@ export default function TrainingScreen() {
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
 
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
-  const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(
     null,
   );
 
@@ -123,11 +122,6 @@ export default function TrainingScreen() {
   }, [trainer]);
 
   useEffect(() => {
-    console.log(
-      "Selected day or availability changed:",
-      selectedDay,
-      availability,
-    );
     if (selectedDay && availability) {
       updateAvailableHours();
     }
@@ -138,7 +132,7 @@ export default function TrainingScreen() {
       if (user.role !== "atleta") {
         // Carregar os atletas do treinador
         const athletes = await userService.getMyAthletes(user._id);
-        athletes.push(trainer);
+        athletes.push(user);
         setMineAthletes(athletes);
       }
     };
@@ -149,10 +143,11 @@ export default function TrainingScreen() {
   const loadData = async () => {
     try {
       setLoading(true);
-      if (user.coach && user.coach.length > 0) {
-        setTrainer(user.coach[0]); // já é o coach completo
-      } else if (user.role === "Admin" || user.role === "PT") {
+     if (user.role === "Admin" || user.role === "PT") {
         setTrainer(user);
+        
+      } else if (user.coach && user.coach.length > 0) {
+        setTrainer(user.coach[0]); // já é o coach completo
       }
 
       await loadAllTrainings();
@@ -165,9 +160,11 @@ export default function TrainingScreen() {
 
   const loadAvailability = async (trainerId: string) => {
     try {
+      console.log("Loading availability for trainer ID:", trainerId);
       const trainerAvailability = await availabilityService.getByPT(trainerId);
       setAvailability(trainerAvailability);
     } catch {
+      console.error("Failed to load availability for trainer:", user);
       Alert.alert(
         "Erro",
         "Não foi possível carregar a disponibilidade do treinador",
@@ -351,7 +348,7 @@ export default function TrainingScreen() {
       message: "Tens a certeza que queres recusar este treino?",
       onConfirm: async () => {
         try {
-          await trainingService.reject(trainingId, user._id);
+          await trainingService.delete(trainingId, user._id);
           await loadAllTrainings();
           setPopup({
             visible: false,
@@ -469,7 +466,7 @@ export default function TrainingScreen() {
       message: messageConfirmation,
       onConfirm: async () => {
         try {
-          await trainingService.delete(training._id);
+          await trainingService.delete(training._id, user._id);
           await loadAllTrainings(); // Recarregar treinos
           setPopup({
             visible: false,
@@ -602,18 +599,7 @@ export default function TrainingScreen() {
             flex: 1,
           }}
         >
-          <>{/* Calendar e restantes componentes */}</>
-        </View>
-
-        <View
-          style={{
-            display: activeTab === "exercises" ? "flex" : "none",
-            flex: 1,
-          }}
-        >
-          <ExerciseScreen />
-        </View>
-      </View>
+          <>{/* Calendar e restantes componentes */}
       <>
         {/* Calendar */}
         <Calendar
@@ -698,7 +684,7 @@ export default function TrainingScreen() {
 
                   {showAthleteDropdown && (
                     <View style={styles.dropdownList}>
-                      {mineAthletes.map((athlete) => (
+                      {mineAthletes.filter((t) => t != null).map((athlete) => (
                         <TouchableOpacity
                           key={athlete._id}
                           style={[
@@ -868,6 +854,18 @@ export default function TrainingScreen() {
           </>
         )}
       </>
+      </>
+        </View>
+
+        <View
+          style={{
+            display: activeTab === "exercises" ? "flex" : "none",
+            flex: 1,
+          }}
+        >
+          <ExerciseScreen />
+        </View>
+      </View>
 
       <Popup
         visible={popup.visible}

@@ -14,7 +14,6 @@ import { useNotifications } from "../context/NotificationsContext";
 const Tab = createMaterialTopTabNavigator();
 
 export default function AthleteTabs() {
-  console.log("Rendering AthleteTabs");
   const { notifications } = useNotifications();
 
   // Badge: quantidade de notificações não lidas

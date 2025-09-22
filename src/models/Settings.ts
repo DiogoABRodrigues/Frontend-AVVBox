@@ -6,4 +6,8 @@ export interface Settings {
   thirtyMin?: boolean;
   sixtyMin?: boolean;
   onetwentyMin?: boolean;
+  trainingPending?: boolean;
+  trainingApproved?: boolean;
+  trainingRejected?: boolean;
+  trainingCanceled?: boolean;
 }

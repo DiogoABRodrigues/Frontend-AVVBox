@@ -23,7 +23,6 @@ interface LocalMuscleGroup {
 }
 
 export default function ExerciseScreen() {
-  console.log("Rendering ExerciseScreen");
   const { user } = useAuth();
   const [expandedMuscleGroup, setExpandedMuscleGroup] = useState<string | null>(
     null,
