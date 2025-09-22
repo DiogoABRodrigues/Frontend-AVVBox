@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -24,6 +24,7 @@ import avvbLogo from "../../assets/avvb.png";
 import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
+//import { registerForPushNotificationsAsync } from "../utils/notifications";
 
 interface PopupState {
   visible: boolean;
@@ -187,6 +188,17 @@ export default function LoginScreen() {
       if (rememberMe) {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
+
+      /*useEffect(() => {
+          async function initPushNotifications() {
+            const token = await registerForPushNotificationsAsync();
+            if (token) {
+              // envia token para o backend
+              await userService.saveExpoPushToken(user.id, token);
+            }
+          }
+          initPushNotifications();
+        }, []);*/
 
       setShowTransition(true);
     } catch (err: any) {

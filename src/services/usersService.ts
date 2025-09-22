@@ -98,4 +98,11 @@ export const userService = {
     const res = await api.get(`${API_URL}/get-staff`);
     return res.data;
   },
+  /*/save-expo-token/:userId*/
+  async saveExpoPushToken(userId: string, token: string): Promise<User> {
+    const res = await api.post(`${API_URL}/save-expo-token/${userId}`, {
+      expoPushToken: token,
+    });
+    return res.data;
+  }
 };

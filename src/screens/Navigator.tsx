@@ -44,6 +44,7 @@ export default function AthleteTabs() {
         tabBarStyle: styles.tabBar,
         tabBarIndicatorStyle: { backgroundColor: "transparent" },
         headerShown: true,
+        tabBarPressColor: "transparent",
         headerTitle: () => {
           const titleIcon = renderIcon(route.name);
           return (

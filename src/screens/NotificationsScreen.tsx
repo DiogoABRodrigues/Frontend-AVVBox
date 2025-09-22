@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,7 +9,7 @@ import { useNotifications } from "../context/NotificationsContext";
 import { notificationService } from "../services/notificationService";
 import { styles } from "./styles/NotificationsScreen.styles";
 import Popup from "../componentes/Popup";
-
+import { User } from "../models/User";
 interface Notification {
   id: string;
   title: string;
@@ -19,7 +20,22 @@ interface Notification {
 }
 
 export default function NotificationsScreen() {
-  const { user } = useAuth();
+  const emptyUser: User = {
+        _id: "",
+        name: "",
+        email: "",
+        phoneNumber: "123456789",
+        role: "atleta",
+        active: true,
+        coach: [],
+        atheletes: [],
+      };
+    
+      let { user } = useAuth();
+      
+      if(!user){
+        user = emptyUser; // Garantir que user nunca é null
+      }
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -110,7 +126,7 @@ export default function NotificationsScreen() {
       }
       fetchNotifications();
       setModalVisible(false);
-    } catch (err) {
+    } catch (err : any) {
       setPopup({
         visible: true,
         type: "error",
@@ -237,7 +253,6 @@ export default function NotificationsScreen() {
         )}
         <Popup
           visible={popup.visible}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           type={popup.type as any}
           title={popup.title}
           message={popup.message}
