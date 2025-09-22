@@ -970,10 +970,22 @@ export default function ProfileScreen() {
                       { key: "thirtyMin", label: "30 minutos antes do treino" },
                       { key: "sixtyMin", label: "1 hora antes do treino" },
                       { key: "onetwentyMin", label: "2 horas antes do treino" },
-                      { key: "trainingPending", label: "Quando existe um treino pendente" },
-                      { key: "trainingApproved", label: "Quando um treino é aprovado" },
-                      { key: "trainingRejected", label: "Quando um treino é rejeitado" },
-                      { key: "trainingCanceled", label: "Quando um treino é cancelado" },
+                      {
+                        key: "trainingPending",
+                        label: "Quando existe um treino pendente",
+                      },
+                      {
+                        key: "trainingApproved",
+                        label: "Quando um treino é aprovado",
+                      },
+                      {
+                        key: "trainingRejected",
+                        label: "Quando um treino é rejeitado",
+                      },
+                      {
+                        key: "trainingCanceled",
+                        label: "Quando um treino é cancelado",
+                      },
                     ].map((notification) => (
                       <TouchableOpacity
                         key={notification.key}

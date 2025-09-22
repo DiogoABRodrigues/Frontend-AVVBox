@@ -39,15 +39,15 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-        <AuthProvider>
-          <NotificationsProvider>
-            <NavigationContainer>
-              <PaperProvider>
-                <AppNavigator />
-              </PaperProvider>
-            </NavigationContainer>
-          </NotificationsProvider>
-        </AuthProvider>
+      <AuthProvider>
+        <NotificationsProvider>
+          <NavigationContainer>
+            <PaperProvider>
+              <AppNavigator />
+            </PaperProvider>
+          </NavigationContainer>
+        </NotificationsProvider>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }
