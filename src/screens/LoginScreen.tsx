@@ -147,7 +147,6 @@ export default function LoginScreen() {
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token); // interceptor usa este token
       login(user, rememberMe); // salva user no context
-      console.log("User data:", user);
       if (!user.verified) {
         showPopup(
           "Utilizador à espera de autenticação",
@@ -191,9 +190,11 @@ export default function LoginScreen() {
 
       setShowTransition(true);
     } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message || "Credenciais inválidas";
-      showPopup(errorMessage, "error", "Erro de Login");
+      showPopup(
+        err.response?.data?.message || "Erro ao solicitar redefinição",
+        "error",
+        "Erro",
+      );
     } finally {
       setLoading(false);
     }
