@@ -72,7 +72,23 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function TrainingScreen() {
-  const { user } = useAuth();
+  const emptyUser: User = {
+    _id: "",
+    name: "",
+    email: "",
+    phoneNumber: "123456789",
+    role: "atleta",
+    active: true,
+    coach: [],
+    atheletes: [],
+  };
+
+  let { user } = useAuth();
+  
+  if(!user){
+    user = emptyUser; // Garantir que user nunca é null
+  }
+  
   const [activeTab, setActiveTab] = useState<"schedule" | "exercises">(
     "schedule",
   );
@@ -99,7 +115,7 @@ export default function TrainingScreen() {
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
 
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
-  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(null);
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>("");
 
   const [popup, setPopup] = useState({
     visible: false,
@@ -127,7 +143,7 @@ export default function TrainingScreen() {
 
   useEffect(() => {
     const fetchAthletes = async () => {
-      if (user.role !== "atleta") {
+      if (user && user.role !== "atleta") {
         // Carregar os atletas do treinador
         const athletes = await userService.getMyAthletes(user._id);
         athletes.push(user);

@@ -25,7 +25,22 @@ import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
 
 export default function ProfileScreen() {
-  const { user, logout } = useAuth();
+  const emptyUser: User = {
+      _id: "",
+      name: "",
+      email: "",
+      phoneNumber: "123456789",
+      role: "atleta",
+      active: true,
+      coach: [],
+      atheletes: [],
+    };
+  
+    let { user } = useAuth();
+    
+    if(!user){
+      user = emptyUser; // Garantir que user nunca é null
+    }
 
   const [userData, setUserData] = useState<User>({
     _id: "",
@@ -38,6 +53,7 @@ export default function ProfileScreen() {
     atheletes: [],
   });
 
+  const { logout } = useAuth();
   const isAdmin = user?.role === "Admin";
   const isPT = user?.role === "PT" || isAdmin;
 
@@ -253,7 +269,7 @@ export default function ProfileScreen() {
 
   const UserMenu = ({ userId }: { userId: string }) => {
     const targetUser = users.find((u) => u._id === userId);
-
+    if (!targetUser) return null;
     const options = [
       ...(targetUser.role === "atleta"
         ? [{ title: "Alterar PT", action: "change-pts" }]
@@ -333,7 +349,7 @@ export default function ProfileScreen() {
         });
       }
       fetchUserData();
-    } catch (err) {
+    } catch (err : any) {
       setPopup({
         visible: true,
         type: "error",
@@ -468,6 +484,9 @@ export default function ProfileScreen() {
     };
 
     try {
+      if (!goalMeasures._id) {
+        throw new Error("Goal measures ID is undefined.");
+      }
       const res = await measuresService.update(goalMeasures._id, data);
 
       if (res && res._id) {

@@ -23,7 +23,22 @@ interface LocalMuscleGroup {
 }
 
 export default function ExerciseScreen() {
-  const { user } = useAuth();
+   const emptyUser: User = {
+          _id: "",
+          name: "",
+          email: "",
+          phoneNumber: "123456789",
+          role: "atleta",
+          active: true,
+          coach: [],
+          atheletes: [],
+        };
+      
+        let { user } = useAuth();
+        
+        if(!user){
+          user = emptyUser; // Garantir que user nunca é null
+        }
   const [expandedMuscleGroup, setExpandedMuscleGroup] = useState<string | null>(
     null,
   );
@@ -61,7 +76,6 @@ export default function ExerciseScreen() {
   ];
 
   useEffect(() => {
-    console.log("Fetching athletes for ExerciseScreen");
     const fetchAthletes = async () => {
       if (user.role !== "atleta") {
         // Carregar os atletas do treinador
