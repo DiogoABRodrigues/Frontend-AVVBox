@@ -99,9 +99,7 @@ export default function TrainingScreen() {
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
 
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
-  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(
-    null,
-  );
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>(null);
 
   const [popup, setPopup] = useState({
     visible: false,
@@ -143,9 +141,8 @@ export default function TrainingScreen() {
   const loadData = async () => {
     try {
       setLoading(true);
-     if (user.role === "Admin" || user.role === "PT") {
+      if (user.role === "Admin" || user.role === "PT") {
         setTrainer(user);
-        
       } else if (user.coach && user.coach.length > 0) {
         setTrainer(user.coach[0]); // já é o coach completo
       }
@@ -599,262 +596,280 @@ export default function TrainingScreen() {
             flex: 1,
           }}
         >
-          <>{/* Calendar e restantes componentes */}
-      <>
-        {/* Calendar */}
-        <Calendar
-          onDayPress={(day) => setSelectedDay(day.dateString)}
-          markedDates={
-            selectedDay
-              ? {
-                  [selectedDay]: {
-                    selected: true,
-                    selectedColor: "#2563eb",
-                    selectedTextColor: "#ffffff",
-                  },
+          <>
+            {/* Calendar e restantes componentes */}
+            <>
+              {/* Calendar */}
+              <Calendar
+                onDayPress={(day) => setSelectedDay(day.dateString)}
+                markedDates={
+                  selectedDay
+                    ? {
+                        [selectedDay]: {
+                          selected: true,
+                          selectedColor: "#2563eb",
+                          selectedTextColor: "#ffffff",
+                        },
+                      }
+                    : {}
                 }
-              : {}
-          }
-          theme={{
-            todayTextColor: "#2563eb",
-            arrowColor: "#2563eb",
-            selectedDayBackgroundColor: "#2563eb",
-            selectedDayTextColor: "#ffffff",
-            monthTextColor: "#1e293b",
-            textDayFontWeight: "500",
-            textMonthFontWeight: "700",
-            textDayHeaderFontWeight: "600",
-          }}
-          style={styles.calendar}
-        />
+                theme={{
+                  todayTextColor: "#2563eb",
+                  arrowColor: "#2563eb",
+                  selectedDayBackgroundColor: "#2563eb",
+                  selectedDayTextColor: "#ffffff",
+                  monthTextColor: "#1e293b",
+                  textDayFontWeight: "500",
+                  textMonthFontWeight: "700",
+                  textDayHeaderFontWeight: "600",
+                }}
+                style={styles.calendar}
+              />
 
-        {/* Lista de horários disponíveis */}
-        {selectedDay &&
-          (morningSlots.length > 0 || afternoonSlots.length > 0) && (
-            <View style={styles.hoursContainer}>
-              {/* Horários da Manhã */}
-              {morningSlots.length > 0 && (
-                <View style={styles.timeSection}>
-                  <Text style={styles.timeSectionHeader}>Manhã</Text>
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    nestedScrollEnabled
-                    scrollEnabled={true}
-                    style={styles.timeRow}
-                    onStartShouldSetResponderCapture={() => true}
-                  >
-                    {morningSlots.map(renderTimeSlot)}
-                  </ScrollView>
-                </View>
-              )}
-
-              {/* Horários da Tarde */}
-              {afternoonSlots.length > 0 && (
-                <View style={styles.timeSection}>
-                  <Text style={styles.timeSectionHeader}>Tarde</Text>
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.timeRow}
-                  >
-                    {afternoonSlots.map(renderTimeSlot)}
-                  </ScrollView>
-                </View>
-              )}
-
-              {/* Se for Admin ou PT, mostrar dropdown de atletas */}
-              {(user.role === "Admin" || user.role === "PT") && (
-                <View style={styles.dropdownSection}>
-                  <Text style={styles.dropdownLabel}>Selecionar Atleta</Text>
-                  <TouchableOpacity
-                    style={styles.dropdownButton}
-                    onPress={() => setShowAthleteDropdown(!showAthleteDropdown)}
-                  >
-                    <Text style={styles.dropdownButtonText}>
-                      {selectedAthleteId
-                        ? mineAthletes.find((a) => a._id === selectedAthleteId)
-                            ?.name
-                        : "Escolher atleta..."}
-                    </Text>
-                    <Text style={styles.dropdownArrow}>
-                      {showAthleteDropdown ? "▲" : "▼"}
-                    </Text>
-                  </TouchableOpacity>
-
-                  {showAthleteDropdown && (
-                    <View style={styles.dropdownList}>
-                      {mineAthletes.filter((t) => t != null).map((athlete) => (
-                        <TouchableOpacity
-                          key={athlete._id}
-                          style={[
-                            styles.dropdownItem,
-                            selectedAthleteId === athlete._id &&
-                              styles.dropdownItemSelected,
-                          ]}
-                          onPress={() => {
-                            setSelectedAthleteId(athlete._id);
-                            setShowAthleteDropdown(false);
-                          }}
+              {/* Lista de horários disponíveis */}
+              {selectedDay &&
+                (morningSlots.length > 0 || afternoonSlots.length > 0) && (
+                  <View style={styles.hoursContainer}>
+                    {/* Horários da Manhã */}
+                    {morningSlots.length > 0 && (
+                      <View style={styles.timeSection}>
+                        <Text style={styles.timeSectionHeader}>Manhã</Text>
+                        <ScrollView
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          nestedScrollEnabled
+                          scrollEnabled={true}
+                          style={styles.timeRow}
+                          onStartShouldSetResponderCapture={() => true}
                         >
-                          <Text
-                            style={[
-                              styles.dropdownItemText,
-                              selectedAthleteId === athlete._id &&
-                                styles.dropdownItemTextSelected,
-                            ]}
-                          >
-                            {athlete.name}
+                          {morningSlots.map(renderTimeSlot)}
+                        </ScrollView>
+                      </View>
+                    )}
+
+                    {/* Horários da Tarde */}
+                    {afternoonSlots.length > 0 && (
+                      <View style={styles.timeSection}>
+                        <Text style={styles.timeSectionHeader}>Tarde</Text>
+                        <ScrollView
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          style={styles.timeRow}
+                        >
+                          {afternoonSlots.map(renderTimeSlot)}
+                        </ScrollView>
+                      </View>
+                    )}
+
+                    {/* Se for Admin ou PT, mostrar dropdown de atletas */}
+                    {(user.role === "Admin" || user.role === "PT") && (
+                      <View style={styles.dropdownSection}>
+                        <Text style={styles.dropdownLabel}>
+                          Selecionar Atleta
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.dropdownButton}
+                          onPress={() =>
+                            setShowAthleteDropdown(!showAthleteDropdown)
+                          }
+                        >
+                          <Text style={styles.dropdownButtonText}>
+                            {selectedAthleteId
+                              ? mineAthletes.find(
+                                  (a) => a._id === selectedAthleteId,
+                                )?.name
+                              : "Escolher atleta..."}
                           </Text>
-                          {selectedAthleteId === athlete._id && (
-                            <Text style={styles.checkmark}>✓</Text>
-                          )}
+                          <Text style={styles.dropdownArrow}>
+                            {showAthleteDropdown ? "▲" : "▼"}
+                          </Text>
                         </TouchableOpacity>
-                      ))}
-                    </View>
-                  )}
-                </View>
-              )}
 
-              {/* Botão de confirmação */}
-              {selectedHour && (
-                <TouchableOpacity
-                  style={[
-                    styles.actionButton,
-                    user.role !== "atleta" &&
-                      !selectedAthleteId && { opacity: 0.5 },
-                  ]}
-                  onPress={handleScheduleTraining}
-                  disabled={user.role !== "atleta" && !selectedAthleteId}
-                >
-                  <Text style={styles.actionButtonText}>Marcar Treino</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
+                        {showAthleteDropdown && (
+                          <View style={styles.dropdownList}>
+                            {mineAthletes
+                              .filter((t) => t != null)
+                              .map((athlete) => (
+                                <TouchableOpacity
+                                  key={athlete._id}
+                                  style={[
+                                    styles.dropdownItem,
+                                    selectedAthleteId === athlete._id &&
+                                      styles.dropdownItemSelected,
+                                  ]}
+                                  onPress={() => {
+                                    setSelectedAthleteId(athlete._id);
+                                    setShowAthleteDropdown(false);
+                                  }}
+                                >
+                                  <Text
+                                    style={[
+                                      styles.dropdownItemText,
+                                      selectedAthleteId === athlete._id &&
+                                        styles.dropdownItemTextSelected,
+                                    ]}
+                                  >
+                                    {athlete.name}
+                                  </Text>
+                                  {selectedAthleteId === athlete._id && (
+                                    <Text style={styles.checkmark}>✓</Text>
+                                  )}
+                                </TouchableOpacity>
+                              ))}
+                          </View>
+                        )}
+                      </View>
+                    )}
 
-        {selectedDay &&
-          morningSlots.length === 0 &&
-          afternoonSlots.length === 0 && (
-            <Text style={styles.noAvailabilityText}>
-              Nenhum horário disponível neste dia
-            </Text>
-          )}
+                    {/* Botão de confirmação */}
+                    {selectedHour && (
+                      <TouchableOpacity
+                        style={[
+                          styles.actionButton,
+                          user.role !== "atleta" &&
+                            !selectedAthleteId && { opacity: 0.5 },
+                        ]}
+                        onPress={handleScheduleTraining}
+                        disabled={user.role !== "atleta" && !selectedAthleteId}
+                      >
+                        <Text style={styles.actionButtonText}>
+                          Marcar Treino
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
 
-        {/* SECÇÃO 1: Treinos que Precisam da Minha Ação */}
-        {trainingsNeedMyAction.length > 0 && (
-          <>
-            <Text style={styles.sectionTitle}>Precisas de Confirmar</Text>
-            <View style={styles.actionNeededContainer}>
-              {trainingsNeedMyAction.map((training) => (
-                <View key={training._id} style={styles.actionNeededCard}>
-                  <Text style={styles.trainingText}>
-                    {formatDate(training.date, training.hour)}
-                    {"\n"}
-                    {user.role === "atleta"
-                      ? training.PT.name
-                      : training.athlete.name}
+              {selectedDay &&
+                morningSlots.length === 0 &&
+                afternoonSlots.length === 0 && (
+                  <Text style={styles.noAvailabilityText}>
+                    Nenhum horário disponível neste dia
                   </Text>
+                )}
 
-                  <View style={styles.confirmedCardFooter}>
-                    <Text style={styles.actionNeededBadge}>
-                      Aguarda Confirmação
-                    </Text>
+              {/* SECÇÃO 1: Treinos que Precisam da Minha Ação */}
+              {trainingsNeedMyAction.length > 0 && (
+                <>
+                  <Text style={styles.sectionTitle}>Precisas de Confirmar</Text>
+                  <View style={styles.actionNeededContainer}>
+                    {trainingsNeedMyAction.map((training) => (
+                      <View key={training._id} style={styles.actionNeededCard}>
+                        <Text style={styles.trainingText}>
+                          {formatDate(training.date, training.hour)}
+                          {"\n"}
+                          {user.role === "atleta"
+                            ? training.PT.name
+                            : training.athlete.name}
+                        </Text>
+
+                        <View style={styles.confirmedCardFooter}>
+                          <Text style={styles.actionNeededBadge}>
+                            Aguarda Confirmação
+                          </Text>
+                        </View>
+
+                        <View style={styles.pendingActions}>
+                          <TouchableOpacity
+                            style={styles.acceptButton}
+                            onPress={() => handleAcceptTraining(training._id)}
+                          >
+                            <Text style={styles.buttonText}>Aceitar</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.rejectButton}
+                            onPress={() => handleRejectTraining(training._id)}
+                          >
+                            <Text style={styles.rejectButtonText}>Recusar</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    ))}
                   </View>
+                </>
+              )}
 
-                  <View style={styles.pendingActions}>
-                    <TouchableOpacity
-                      style={styles.acceptButton}
-                      onPress={() => handleAcceptTraining(training._id)}
-                    >
-                      <Text style={styles.buttonText}>Aceitar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.rejectButton}
-                      onPress={() => handleRejectTraining(training._id)}
-                    >
-                      <Text style={styles.rejectButtonText}>Recusar</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </View>
-          </>
-        )}
-
-        {/* SECÇÃO 2: Próximos Treinos Confirmados */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Próximos Treinos Confirmados</Text>
-          <DaysSwitch />
-        </View>
-
-        <View style={styles.confirmedContainer}>
-          {getTrainingsToShow().length > 0 ? (
-            getTrainingsToShow().map((training) => (
-              <View key={training._id} style={styles.confirmedCard}>
-                <Text style={styles.trainingText}>
-                  {formatDate(training.date, training.hour)}
-                  {"\n"}
-                  {user.role === "atleta"
-                    ? training.PT.name
-                    : training.athlete.name}
+              {/* SECÇÃO 2: Próximos Treinos Confirmados */}
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>
+                  Próximos Treinos Confirmados
                 </Text>
-
-                <View style={styles.confirmedCardFooter}>
-                  <Text style={styles.confirmedBadge}>Confirmado</Text>
-                  <TouchableOpacity
-                    onPress={() => handleDeleteTraining(training)}
-                    style={styles.deleteButtonContainer}
-                  >
-                    <Ionicons name="close-outline" size={18} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
+                <DaysSwitch />
               </View>
-            ))
-          ) : (
-            <Text style={styles.emptyStateText}>
-              {showFifteenDays
-                ? "Não existem treinos para os próximos 15 dias."
-                : "Não existem treinos para os próximos 7 dias."}
-            </Text>
-          )}
-        </View>
 
-        {/* SECÇÃO 3: À Espera de Confirmação */}
-        {pendingOtherPerson.length > 0 && (
-          <>
-            <Text style={styles.sectionTitle}>À Espera de Confirmação</Text>
-            <View style={styles.pendingContainer}>
-              {pendingOtherPerson.map((training) => (
-                <View key={training._id} style={styles.pendingCard}>
-                  <Text style={styles.trainingText}>
-                    {formatDate(training.date, training.hour)}
-                    {"\n"}
-                    {user.role === "atleta"
-                      ? training.PT.name
-                      : training.athlete.name}
+              <View style={styles.confirmedContainer}>
+                {getTrainingsToShow().length > 0 ? (
+                  getTrainingsToShow().map((training) => (
+                    <View key={training._id} style={styles.confirmedCard}>
+                      <Text style={styles.trainingText}>
+                        {formatDate(training.date, training.hour)}
+                        {"\n"}
+                        {user.role === "atleta"
+                          ? training.PT.name
+                          : training.athlete.name}
+                      </Text>
+
+                      <View style={styles.confirmedCardFooter}>
+                        <Text style={styles.confirmedBadge}>Confirmado</Text>
+                        <TouchableOpacity
+                          onPress={() => handleDeleteTraining(training)}
+                          style={styles.deleteButtonContainer}
+                        >
+                          <Ionicons
+                            name="close-outline"
+                            size={18}
+                            color="#ef4444"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ))
+                ) : (
+                  <Text style={styles.emptyStateText}>
+                    {showFifteenDays
+                      ? "Não existem treinos para os próximos 15 dias."
+                      : "Não existem treinos para os próximos 7 dias."}
                   </Text>
+                )}
+              </View>
 
-                  <View style={styles.confirmedCardFooter}>
-                    <Text style={styles.pendingBadge}>Pendente</Text>
-                    <TouchableOpacity
-                      onPress={() => handleDeleteTraining(training)}
-                      style={styles.deleteButtonContainer}
-                    >
-                      <Ionicons
-                        name="trash-outline"
-                        size={18}
-                        color="#ef4444"
-                      />
-                    </TouchableOpacity>
+              {/* SECÇÃO 3: À Espera de Confirmação */}
+              {pendingOtherPerson.length > 0 && (
+                <>
+                  <Text style={styles.sectionTitle}>
+                    À Espera de Confirmação
+                  </Text>
+                  <View style={styles.pendingContainer}>
+                    {pendingOtherPerson.map((training) => (
+                      <View key={training._id} style={styles.pendingCard}>
+                        <Text style={styles.trainingText}>
+                          {formatDate(training.date, training.hour)}
+                          {"\n"}
+                          {user.role === "atleta"
+                            ? training.PT.name
+                            : training.athlete.name}
+                        </Text>
+
+                        <View style={styles.confirmedCardFooter}>
+                          <Text style={styles.pendingBadge}>Pendente</Text>
+                          <TouchableOpacity
+                            onPress={() => handleDeleteTraining(training)}
+                            style={styles.deleteButtonContainer}
+                          >
+                            <Ionicons
+                              name="trash-outline"
+                              size={18}
+                              color="#ef4444"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    ))}
                   </View>
-                </View>
-              ))}
-            </View>
+                </>
+              )}
+            </>
           </>
-        )}
-      </>
-      </>
         </View>
 
         <View
