@@ -21,6 +21,12 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#1e293b",
   },
+  // Adicione estas propriedades ao seu stylesheet
+  dragHandle: {
+    padding: 10,
+    marginRight: 10,
+    justifyContent: "center",
+  },
 
   sectionTitle: {
     fontSize: 20,

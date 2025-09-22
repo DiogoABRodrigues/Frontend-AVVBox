@@ -23,8 +23,8 @@ export const trainingService = {
     const res = await api.patch(`${API_URL}/${id}/reject`, { userId });
     return res.data;
   },
-  async delete(id: string): Promise<{ message: string }> {
-    const res = await api.delete(`${API_URL}/${id}`);
+  async delete(id: string, userId: string): Promise<{ message: string }> {
+    const res = await api.delete(`${API_URL}/${id}`, { data: { userId } });
     return res.data;
   },
   async getPending(userId: string): Promise<Training[]> {

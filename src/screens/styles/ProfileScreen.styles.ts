@@ -454,6 +454,7 @@ export const styles = StyleSheet.create({
     color: "#374151",
     fontWeight: "500",
     flex: 1,
+    marginRight: 10,
   },
 
   switch: {

@@ -19,7 +19,6 @@ interface Notification {
 }
 
 export default function NotificationsScreen() {
-  console.log("Rendering NotificationsScreen");
   const { user } = useAuth();
   const isPT = user?.role === "PT" || user?.role === "Admin";
 

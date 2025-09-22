@@ -30,7 +30,6 @@ interface AthleteData {
 }
 
 export default function MeasurementsScreen() {
-  console.log("Rendering MeasurementsScreen");
   const { user } = useAuth();
   const isPT = user?.role === "PT" || user?.role === "Admin";
 

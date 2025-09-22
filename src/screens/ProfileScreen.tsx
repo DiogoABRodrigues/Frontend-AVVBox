@@ -25,7 +25,6 @@ import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
 
 export default function ProfileScreen() {
-  console.log("Rendering ProfileScreen");
   const { user, logout } = useAuth();
 
   const [userData, setUserData] = useState<User>({
@@ -103,6 +102,10 @@ export default function ProfileScreen() {
     thirtyMin: false,
     sixtyMin: false,
     onetwentyMin: false,
+    trainingPending: false,
+    trainingApproved: false,
+    trainingRejected: false,
+    trainingCanceled: false,
   });
 
   const toggleExpand = (title: string) => {
@@ -956,18 +959,21 @@ export default function ProfileScreen() {
                       Configurações de Notificação
                     </Text>
                     <Text style={styles.notificationDescription}>
-                      Escolha quando deseja ser notificado antes dos seus
-                      treinos
+                      Escolha quando deseja ser notificado
                     </Text>
 
                     {[
                       {
                         key: "fifteenMin",
-                        label: "Notificar 15 minutos antes",
+                        label: "15 minutos antes do treino",
                       },
-                      { key: "thirtyMin", label: "Notificar 30 minutos antes" },
-                      { key: "sixtyMin", label: "Notificar 1 hora antes" },
-                      { key: "onetwentyMin", label: "Notificar 2 horas antes" },
+                      { key: "thirtyMin", label: "30 minutos antes do treino" },
+                      { key: "sixtyMin", label: "1 hora antes do treino" },
+                      { key: "onetwentyMin", label: "2 horas antes do treino" },
+                      { key: "trainingPending", label: "Quando existe um treino pendente" },
+                      { key: "trainingApproved", label: "Quando um treino é aprovado" },
+                      { key: "trainingRejected", label: "Quando um treino é rejeitado" },
+                      { key: "trainingCanceled", label: "Quando um treino é cancelado" },
                     ].map((notification) => (
                       <TouchableOpacity
                         key={notification.key}
