@@ -189,16 +189,14 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
 
-      /*useEffect(() => {
-          async function initPushNotifications() {
+          /*async function initPushNotifications() {
             const token = await registerForPushNotificationsAsync();
             if (token) {
               // envia token para o backend
               await userService.saveExpoPushToken(user.id, token);
             }
           }
-          initPushNotifications();
-        }, []);*/
+          initPushNotifications();*/
 
       setShowTransition(true);
     } catch (err: any) {

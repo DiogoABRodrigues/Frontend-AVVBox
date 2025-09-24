@@ -173,7 +173,6 @@ export default function TrainingScreen() {
 
   const loadAvailability = async (trainerId: string) => {
     try {
-      console.log("Loading availability for trainer ID:", trainerId);
       const trainerAvailability = await availabilityService.getByPT(trainerId);
       setAvailability(trainerAvailability);
     } catch {
@@ -187,7 +186,6 @@ export default function TrainingScreen() {
 
   const loadAllTrainings = async () => {
     try {
-      console.log("Loading all trainings for user:", user);
       const [pending, upcoming] = await Promise.all([
         trainingService.getPending(user._id),
         trainingService.getUpcoming(user._id),
