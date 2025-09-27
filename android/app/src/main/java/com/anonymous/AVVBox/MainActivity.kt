@@ -1,4 +1,4 @@
-package com.anonymous.FrontendAVVBox
+package com.anonymous.AVVBox
 
 import android.os.Build
 import android.os.Bundle
