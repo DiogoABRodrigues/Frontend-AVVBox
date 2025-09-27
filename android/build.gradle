@@ -33,5 +33,19 @@ allprojects {
   }
 }
 
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "2.0.21" apply false
+}
+
+allprojects {
+    plugins.withId("org.jetbrains.kotlin.android") {
+        kotlin {
+            jvmToolchain(17)
+        }
+    }
+}
+
+
+
 apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"
