@@ -1,43 +1,44 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-  repositories {
-    google()
-    mavenCentral()
-  }
-  dependencies {
-    classpath('com.android.tools.build:gradle:8.8.2')
-    classpath('com.facebook.react:react-native-gradle-plugin')
-    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21')
-  }
-}
-
-def reactNativeAndroidDir = new File(
-  providers.exec {
-    workingDir(rootDir)
-    commandLine("node", "--print", "require.resolve('react-native/package.json')")
-  }.standardOutput.asText.get().trim(),
-  "../android"
-)
-
-allprojects {
-  repositories {
-    maven {
-      // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-      url(reactNativeAndroidDir)
+    repositories {
+        google()
+        mavenCentral()
     }
-
-    google()
-    mavenCentral()
-    maven { url 'https://www.jitpack.io' }
-  }
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.8.2")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
+    }
 }
 
 plugins {
     id "org.jetbrains.kotlin.jvm" version "2.0.21" apply false
+    // podes adicionar outros plugins se necessário
 }
 
+// Código adicional como definição de diretórios ou configurações do allprojects
+// deve vir **depois** do bloco plugins
+def reactNativeAndroidDir = new File(
+    providers.exec {
+        workingDir(rootDir)
+        commandLine("node", "--print", "require.resolve('react-native/package.json')")
+    }.standardOutput.asText.get().trim(),
+    "../android"
+)
+
 allprojects {
+    repositories {
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url(reactNativeAndroidDir)
+        }
+
+        google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+    }
+
     plugins.withId("org.jetbrains.kotlin.android") {
         kotlin {
             jvmToolchain(17)
@@ -45,7 +46,6 @@ allprojects {
     }
 }
 
-
-
+// Aplica plugins adicionais **depois** do bloco plugins
 apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"
