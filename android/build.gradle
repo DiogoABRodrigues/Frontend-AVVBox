@@ -1,64 +1,24 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.8.2")
-        classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
-    }
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath('com.android.tools.build:gradle')
+    classpath('com.facebook.react:react-native-gradle-plugin')
+    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+  }
 }
-
-plugins {
-    id "org.jetbrains.kotlin.jvm" version "2.0.21" apply false
-    // podes adicionar outros plugins se necessário
-}
-
-// Código adicional como definição de diretórios ou configurações do allprojects
-// deve vir **depois** do bloco plugins
-def reactNativeAndroidDir = new File(
-    providers.exec {
-        workingDir(rootDir)
-        commandLine("node", "--print", "require.resolve('react-native/package.json')")
-    }.standardOutput.asText.get().trim(),
-    "../android"
-)
 
 allprojects {
-    repositories {
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url(reactNativeAndroidDir)
-        }
-
-        google()
-        mavenCentral()
-        maven { url 'https://www.jitpack.io' }
-    }
-    
-
-    plugins.withId("org.jetbrains.kotlin.android") {
-        kotlin {
-            jvmToolchain(17)
-        }
-    }
+  repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://www.jitpack.io' }
+  }
 }
 
-subprojects {
-    afterEvaluate { project ->
-        if (project.plugins.hasPlugin("kotlin") || project.plugins.hasPlugin("org.jetbrains.kotlin.android")) {
-            project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-                kotlinOptions {
-                    jvmTarget = "17"
-                }
-            }
-        }
-    }
-}
-
-// Aplica plugins adicionais **depois** do bloco plugins
 apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"
