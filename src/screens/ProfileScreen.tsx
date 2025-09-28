@@ -1351,24 +1351,24 @@ export default function ProfileScreen() {
 
                     {/* Filtros de Role */}
                     <View style={styles.roleFilterContainer}>
-                      {["todos", "atleta", "PT", "Admin"].map((role) => (
+                      {[{ key: "todos", label: "Todos" }, { key: "atleta", label: "Atleta" }, { key: "PT", label: "PT" }, { key: "Admin", label: "Admin" }].map((role) => (
                         <TouchableOpacity
-                          key={role}
+                          key={role.key.toString()}
                           style={[
                             styles.roleFilterButton,
-                            roleFilter === role &&
+                            roleFilter === role.key.toString() &&
                               styles.roleFilterButtonActive,
                           ]}
-                          onPress={() => setRoleFilter(role as any)}
+                          onPress={() => setRoleFilter(role.key as any)}
                         >
                           <Text
                             style={[
                               styles.roleFilterText,
-                              roleFilter === role &&
+                              roleFilter === role.key.toString() &&
                                 styles.roleFilterTextActive,
                             ]}
                           >
-                            {role}
+                            {role.label}
                           </Text>
                         </TouchableOpacity>
                       ))}
