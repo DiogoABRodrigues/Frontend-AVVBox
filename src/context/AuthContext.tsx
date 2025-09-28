@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../models/User";
+import { userService } from "@/services/usersService";
 
 interface AuthContextType {
   user: User | null;
@@ -24,7 +25,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const loadUser = async () => {
       try {
         const storedUser = await AsyncStorage.getItem("user");
-        if (storedUser) setUser(JSON.parse(storedUser));
+        if (storedUser) {
+          const userRefresh = await userService.getById(JSON.parse(storedUser)._id);
+          //guardar o usuário atualizado no async storage
+          await AsyncStorage.setItem("user", JSON.stringify(userRefresh));
+          setUser(userRefresh);
+        }
       } catch (err) {
         console.log("Erro ao carregar usuário localmente:", err);
       }

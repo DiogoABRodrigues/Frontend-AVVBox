@@ -41,7 +41,7 @@ export default function MeasurementsScreen() {
 
   const [expandedHistory, setExpandedHistory] = useState<string | null>(null);
 
-  const [timeFilter, setTimeFilter] = useState<"all" | "1y" | "6m" | "3m">(
+  const [timeFilter, setTimeFilter] = useState<"all" | "1y" | "6m" | "3m" | "1m">(
     "all",
   );
 
@@ -248,6 +248,10 @@ export default function MeasurementsScreen() {
         cutoff = new Date();
         cutoff.setMonth(now.getMonth() - 3);
         break;
+      case "1m":
+        cutoff = new Date();
+        cutoff.setMonth(now.getMonth() - 2);
+        break;
       default:
         cutoff = null;
     }
@@ -390,6 +394,8 @@ export default function MeasurementsScreen() {
         return "6 meses";
       case "3m":
         return "3 meses";
+      case "1m":
+        return "1 mês";
       default:
         return "Desde sempre";
     }
@@ -637,6 +643,7 @@ export default function MeasurementsScreen() {
                 { key: "1y", label: "1 ano" },
                 { key: "6m", label: "6 meses" },
                 { key: "3m", label: "3 meses" },
+                { key: "1m", label: "1 mês" },
               ].map((item) => (
                 <TouchableOpacity
                   key={item.key}
