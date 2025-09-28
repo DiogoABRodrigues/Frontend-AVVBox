@@ -441,6 +441,44 @@ export default function MeasurementsScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+            {isPT && showAthleteDropdown && (
+              <View style={{ ...styles.dropdownOverlay }}>
+                <View style={styles.dropdownListContainer}>
+                  <ScrollView
+                    nestedScrollEnabled={true}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                  >
+                    {athletes.map((athlete) => (
+                      <TouchableOpacity
+                        key={athlete.id}
+                        style={[
+                          styles.dropdownItem,
+                          selectedAthleteId === athlete.id &&
+                            styles.dropdownItemSelected,
+                        ]}
+                        onPress={() => {
+                          setSelectedAthleteId(athlete.id);
+                          setShowAthleteDropdown(false);
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.dropdownItemText,
+                            selectedAthleteId === athlete.id &&
+                              styles.dropdownItemTextSelected,
+                          ]}
+                        >
+                          {athlete.name}
+                        </Text>
+                        {selectedAthleteId === athlete.id && (
+                          <Text style={styles.checkmark}>✓</Text>
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              </View>
+            )}
 
             {/* Botão de adicionar */}
             <TouchableOpacity
@@ -703,46 +741,6 @@ export default function MeasurementsScreen() {
           </View>
         )}
       </ScrollView>
-
-      {/* Dropdown overlay - FORA DO SCROLLVIEW */}
-      {isPT && showAthleteDropdown && (
-        <View style={styles.dropdownOverlay}>
-          <View style={styles.dropdownListContainer}>
-            <ScrollView
-              nestedScrollEnabled={true}
-              style={styles.dropdownScrollView}
-            >
-              {athletes.map((athlete) => (
-                <TouchableOpacity
-                  key={athlete.id}
-                  style={[
-                    styles.dropdownItem,
-                    selectedAthleteId === athlete.id &&
-                      styles.dropdownItemSelected,
-                  ]}
-                  onPress={() => {
-                    setSelectedAthleteId(athlete.id);
-                    setShowAthleteDropdown(false);
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.dropdownItemText,
-                      selectedAthleteId === athlete.id &&
-                        styles.dropdownItemTextSelected,
-                    ]}
-                  >
-                    {athlete.name}
-                  </Text>
-                  {selectedAthleteId === athlete.id && (
-                    <Text style={styles.checkmark}>✓</Text>
-                  )}
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
-      )}
 
       {/* POPUP */}
       <Popup

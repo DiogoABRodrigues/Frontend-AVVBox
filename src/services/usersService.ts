@@ -104,5 +104,5 @@ export const userService = {
       expoPushToken: token,
     });
     return res.data;
-  }
+  },
 };

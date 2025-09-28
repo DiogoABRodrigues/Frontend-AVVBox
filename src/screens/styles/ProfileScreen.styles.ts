@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingBottom: 40,
     backgroundColor: "#f8fafc",
   },
 
@@ -12,7 +13,6 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 24,
-    paddingTop: 8,
   },
   headerTitle: {
     fontSize: 28,

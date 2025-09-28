@@ -189,7 +189,7 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
 
-          /*async function initPushNotifications() {
+      /*async function initPushNotifications() {
             const token = await registerForPushNotificationsAsync();
             if (token) {
               // envia token para o backend

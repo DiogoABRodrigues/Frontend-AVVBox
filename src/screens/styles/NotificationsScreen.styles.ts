@@ -1,18 +1,19 @@
-import { StyleSheet, Dimensions } from "react-native";
-
-const { width } = Dimensions.get("window");
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8fafc", // Mudança: cor de fundo mais suave
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 40,
   },
 
   // Header separado para o título
   titleHeader: {
     marginBottom: 24, // Mudança: mais espaçamento
-    paddingTop: 8, // Mudança: padding top consistente
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   headerTitle: {
     fontSize: 28, // Mudança: fonte maior e mais consistente

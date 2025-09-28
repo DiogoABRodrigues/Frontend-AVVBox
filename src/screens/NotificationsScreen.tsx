@@ -21,21 +21,21 @@ interface Notification {
 
 export default function NotificationsScreen() {
   const emptyUser: User = {
-        _id: "",
-        name: "",
-        email: "",
-        phoneNumber: "123456789",
-        role: "atleta",
-        active: true,
-        coach: [],
-        atheletes: [],
-      };
-    
-      let { user } = useAuth();
-      
-      if(!user){
-        user = emptyUser; // Garantir que user nunca é null
-      }
+    _id: "",
+    name: "",
+    email: "",
+    phoneNumber: "123456789",
+    role: "atleta",
+    active: true,
+    coach: [],
+    atheletes: [],
+  };
+
+  let { user } = useAuth();
+
+  if (!user) {
+    user = emptyUser; // Garantir que user nunca é null
+  }
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -126,7 +126,7 @@ export default function NotificationsScreen() {
       }
       fetchNotifications();
       setModalVisible(false);
-    } catch (err : any) {
+    } catch (err: any) {
       setPopup({
         visible: true,
         type: "error",

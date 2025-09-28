@@ -8,6 +8,8 @@ import AthleteTabs from "./src/screens/Navigator";
 import LoginScreen from "./src/screens/LoginScreen";
 import { NotificationsProvider } from "./src/context/NotificationsContext";
 import { Provider as PaperProvider } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
+      <StatusBar backgroundColor="#f8fafc" barStyle="dark-content" />
       <AuthProvider>
         <NotificationsProvider>
           <NavigationContainer>
