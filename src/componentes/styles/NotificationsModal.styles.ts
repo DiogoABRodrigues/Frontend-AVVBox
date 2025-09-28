@@ -122,7 +122,7 @@ export const styles = StyleSheet.create({
 
   // User List Container
   userListContainer: {
-    maxHeight: 220,
+    maxHeight: 180,
     marginBottom: 24,
     borderRadius: 14,
     backgroundColor: "#f8fafc",

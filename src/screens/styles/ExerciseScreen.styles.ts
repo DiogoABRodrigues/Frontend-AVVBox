@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#f8fafc",
   },
 
@@ -399,18 +399,14 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     lineHeight: 22,
   },
-  dropdownSection: {
-    marginBottom: 20,
-    zIndex: 1000,
-    paddingHorizontal: 16,
-    position: "relative",
-  },
 
   dropdownLabel: {
     fontSize: 16,
     fontWeight: "700",
     color: "#475569",
     marginBottom: 8,
+    zIndex: 1001,
+    elevation: 1001,
   },
 
   dropdownButton: {
@@ -501,5 +497,46 @@ export const styles = StyleSheet.create({
     color: "#64748b",
     marginTop: 4,
     lineHeight: 18,
+  },
+
+  dropdownOverlay: {
+    position: "absolute",
+    top: 85, // Ajuste conforme a altura do seu botão
+    left: 0,
+    right: 0,
+    zIndex: 9999,
+    elevation: 25,
+  },
+
+  dropdownListContainer: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    shadowColor: "#1e293b",
+    shadowOpacity: 0.25,
+    shadowRadius: 15,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 20,
+    maxHeight: 200, // ⭐ ALTURA FIXA é crucial
+    overflow: "hidden",
+  },
+
+  dropdownBackdrop: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "transparent",
+    zIndex: 9998,
+    elevation: 19,
+  },
+
+  // Para garantir que o dropdown section tem posição relativa:
+  dropdownSection: {
+    marginBottom: 20,
+    zIndex: 1001,
+    elevation: 1001,
   },
 });

@@ -23,22 +23,22 @@ interface LocalMuscleGroup {
 }
 
 export default function ExerciseScreen() {
-   const emptyUser: User = {
-          _id: "",
-          name: "",
-          email: "",
-          phoneNumber: "123456789",
-          role: "atleta",
-          active: true,
-          coach: [],
-          atheletes: [],
-        };
-      
-        let { user } = useAuth();
-        
-        if(!user){
-          user = emptyUser; // Garantir que user nunca é null
-        }
+  const emptyUser: User = {
+    _id: "",
+    name: "",
+    email: "",
+    phoneNumber: "123456789",
+    role: "atleta",
+    active: true,
+    coach: [],
+    atheletes: [],
+  };
+
+  let { user } = useAuth();
+
+  if (!user) {
+    user = emptyUser; // Garantir que user nunca é null
+  }
   const [expandedMuscleGroup, setExpandedMuscleGroup] = useState<string | null>(
     null,
   );
@@ -332,63 +332,26 @@ export default function ExerciseScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Se for Admin ou PT, mostrar dropdown de atletas */}
-      {isPT && (
-        <View style={styles.dropdownSection}>
-          <TouchableOpacity
-            style={styles.dropdownButton}
-            onPress={() => setShowAthleteDropdown(!showAthleteDropdown)}
-          >
-            <Text style={styles.dropdownButtonText}>
-              {selectedAthleteId
-                ? mineAthletes.find((a) => a._id === selectedAthleteId)?.name
-                : "Escolher atleta..."}
-            </Text>
-            <Text style={styles.dropdownArrow}>
-              {showAthleteDropdown ? "▲" : "▼"}
-            </Text>
-          </TouchableOpacity>
-
-          {showAthleteDropdown && (
-            <View style={styles.dropdownList}>
-              <ScrollView nestedScrollEnabled={true}>
-                {mineAthletes.map((athlete) => (
-                  <TouchableOpacity
-                    key={athlete._id}
-                    style={[
-                      styles.dropdownItem,
-                      selectedAthleteId === athlete._id &&
-                        styles.dropdownItemSelected,
-                    ]}
-                    onPress={() => {
-                      setSelectedAthleteId(athlete._id);
-                      setShowAthleteDropdown(false);
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.dropdownItemText,
-                        selectedAthleteId === athlete._id &&
-                          styles.dropdownItemTextSelected,
-                      ]}
-                    >
-                      {athlete.name}
-                    </Text>
-                    {selectedAthleteId === athlete._id && (
-                      <Text style={styles.checkmark}>✓</Text>
-                    )}
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
-        </View>
-      )}
-
-      <ScrollView
-        style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Se for Admin ou PT, mostrar dropdown de atletas */}
+        {isPT && (
+          <View style={styles.dropdownSection}>
+            <Text style={styles.dropdownLabel}>Selecionar Atleta</Text>
+            <TouchableOpacity
+              style={styles.dropdownButton}
+              onPress={() => setShowAthleteDropdown(!showAthleteDropdown)}
+            >
+              <Text style={styles.dropdownButtonText}>
+                {selectedAthleteId
+                  ? mineAthletes.find((a) => a._id === selectedAthleteId)?.name
+                  : "Escolher atleta..."}
+              </Text>
+              <Text style={styles.dropdownArrow}>
+                {showAthleteDropdown ? "▲" : "▼"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {muscleGroups.map((group) => (
           <View key={group.key} style={styles.muscleGroupContainer}>
             <TouchableOpacity
@@ -703,6 +666,45 @@ export default function ExerciseScreen() {
           onClose={() => setPopup((p) => ({ ...p, visible: false }))}
         />
       </ScrollView>
+
+      {showAthleteDropdown && (
+        <View style={styles.dropdownOverlay}>
+          <View style={styles.dropdownListContainer}>
+            <ScrollView
+              nestedScrollEnabled={true}
+              contentContainerStyle={{ flexGrow: 1 }}
+            >
+              {mineAthletes.map((athlete) => (
+                <TouchableOpacity
+                  key={athlete._id}
+                  style={[
+                    styles.dropdownItem,
+                    selectedAthleteId === athlete._id &&
+                      styles.dropdownItemSelected,
+                  ]}
+                  onPress={() => {
+                    setSelectedAthleteId(athlete._id);
+                    setShowAthleteDropdown(false);
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.dropdownItemText,
+                      selectedAthleteId === athlete._id &&
+                        styles.dropdownItemTextSelected,
+                    ]}
+                  >
+                    {athlete.name}
+                  </Text>
+                  {selectedAthleteId === athlete._id && (
+                    <Text style={styles.checkmark}>✓</Text>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

@@ -26,21 +26,21 @@ import { Availability } from "../models/Availability";
 
 export default function ProfileScreen() {
   const emptyUser: User = {
-      _id: "",
-      name: "",
-      email: "",
-      phoneNumber: "123456789",
-      role: "atleta",
-      active: true,
-      coach: [],
-      atheletes: [],
-    };
-  
-    let { user } = useAuth();
-    
-    if(!user){
-      user = emptyUser; // Garantir que user nunca é null
-    }
+    _id: "",
+    name: "",
+    email: "",
+    phoneNumber: "123456789",
+    role: "atleta",
+    active: true,
+    coach: [],
+    atheletes: [],
+  };
+
+  let { user } = useAuth();
+
+  if (!user) {
+    user = emptyUser; // Garantir que user nunca é null
+  }
 
   const [userData, setUserData] = useState<User>({
     _id: "",
@@ -349,7 +349,7 @@ export default function ProfileScreen() {
         });
       }
       fetchUserData();
-    } catch (err : any) {
+    } catch (err: any) {
       setPopup({
         visible: true,
         type: "error",
@@ -1377,6 +1377,8 @@ export default function ProfileScreen() {
                     <ScrollView
                       style={styles.usersList}
                       showsVerticalScrollIndicator={false}
+                      contentContainerStyle={{ paddingBottom: 100 }}
+                      nestedScrollEnabled={true}
                     >
                       {filteredUsers.length === 0 ? (
                         <View style={styles.emptyUsersContainer}>
@@ -1397,12 +1399,15 @@ export default function ProfileScreen() {
                             style={[
                               styles.userItem,
                               !userItem.active && styles.userItemInactive,
-                              activeMenu === userItem._id && { zIndex: 10000 }, // Z-index elevado quando o menu está aberto
+                              activeMenu === userItem._id && { zIndex: 6 }, // Z-index elevado quando o menu está aberto
                             ]}
                           >
                             <View style={styles.userInfo}>
                               <Text style={styles.userName}>
                                 {userItem.name}
+                              </Text>
+                              <Text style={styles.userRole}>
+                                {userItem.phoneNumber}
                               </Text>
                               <Text style={styles.userRole}>
                                 {userItem.role}

@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     paddingHorizontal: 16,
-    paddingBottom: 40,
+    paddingBottom: 24,
     backgroundColor: "#f8fafc",
   },
 
@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 16,
   },
   headerTitle: {
     fontSize: 28, // Mudança: fonte maior e mais consistente
@@ -55,7 +54,8 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 6 },
-    elevation: 10,
+    zIndex: 1001,
+    elevation: 1001,
   },
 
   // Time Section Styles
@@ -328,7 +328,8 @@ export const styles = StyleSheet.create({
   // Dropdown Styles
   dropdownSection: {
     marginBottom: 20,
-    zIndex: 1000,
+    zIndex: 1001,
+    elevation: 1001,
   },
 
   dropdownLabel: {
@@ -336,6 +337,8 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#475569",
     marginBottom: 8,
+    zIndex: 1001,
+    elevation: 1001,
   },
 
   dropdownButton: {
@@ -839,5 +842,29 @@ export const styles = StyleSheet.create({
     color: "#6b7280",
     textAlign: "center",
     fontStyle: "italic",
+  },
+  dropdownOverlay: {
+    position: "absolute",
+    top: 64, // Ajuste conforme a posição do seu header
+    left: 0,
+    right: 0,
+    zIndex: 1001,
+    elevation: 1001,
+  },
+
+  dropdownListContainer: {
+    backgroundColor: "#ffffff",
+    top: 20,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    shadowColor: "#1e293b",
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 1001,
+    zIndex: 1001,
+    maxHeight: 200,
+    overflow: "hidden",
   },
 });

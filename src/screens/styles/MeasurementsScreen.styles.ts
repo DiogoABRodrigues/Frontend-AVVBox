@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingBottom: 40,
     backgroundColor: "#f8fafc",
   },
 
@@ -14,7 +15,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 24,
-    paddingTop: 8,
   },
   teste: {
     flex: 1,
@@ -282,6 +282,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
+    marginBottom: 24,
   },
   chartInfo: {
     marginTop: 12,
@@ -490,8 +491,7 @@ export const styles = StyleSheet.create({
 
   dropdownListContainer: {
     backgroundColor: "#ffffff",
-    top: 28,
-    position: "absolute",
+    top: 20,
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
@@ -539,14 +539,14 @@ export const styles = StyleSheet.create({
 
   dropdownOverlay: {
     position: "absolute",
-    top: 100, // Ajuste conforme a posição do seu header
-    left: 16,
-    right: 16,
+    top: 35, // Ajuste conforme a posição do seu header
+    left: 0,
+    right: 60,
     zIndex: 1000,
     elevation: 1000,
   },
 
   dropdownScrollView: {
-    maxHeight: 200,
+    flex: 1,
   },
 });

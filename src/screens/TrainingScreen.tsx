@@ -84,11 +84,11 @@ export default function TrainingScreen() {
   };
 
   let { user } = useAuth();
-  
-  if(!user){
+
+  if (!user) {
     user = emptyUser; // Garantir que user nunca é null
   }
-  
+
   const [activeTab, setActiveTab] = useState<"schedule" | "exercises">(
     "schedule",
   );
@@ -700,36 +700,43 @@ export default function TrainingScreen() {
                         </TouchableOpacity>
 
                         {showAthleteDropdown && (
-                          <View style={styles.dropdownList}>
-                            {mineAthletes
-                              .filter((t) => t != null)
-                              .map((athlete) => (
-                                <TouchableOpacity
-                                  key={athlete._id}
-                                  style={[
-                                    styles.dropdownItem,
-                                    selectedAthleteId === athlete._id &&
-                                      styles.dropdownItemSelected,
-                                  ]}
-                                  onPress={() => {
-                                    setSelectedAthleteId(athlete._id);
-                                    setShowAthleteDropdown(false);
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.dropdownItemText,
-                                      selectedAthleteId === athlete._id &&
-                                        styles.dropdownItemTextSelected,
-                                    ]}
-                                  >
-                                    {athlete.name}
-                                  </Text>
-                                  {selectedAthleteId === athlete._id && (
-                                    <Text style={styles.checkmark}>✓</Text>
-                                  )}
-                                </TouchableOpacity>
-                              ))}
+                          <View style={{ ...styles.dropdownOverlay }}>
+                            <View style={styles.dropdownListContainer}>
+                              <ScrollView
+                                nestedScrollEnabled={true}
+                                contentContainerStyle={{ flexGrow: 1 }}
+                              >
+                                {mineAthletes
+                                  .filter((t) => t != null)
+                                  .map((athlete) => (
+                                    <TouchableOpacity
+                                      key={athlete._id}
+                                      style={[
+                                        styles.dropdownItem,
+                                        selectedAthleteId === athlete._id &&
+                                          styles.dropdownItemSelected,
+                                      ]}
+                                      onPress={() => {
+                                        setSelectedAthleteId(athlete._id);
+                                        setShowAthleteDropdown(false);
+                                      }}
+                                    >
+                                      <Text
+                                        style={[
+                                          styles.dropdownItemText,
+                                          selectedAthleteId === athlete._id &&
+                                            styles.dropdownItemTextSelected,
+                                        ]}
+                                      >
+                                        {athlete.name}
+                                      </Text>
+                                      {selectedAthleteId === athlete._id && (
+                                        <Text style={styles.checkmark}>✓</Text>
+                                      )}
+                                    </TouchableOpacity>
+                                  ))}
+                              </ScrollView>
+                            </View>
                           </View>
                         )}
                       </View>
