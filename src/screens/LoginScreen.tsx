@@ -189,11 +189,13 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
       console.log("Login feito com sucesso, a pedir token...");
+      showPopup(`A pedir token de notificação...`, "success", "Token de Notificação");
        const pushToken = await registerForPushNotificationsAsync();
        showPopup(`Push Token: ${pushToken}`, "success", "Token de Notificação");
         if (pushToken) {
           await userService.saveExpoPushToken(user._id, pushToken);
         }
+        showPopup(`Token guardado com sucesso! ${pushToken} para user ${user.email}`, "success", "Token de Notificação");
 
       setShowTransition(true);
     } catch (err: any) {
@@ -292,31 +294,37 @@ export default function LoginScreen() {
 
   async function registerForPushNotificationsAsync() {
   console.log("Chamou registerForPushNotificationsAsync");
+  showPopup(`Chamou registerForPushNotificationsAsync`, "success", "Debug");
 
   if (!Constants.isDevice) {
     console.log("Não é dispositivo físico!");
+    showPopup("Não é dispositivo físico!", "error", "Erro");
     return;
   }
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   console.log("Permissão existente:", existingStatus);
-
+showPopup(`Permissão existente: ${existingStatus}`, "success", "Debug");
   let finalStatus = existingStatus;
   if (existingStatus !== "granted") {
     const { status } = await Notifications.requestPermissionsAsync();
     console.log("Permissão pedida:", status);
+    showPopup(`Permissão pedida: ${status}`, "success", "Debug");
     finalStatus = status;
   }
 
   if (finalStatus !== "granted") {
     console.log("Permissão negada!");
+    showPopup("Permissão negada!", "error", "Erro");
     return;
   }
 
   const token = (await Notifications.getExpoPushTokenAsync()).data;
   console.log("Token Expo:", token);
+  showPopup(`Token Expo: ${token}`, "success", "Token de Notificação");
 
   if (Platform.OS === "android") {
+    showPopup("Configurando canal Android para notificações", "success", "Debug");
     await Notifications.setNotificationChannelAsync("default", {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
