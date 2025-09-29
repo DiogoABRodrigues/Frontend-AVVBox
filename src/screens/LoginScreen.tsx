@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -24,7 +24,8 @@ import avvbLogo from "../../assets/avvb.png";
 import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
-//import { registerForPushNotificationsAsync } from "../utils/notifications";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 
 interface PopupState {
   visible: boolean;
@@ -147,7 +148,6 @@ export default function LoginScreen() {
 
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token); // interceptor usa este token
-      login(user, rememberMe); // salva user no context
       if (!user.verified) {
         showPopup(
           "Utilizador à espera de autenticação",
@@ -188,15 +188,12 @@ export default function LoginScreen() {
       if (rememberMe) {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
-
-      /*async function initPushNotifications() {
-            const token = await registerForPushNotificationsAsync();
-            if (token) {
-              // envia token para o backend
-              await userService.saveExpoPushToken(user.id, token);
-            }
-          }
-          initPushNotifications();*/
+      console.log("Login feito com sucesso, a pedir token...");
+       const pushToken = await registerForPushNotificationsAsync();
+       showPopup(`Push Token: ${pushToken}`, "success", "Token de Notificação");
+        if (pushToken) {
+          await userService.saveExpoPushToken(user._id, pushToken);
+        }
 
       setShowTransition(true);
     } catch (err: any) {
@@ -292,6 +289,42 @@ export default function LoginScreen() {
     clearForm();
     hidePopup();
   };
+
+  async function registerForPushNotificationsAsync() {
+  console.log("Chamou registerForPushNotificationsAsync");
+
+  if (!Constants.isDevice) {
+    console.log("Não é dispositivo físico!");
+    return;
+  }
+
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  console.log("Permissão existente:", existingStatus);
+
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    console.log("Permissão pedida:", status);
+    finalStatus = status;
+  }
+
+  if (finalStatus !== "granted") {
+    console.log("Permissão negada!");
+    return;
+  }
+
+  const token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log("Token Expo:", token);
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+    });
+  }
+
+  return token;
+}
 
   return (
     <SafeAreaView style={styles.safeArea}>

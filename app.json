@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Frontend-AVVBox",
-    "slug": "Frontend-AVVBox",
+    "name": "AVVBox",
+    "slug": "AVVBox",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,14 +21,15 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": false,
-      "package": "com.anonymous.AVVBox"
+      "package": "com.anonymous.AVVBox",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "1fb582fd-90cc-4427-8dc9-e08230188d86"
+        "projectId": "243d43fd-5861-4710-bc1c-3ee9be00b58f"
       }
     }
   }

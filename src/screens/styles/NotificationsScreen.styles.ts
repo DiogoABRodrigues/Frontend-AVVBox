@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8fafc", // Mudança: cor de fundo mais suave
     paddingHorizontal: 16,
-    paddingBottom: 40,
   },
 
   // Header separado para o título
