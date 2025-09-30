@@ -41,9 +41,9 @@ export default function MeasurementsScreen() {
 
   const [expandedHistory, setExpandedHistory] = useState<string | null>(null);
 
-  const [timeFilter, setTimeFilter] = useState<"all" | "1y" | "6m" | "3m" | "1m">(
-    "all",
-  );
+  const [timeFilter, setTimeFilter] = useState<
+    "all" | "1y" | "6m" | "3m" | "1m"
+  >("all");
 
   const screenWidth = Dimensions.get("window").width - 32;
 

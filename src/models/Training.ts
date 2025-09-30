@@ -8,6 +8,7 @@ export interface Training {
   date: string; // ISO string
   hour: string;
   duration?: number;
+  details?: string;
   PT: UserSummary; // antes era string
   athlete: UserSummary; // antes era string
   proposedBy: "PT" | "Athlete" | "Admin";
@@ -20,6 +21,7 @@ export interface TrainingRequest {
   date: string;
   hour: string;
   duration?: number;
+  details?: string;
   PT: string; // ID do PT
   athlete: string; // ID do atleta
   proposedBy: "PT" | "Athlete" | "Admin";

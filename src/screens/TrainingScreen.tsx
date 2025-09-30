@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -95,6 +96,7 @@ export default function TrainingScreen() {
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
+  const [details, setDetails] = useState<string | null>(null);
   const [trainer, setTrainer] = useState<User | null>(null);
   const [availability, setAvailability] = useState<Availability | null>(null);
   const [morningSlots, setMorningSlots] = useState<TimeSlot[]>([]);
@@ -122,6 +124,7 @@ export default function TrainingScreen() {
     type: "success" as "success" | "error" | "confirm",
     title: "",
     message: "",
+    style: {} as any,
     onConfirm: undefined as (() => void) | undefined,
   });
 
@@ -190,6 +193,9 @@ export default function TrainingScreen() {
         trainingService.getPending(user._id),
         trainingService.getUpcoming(user._id),
       ]);
+
+      console.log("Treinos pendentes:", pending);
+      console.log("Próximos treinos:", upcoming);
 
       const confirmedFifteenDays = await trainingService.getNextFifteenDays(
         user._id,
@@ -292,6 +298,7 @@ export default function TrainingScreen() {
           title: "Data Inválida",
           message:
             "Não é possível marcar um treino num dia/hora que já passou.",
+          style: {},
           onConfirm: undefined,
         });
         return;
@@ -303,6 +310,7 @@ export default function TrainingScreen() {
           PT: trainer._id,
           athlete: user.role === "atleta" ? user._id : selectedAthleteId, // Se for atleta, é ele próprio. Se for PT/Admin, é o atleta selecionado
           proposedBy: user.role === "atleta" ? "Athlete" : "PT",
+          details: details || undefined, // Adicionar campo de detalhes se necessário
         };
 
         const res = await trainingService.create(trainingData);
@@ -317,17 +325,20 @@ export default function TrainingScreen() {
               "Treino agendado com sucesso! Aguarda a confirmação do " +
               membro +
               ".",
+            style: {},
             onConfirm: undefined,
           });
         }
         // Recarregar todos os treinos para atualizar as listas
         await loadAllTrainings();
+        setDetails(null);
       } catch {
         setPopup({
           visible: true,
           type: "error",
           title: "Erro",
           message: "Ocorreu um erro ao agendar o treino.",
+          style: {},
           onConfirm: undefined,
         });
         await loadAllTrainings();
@@ -346,6 +357,7 @@ export default function TrainingScreen() {
         type: "error",
         title: "Erro",
         message: "Não foi possível confirmar o treino.",
+        style: {},
         onConfirm: undefined,
       });
     }
@@ -357,6 +369,7 @@ export default function TrainingScreen() {
       type: "confirm",
       title: "Confirmar",
       message: "Tens a certeza que queres recusar este treino?",
+      style: {},
       onConfirm: async () => {
         try {
           await trainingService.delete(trainingId, user._id);
@@ -366,6 +379,7 @@ export default function TrainingScreen() {
             type: "success",
             title: "Treino Recusado",
             message: "Treino recusado com sucesso.",
+            style: {},
             onConfirm: undefined,
           });
         } catch {
@@ -374,6 +388,7 @@ export default function TrainingScreen() {
             type: "error",
             title: "Erro",
             message: "Não foi possível recusar o treino.",
+            style: {},
             onConfirm: undefined,
           });
           await loadAllTrainings();
@@ -474,6 +489,7 @@ export default function TrainingScreen() {
       type: "confirm",
       title: "Confirmar eliminação",
       message: messageConfirmation,
+      style: {},
       onConfirm: async () => {
         try {
           await trainingService.delete(training._id, user._id);
@@ -483,6 +499,7 @@ export default function TrainingScreen() {
             type: "success",
             title: "Sucesso",
             message: messageAnswer,
+            style: {},
             onConfirm: undefined,
           });
         } catch {
@@ -491,6 +508,7 @@ export default function TrainingScreen() {
             type: "error",
             title: "Erro",
             message: "Não foi possível eliminar o treino.",
+            style: {},
             onConfirm: undefined,
           });
           await loadAllTrainings();
@@ -589,6 +607,11 @@ export default function TrainingScreen() {
     </View>
   );
 
+  // i para ver details
+  //opções de editar treino
+  const isDisabled =
+    !selectedHour || (user.role !== "atleta" && !selectedAthleteId);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -614,7 +637,15 @@ export default function TrainingScreen() {
             <>
               {/* Calendar */}
               <Calendar
-                onDayPress={(day) => setSelectedDay(day.dateString)}
+                onDayPress={(day) => {
+                  if (selectedDay === day.dateString) {
+                    // Se já está selecionado, desmarcar
+                    setSelectedDay(null);
+                  } else {
+                    setSelectedDay(day.dateString);
+                  }
+                  setSelectedHour(null); // Reset hora ao mudar dia
+                }}
                 markedDates={
                   selectedDay
                     ? {
@@ -738,25 +769,36 @@ export default function TrainingScreen() {
                             </View>
                           </View>
                         )}
+                        {/* Campo opcional de detalhes do treino */}
+                        <Text style={styles.detailsLabel}>
+                          Detalhes do Treino (opcional)
+                        </Text>
+                        <TextInput
+                          style={styles.detailsInput}
+                          placeholder="Plano de treino, objetivos, etc."
+                          multiline
+                          numberOfLines={5}
+                          value={details || ""}
+                          onChangeText={setDetails}
+                        />
                       </View>
                     )}
 
                     {/* Botão de confirmação */}
-                    {selectedHour && (
+                    {
                       <TouchableOpacity
                         style={[
                           styles.actionButton,
-                          user.role !== "atleta" &&
-                            !selectedAthleteId && { opacity: 0.5 },
+                          isDisabled && { opacity: 0.5 }, // deixa opaco quando desativado
                         ]}
                         onPress={handleScheduleTraining}
-                        disabled={user.role !== "atleta" && !selectedAthleteId}
+                        disabled={isDisabled} // controla clique
                       >
                         <Text style={styles.actionButtonText}>
                           Marcar Treino
                         </Text>
                       </TouchableOpacity>
-                    )}
+                    }
                   </View>
                 )}
 
@@ -782,6 +824,27 @@ export default function TrainingScreen() {
                             ? training.PT.name
                             : training.athlete.name}
                         </Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setPopup({
+                              visible: true,
+                              type: "success",
+                              title: "Detalhes do Treino",
+                              message:
+                                training.details || "Sem detalhes adicionais",
+                              style: { textAlign: "left", lineHeight: 22 },
+                              onConfirm: () =>
+                                setPopup((p) => ({ ...p, visible: false })),
+                            });
+                          }}
+                          style={{ padding: 4 }}
+                        >
+                          <Ionicons
+                            name="information-circle-outline"
+                            size={22}
+                            color="#1e293b"
+                          />
+                        </TouchableOpacity>
 
                         <View style={styles.confirmedCardFooter}>
                           <Text style={styles.actionNeededBadge}>
@@ -829,6 +892,29 @@ export default function TrainingScreen() {
                           : training.athlete.name}
                       </Text>
 
+                      {/* Botão de informação */}
+                      <TouchableOpacity
+                        onPress={() => {
+                          setPopup({
+                            visible: true,
+                            type: "success",
+                            title: "Detalhes do Treino",
+                            message:
+                              training.details || "Sem detalhes adicionais",
+                            style: { textAlign: "left", lineHeight: 22 },
+                            onConfirm: () =>
+                              setPopup((p) => ({ ...p, visible: false })),
+                          });
+                        }}
+                        style={{ padding: 4 }}
+                      >
+                        <Ionicons
+                          name="information-circle-outline"
+                          size={22}
+                          color="#1e293b"
+                        />
+                      </TouchableOpacity>
+
                       <View style={styles.confirmedCardFooter}>
                         <Text style={styles.confirmedBadge}>Confirmado</Text>
                         <TouchableOpacity
@@ -870,6 +956,29 @@ export default function TrainingScreen() {
                             : training.athlete.name}
                         </Text>
 
+                        {/* Botão de informação */}
+                        <TouchableOpacity
+                          onPress={() => {
+                            setPopup({
+                              visible: true,
+                              type: "success",
+                              title: "Detalhes do Treino",
+                              message:
+                                training.details || "Sem detalhes adicionais",
+                              style: { textAlign: "left", lineHeight: 22 },
+                              onConfirm: () =>
+                                setPopup((p) => ({ ...p, visible: false })),
+                            });
+                          }}
+                          style={{ padding: 4 }}
+                        >
+                          <Ionicons
+                            name="information-circle-outline"
+                            size={22}
+                            color="#1e293b"
+                          />
+                        </TouchableOpacity>
+
                         <View style={styles.confirmedCardFooter}>
                           <Text style={styles.pendingBadge}>Pendente</Text>
                           <TouchableOpacity
@@ -907,6 +1016,7 @@ export default function TrainingScreen() {
         type={popup.type as any}
         title={popup.title}
         message={popup.message}
+        style={popup.style || undefined}
         onConfirm={popup.onConfirm}
         onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
         onClose={() => setPopup((p) => ({ ...p, visible: false }))}
