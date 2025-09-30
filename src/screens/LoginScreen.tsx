@@ -24,7 +24,7 @@ import avvbLogo from "../../assets/avvb.png";
 import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
-import {registerIndieID} from 'native-notify';
+import { registerIndieID } from "native-notify";
 
 interface PopupState {
   visible: boolean;
@@ -188,8 +188,7 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
       console.log("Iniciando transição de login", user._id);
-      registerIndieID(user._id, 32295, 'wyhRSJsJFB6gxzAT0mmfaF');
-      
+      registerIndieID(user._id, 32295, "wyhRSJsJFB6gxzAT0mmfaF");
     } catch (err: any) {
       showPopup(
         err.response?.data?.message || "Erro ao solicitar redefinição",
