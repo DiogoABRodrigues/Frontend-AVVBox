@@ -803,12 +803,12 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
+
+
+      <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Perfil</Text>
       </View>
-
-      <ScrollView style={styles.container}>
         <View style={styles.profileHeader}>
           <Ionicons name="person-circle-outline" size={100} color="#1e293b" />
           <View style={styles.userInfo}>
@@ -1502,6 +1502,5 @@ export default function ProfileScreen() {
           onConfirm={saveAthletesChange}
         />
       </ScrollView>
-    </View>
   );
 }

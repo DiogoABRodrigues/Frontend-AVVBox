@@ -860,4 +860,41 @@ export const styles = StyleSheet.create({
     maxHeight: 200,
     overflow: "hidden",
   },
+
+  detailsSection: {
+  marginTop: 16,
+  backgroundColor: "#ffffff",
+  borderRadius: 12,
+  borderWidth: 1,
+  borderColor: "#e2e8f0",
+  padding: 16,
+  shadowColor: "#64748b",
+  shadowOpacity: 0.08,
+  shadowRadius: 8,
+  shadowOffset: { width: 0, height: 2 },
+  elevation: 4,
+},
+
+detailsLabel: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#475569",
+    marginBottom: 8,
+    marginTop: 35,
+  },
+
+detailsInput: {
+  backgroundColor: "#f8fafc",
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: "#e2e8f0",
+  paddingVertical: 12,
+  paddingHorizontal: 16,
+  fontSize: 15,
+  color: "#1e293b",
+  textAlignVertical: "top", // importante para multiline
+  minHeight: 80,
+  maxHeight: 300,
+},
+
 });

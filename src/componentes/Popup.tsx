@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, View, Text, TouchableOpacity } from "react-native";
+import { Modal, View, Text, TouchableOpacity, ViewStyle } from "react-native";
 import { styles } from "./styles/Popup.styles";
 
 interface PopupProps {
@@ -10,6 +10,7 @@ interface PopupProps {
   onConfirm?: () => void;
   onCancel?: () => void;
   onClose?: () => void; // usado para success/error
+  style?: ViewStyle; // novo prop opcional para customizar o container
 }
 
 export default function Popup({
@@ -20,13 +21,14 @@ export default function Popup({
   onConfirm,
   onCancel,
   onClose,
+  style,
 }: PopupProps) {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
-        <View style={styles.container}>
+        <View style={[styles.container]}>
           {title && <Text style={styles.title}>{title}</Text>}
-          <Text style={styles.message}>{message}</Text>
+          <Text style={[styles.message, style]}>{message}</Text>
 
           <View style={styles.buttons}>
             {type === "confirm" ? (
