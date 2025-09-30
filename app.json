@@ -4,11 +4,11 @@
     "slug": "AVVBox",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "assets/avvb.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "assets/avvb.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/avvb.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": false,
@@ -25,8 +25,16 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "assets/avvb.png"
     },
+        "plugins": [
+      [
+         "expo-notifications",
+         {
+             "icon": "./assets/notification-icon.png"
+         }
+      ]
+   ],
     "extra": {
       "eas": {
         "projectId": "243d43fd-5861-4710-bc1c-3ee9be00b58f"

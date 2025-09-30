@@ -448,7 +448,6 @@ export default function TrainingScreen() {
   }
 
   if (!trainer) {
-    console.log("User data:", user);
     return (
       <View style={styles.container}>
         <Text style={styles.noTrainerText}>

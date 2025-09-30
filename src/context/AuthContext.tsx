@@ -8,6 +8,7 @@ import React, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../models/User";
 import { userService } from "@/services/usersService";
+import { unregisterIndieDevice } from 'native-notify';
 
 interface AuthContextType {
   user: User | null;
@@ -51,6 +52,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     setUser(null);
+    try {
+      unregisterIndieDevice(user?._id, 32295, 'wyhRSJsJFB6gxzAT0mmfaF');
+    } catch (err) {
+      console.log("Erro ao desregistrar dispositivo:", err);
+    }
     try {
       await AsyncStorage.removeItem("user");
     } catch (err) {

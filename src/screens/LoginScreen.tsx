@@ -24,8 +24,7 @@ import avvbLogo from "../../assets/avvb.png";
 import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
-import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
+import {registerIndieID} from 'native-notify';
 
 interface PopupState {
   visible: boolean;
@@ -188,16 +187,9 @@ export default function LoginScreen() {
       if (rememberMe) {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
-      console.log("Login feito com sucesso, a pedir token...");
-      showPopup(`A pedir token de notificação...`, "success", "Token de Notificação");
-       const pushToken = await registerForPushNotificationsAsync();
-       showPopup(`Push Token: ${pushToken}`, "success", "Token de Notificação");
-        if (pushToken) {
-          await userService.saveExpoPushToken(user._id, pushToken);
-        }
-        showPopup(`Token guardado com sucesso! ${pushToken} para user ${user.email}`, "success", "Token de Notificação");
-
-      setShowTransition(true);
+      console.log("Iniciando transição de login", user._id);
+      registerIndieID(user._id, 32295, 'wyhRSJsJFB6gxzAT0mmfaF');
+      
     } catch (err: any) {
       showPopup(
         err.response?.data?.message || "Erro ao solicitar redefinição",
@@ -291,48 +283,6 @@ export default function LoginScreen() {
     clearForm();
     hidePopup();
   };
-
-  async function registerForPushNotificationsAsync() {
-  console.log("Chamou registerForPushNotificationsAsync");
-  showPopup(`Chamou registerForPushNotificationsAsync`, "success", "Debug");
-
-  if (!Constants.isDevice) {
-    console.log("Não é dispositivo físico!");
-    showPopup("Não é dispositivo físico!", "error", "Erro");
-    return;
-  }
-
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  console.log("Permissão existente:", existingStatus);
-showPopup(`Permissão existente: ${existingStatus}`, "success", "Debug");
-  let finalStatus = existingStatus;
-  if (existingStatus !== "granted") {
-    const { status } = await Notifications.requestPermissionsAsync();
-    console.log("Permissão pedida:", status);
-    showPopup(`Permissão pedida: ${status}`, "success", "Debug");
-    finalStatus = status;
-  }
-
-  if (finalStatus !== "granted") {
-    console.log("Permissão negada!");
-    showPopup("Permissão negada!", "error", "Erro");
-    return;
-  }
-
-  const token = (await Notifications.getExpoPushTokenAsync()).data;
-  console.log("Token Expo:", token);
-  showPopup(`Token Expo: ${token}`, "success", "Token de Notificação");
-
-  if (Platform.OS === "android") {
-    showPopup("Configurando canal Android para notificações", "success", "Debug");
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-    });
-  }
-
-  return token;
-}
 
   return (
     <SafeAreaView style={styles.safeArea}>
