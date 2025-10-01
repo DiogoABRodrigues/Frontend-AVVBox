@@ -194,9 +194,6 @@ export default function TrainingScreen() {
         trainingService.getUpcoming(user._id),
       ]);
 
-      console.log("Treinos pendentes:", pending);
-      console.log("Próximos treinos:", upcoming);
-
       const confirmedFifteenDays = await trainingService.getNextFifteenDays(
         user._id,
       );
@@ -517,6 +514,10 @@ export default function TrainingScreen() {
     });
   };
 
+  const handleEditTraining = (training: Training) => {
+    // Lógica para editar o treino
+  };
+
   const getTrainingsToShow = () => {
     return showFifteenDays ? confirmedFifteenDays : confirmedTrainings;
   };
@@ -819,12 +820,7 @@ export default function TrainingScreen() {
                       <View key={training._id} style={styles.actionNeededCard}>
                         <Text style={styles.trainingText}>
                           {formatDate(training.date, training.hour)}
-                          {"\n"}
-                          {user.role === "atleta"
-                            ? training.PT.name
-                            : training.athlete.name}
-                        </Text>
-                        <TouchableOpacity
+                                                  <TouchableOpacity
                           onPress={() => {
                             setPopup({
                               visible: true,
@@ -845,6 +841,13 @@ export default function TrainingScreen() {
                             color="#1e293b"
                           />
                         </TouchableOpacity>
+                          
+                          {"\n"}
+                          {user.role === "atleta"
+                            ? training.PT.name
+                            : training.athlete.name}
+                        </Text>
+
 
                         <View style={styles.confirmedCardFooter}>
                           <Text style={styles.actionNeededBadge}>
@@ -886,47 +889,57 @@ export default function TrainingScreen() {
                     <View key={training._id} style={styles.confirmedCard}>
                       <Text style={styles.trainingText}>
                         {formatDate(training.date, training.hour)}
+                                                <TouchableOpacity
+                          onPress={() => {
+                            setPopup({
+                              visible: true,
+                              type: "success",
+                              title: "Detalhes do Treino",
+                              message:
+                                training.details || "Sem detalhes adicionais",
+                              style: { textAlign: "left", lineHeight: 22 },
+                              onConfirm: () =>
+                                setPopup((p) => ({ ...p, visible: false })),
+                            });
+                          }}
+                          style={{ padding: 4 }}
+                        >
+                          <Ionicons
+                            name="information-circle-outline"
+                            size={22}
+                            color="#1e293b"
+                          />
+                        </TouchableOpacity>
                         {"\n"}
                         {user.role === "atleta"
                           ? training.PT.name
                           : training.athlete.name}
                       </Text>
 
-                      {/* Botão de informação */}
-                      <TouchableOpacity
-                        onPress={() => {
-                          setPopup({
-                            visible: true,
-                            type: "success",
-                            title: "Detalhes do Treino",
-                            message:
-                              training.details || "Sem detalhes adicionais",
-                            style: { textAlign: "left", lineHeight: 22 },
-                            onConfirm: () =>
-                              setPopup((p) => ({ ...p, visible: false })),
-                          });
-                        }}
-                        style={{ padding: 4 }}
-                      >
-                        <Ionicons
-                          name="information-circle-outline"
-                          size={22}
-                          color="#1e293b"
-                        />
-                      </TouchableOpacity>
-
                       <View style={styles.confirmedCardFooter}>
-                        <Text style={styles.confirmedBadge}>Confirmado</Text>
-                        <TouchableOpacity
-                          onPress={() => handleDeleteTraining(training)}
-                          style={styles.deleteButtonContainer}
-                        >
-                          <Ionicons
-                            name="close-outline"
-                            size={18}
-                            color="#ef4444"
-                          />
-                        </TouchableOpacity>
+                          <Text style={styles.pendingBadge}>Pendente</Text>
+                          <View style={{ flexDirection: "row" }}>
+                            <TouchableOpacity
+                              onPress={() => handleEditTraining(training)}
+                              style={styles.editButtonContainer}
+                            >
+                              <Ionicons
+                                name="create-outline"
+                                size={18}
+                              color="#1e293b"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleDeleteTraining(training)}
+                            style={styles.deleteButtonContainer}
+                          >
+                            <Ionicons
+                              name="trash-outline"
+                              size={18}
+                              color="#ef4444"
+                            />
+                          </TouchableOpacity>
+                          </View>
                       </View>
                     </View>
                   ))
@@ -950,14 +963,7 @@ export default function TrainingScreen() {
                       <View key={training._id} style={styles.pendingCard}>
                         <Text style={styles.trainingText}>
                           {formatDate(training.date, training.hour)}
-                          {"\n"}
-                          {user.role === "atleta"
-                            ? training.PT.name
-                            : training.athlete.name}
-                        </Text>
-
-                        {/* Botão de informação */}
-                        <TouchableOpacity
+                                                  <TouchableOpacity
                           onPress={() => {
                             setPopup({
                               visible: true,
@@ -978,9 +984,25 @@ export default function TrainingScreen() {
                             color="#1e293b"
                           />
                         </TouchableOpacity>
+                          {"\n"}
+                          {user.role === "atleta"
+                            ? training.PT.name
+                            : training.athlete.name}
+                        </Text>
 
                         <View style={styles.confirmedCardFooter}>
                           <Text style={styles.pendingBadge}>Pendente</Text>
+                          <View style={{ flexDirection: "row" }}>
+                            <TouchableOpacity
+                              onPress={() => handleEditTraining(training)}
+                              style={styles.editButtonContainer}
+                            >
+                              <Ionicons
+                                name="create-outline"
+                                size={18}
+                              color="#1e293b"
+                            />
+                          </TouchableOpacity>
                           <TouchableOpacity
                             onPress={() => handleDeleteTraining(training)}
                             style={styles.deleteButtonContainer}
@@ -991,6 +1013,7 @@ export default function TrainingScreen() {
                               color="#ef4444"
                             />
                           </TouchableOpacity>
+                          </View>
                         </View>
                       </View>
                     ))}

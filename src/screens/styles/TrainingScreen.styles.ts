@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 15,
   },
   headerTitle: {
     fontSize: 28, // Mudança: fonte maior e mais consistente
@@ -620,7 +621,6 @@ export const styles = StyleSheet.create({
   confirmedCardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
@@ -630,7 +630,6 @@ export const styles = StyleSheet.create({
   canceledCardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
@@ -645,6 +644,19 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fecaca",
     shadowColor: "#ef4444",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+    marginLeft: 10,
+  },
+
+  editButtonContainer: {
+    padding: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#1e293b",
+    shadowColor: "#141a24ff",
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
