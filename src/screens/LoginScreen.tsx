@@ -24,7 +24,8 @@ import avvbLogo from "../../assets/avvb.png";
 import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
-import { registerIndieID } from "native-notify";
+import * as Notifications from "expo-notifications";
+import  { registerIndieID }  from "native-notify";
 
 interface PopupState {
   visible: boolean;
@@ -133,6 +134,13 @@ export default function LoginScreen() {
   const [showTransition, setShowTransition] = React.useState(false);
 
   const handleLogin = async () => {
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+
+    if (existingStatus !== "granted") {
+      await Notifications.requestPermissionsAsync();
+    }
+
     if (!email || !password) {
       showPopup("Preencha email e senha", "error", "Campos obrigatórios");
       return;
@@ -182,13 +190,13 @@ export default function LoginScreen() {
         );
         return;
       }
-
+            const userId = (user._id || "").toString();
+       registerIndieID(userId, 32298, 'FJv06dvuLO2xdBkaBSxXog');
       login(user, rememberMe);
       if (rememberMe) {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
-      console.log("Iniciando transição de login", user._id);
-      registerIndieID(user._id, 32295, "wyhRSJsJFB6gxzAT0mmfaF");
+
     } catch (err: any) {
       showPopup(
         err.response?.data?.message || "Erro ao solicitar redefinição",
