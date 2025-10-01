@@ -22,7 +22,8 @@
       },
       "edgeToEdgeEnabled": false,
       "package": "com.anonymous.AVVBox",
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "assets/avvb.png"
