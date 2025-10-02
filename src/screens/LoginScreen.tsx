@@ -26,6 +26,7 @@ import { API_BASE_URL } from "../../config";
 import api from "../../api";
 import * as Notifications from "expo-notifications";
 import { registerIndieID } from "native-notify";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 interface PopupState {
   visible: boolean;
@@ -85,20 +86,41 @@ export default function LoginScreen() {
   // Pedir código por email
   const handleRequestReset = async () => {
     if (!resetEmail) {
-      showPopup("Insira seu email", "error", "Email necessário");
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Insira seu email",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       return;
     }
     setLoading(true);
     try {
       await userService.requestPasswordReset(resetEmail);
-      showPopup("Código enviado por email!", "success", "Sucesso");
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Código enviado por email!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
       setResetStep("code");
     } catch (err: any) {
-      showPopup(
-        err.response?.data?.message || "Erro ao solicitar redefinição",
-        "error",
-        "Erro"
-      );
+            Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: err.response?.data?.message || "Erro ao solicitar redefinição",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
     } finally {
       setLoading(false);
     }
@@ -107,25 +129,44 @@ export default function LoginScreen() {
   // Confirmar código e nova senha
   const handleResetWithCode = async () => {
     if (newPassword !== confirmNewPassword) {
-      showPopup("As senhas não coincidem", "error", "Erro de validação");
+      Toast.hide();
+      Toast.show({
+      topOffset: 10,
+      type: "error",
+      text2: "As senhas não coincidem",
+      position: "top",
+      visibilityTime: 2500,
+      autoHide: true,
+      });
       return;
     }
     setLoading(true);
     try {
       await userService.resetPasswordWithCode(resetEmail, code, newPassword);
-      showPopup("Senha alterada com sucesso!", "success", "Sucesso", () => {
+      Toast.hide();
+      Toast.show({
+      topOffset: 10,
+      type: "success",
+      text2: "Senha alterada com sucesso!",
+      position: "top",
+      visibilityTime: 2500,
+      autoHide: true,
+      });
         setResetStep("none");
         setResetEmail("");
         setCode("");
         setNewPassword("");
         setConfirmNewPassword("");
-      });
     } catch (err: any) {
-      showPopup(
-        err.response?.data?.message || "Código inválido ou expirado",
-        "error",
-        "Erro"
-      );
+      Toast.hide();
+      Toast.show({
+      topOffset: 10,
+      type: "error",
+      text2: err.response?.data?.message || "Código inválido ou expirado",
+      position: "top",
+      visibilityTime: 2500,
+      autoHide: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -142,7 +183,15 @@ export default function LoginScreen() {
     }
 
     if (!email || !password) {
-      showPopup("Preencha email e senha", "error", "Campos obrigatórios");
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Preencha email e senha.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       return;
     }
 
@@ -165,17 +214,25 @@ export default function LoginScreen() {
               await api.post(`${API_BASE_URL}/users/resend-verification`, {
                 email: user.email,
               });
-              showPopup(
-                "Email de verificação reenviado!",
-                "success",
-                "Sucesso"
-              );
+              Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Email de verificação reenviado!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
             } catch (err: any) {
-              showPopup(
-                err.response?.data?.message || "Erro ao reenviar email",
-                "error",
-                "Erro"
-              );
+              Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: err.response?.data?.message || "Erro ao reenviar email",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
             }
           }
         );
@@ -197,11 +254,15 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
     } catch (err: any) {
-      showPopup(
-        err.response?.data?.message || "Erro ao solicitar redefinição",
-        "error",
-        "Erro"
-      );
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: err.response?.data?.message || "Erro ao solicitar redefinição",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
     } finally {
       setLoading(false);
     }
@@ -209,24 +270,54 @@ export default function LoginScreen() {
 
   const handleRegister = async () => {
     if (!email || !password || !name || !phoneNumber) {
-      showPopup("Preencha todos os campos", "error", "Campos obrigatórios");
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Preencha todos os campos",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
       return;
     }
     if (password !== confirmPassword) {
-      showPopup("As senhas não coincidem", "error", "Erro de validação");
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "As senhas não coincidem",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       return;
     }
     if (password.length < 6) {
-      showPopup(
-        "A senha deve ter pelo menos 6 caracteres",
-        "error",
-        "Senha inválida"
-      );
+      Toast.hide();
+        Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "A senha deve ter pelo menos 6 caracteres",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+        });
+
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      showPopup("Por favor, insira um email válido", "error", "Email inválido");
+              Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Por favor, insira um email válido",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       return;
     }
 
@@ -252,22 +343,37 @@ export default function LoginScreen() {
         errorMessage.toLowerCase().includes("email") &&
         errorMessage.toLowerCase().includes("já existe")
       ) {
-        showPopup(
-          "Este email já está registado. Tente login ou outro email.",
-          "error",
-          "Email já existe"
-        );
+        Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Este email já está registado no sistema.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       } else if (
         errorMessage.toLowerCase().includes("telefone") ||
         errorMessage.toLowerCase().includes("telemóvel")
       ) {
-        showPopup(
-          "Este número já está registado. Tente outro.",
-          "error",
-          "Telemóvel já existe"
-        );
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Este número já está registado no sistema.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       } else {
-        showPopup(errorMessage, "error", "Erro no registo");
+                Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: errorMessage,
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       }
     } finally {
       setLoading(false);

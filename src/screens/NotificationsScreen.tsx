@@ -8,8 +8,8 @@ import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationsContext";
 import { notificationService } from "../services/notificationService";
 import { styles } from "./styles/NotificationsScreen.styles";
-import Popup from "../componentes/Popup";
 import { User } from "../models/User";
+import Toast from "react-native-toast-message";
 interface Notification {
   id: string;
   title: string;
@@ -45,14 +45,6 @@ export default function NotificationsScreen() {
 
   const { notifications, refreshNotifications, markAsRead } =
     useNotifications();
-
-  const [popup, setPopup] = useState({
-    visible: false,
-    type: "success" as "success" | "error" | "confirm",
-    title: "",
-    message: "",
-    onConfirm: undefined as (() => void) | undefined,
-  });
 
   // FETCH
   const fetchNotifications = async () => {
@@ -118,25 +110,30 @@ export default function NotificationsScreen() {
         target,
       });
       if (res && res.notification && res.notification._id) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Notificação enviada com sucesso!",
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Notificação enviada com sucesso!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
       }
       fetchNotifications();
       setModalVisible(false);
     } catch (err: any) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: `Ocorreu um erro ao enviar a notificação: ${
-          err.response?.data?.message || err.message || err
-        }`,
-        onConfirm: undefined,
+      Toast.hide();
+      Toast.show({
+      topOffset: 10,
+      type: "success",
+      text2: `Ocorreu um erro ao enviar a notificação: ${
+                err.response?.data?.message || err.message || err
+              }`,
+      position: "top",
+      visibilityTime: 2500,
+      autoHide: true,
       });
     }
   };
@@ -255,15 +252,6 @@ export default function NotificationsScreen() {
             </Swipeable>
           ))
         )}
-        <Popup
-          visible={popup.visible}
-          type={popup.type as any}
-          title={popup.title}
-          message={popup.message}
-          onConfirm={popup.onConfirm}
-          onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
-          onClose={() => setPopup((p) => ({ ...p, visible: false }))}
-        />
       </ScrollView>
 
       {/* Modal */}

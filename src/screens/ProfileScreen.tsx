@@ -23,6 +23,7 @@ import ChangePtsModal from "../componentes/ChangePtsModal";
 import ChangeRoleModal from "../componentes/ChangeRoleModal";
 import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
+import Toast from "react-native-toast-message";
 
 export default function ProfileScreen() {
   const emptyUser: User = {
@@ -222,22 +223,26 @@ export default function ProfileScreen() {
                 await userService.activate(userId);
               }
               fetchUsers();
-              setPopup({
-                visible: true,
-                type: "success",
-                title: "Sucesso",
-                message: `Utilizador ${
+              Toast.hide();
+              Toast.show({
+              topOffset: 10,
+              type: "success",
+              text2: `Utilizador ${
                   targetUser.active ? "desativado" : "ativado"
                 } com sucesso!`,
-                onConfirm: undefined,
+              position: "top",
+              visibilityTime: 2500,
+              autoHide: true,
               });
             } catch {
-              setPopup({
-                visible: true,
-                type: "error",
-                title: "Erro",
-                message: "Erro ao alterar status do utilizador.",
-                onConfirm: undefined,
+              Toast.hide();
+              Toast.show({
+              topOffset: 10,
+              type: "error",
+              text2: "Erro ao alterar status do utilizador.",
+              position: "top",
+              visibilityTime: 2500,
+              autoHide: true,
               });
             }
           },
@@ -344,25 +349,30 @@ export default function ProfileScreen() {
       const res = await userService.update(userData._id, updatedData);
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Alteração guardada com sucesso!",
-          onConfirm: undefined,
+        Toast.hide();
+        Toast.show({
+        topOffset: 10,
+        type: "success",
+        text2: "Alteração guardada com sucesso!",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
         });
       }
       fetchUserData();
     } catch (err: any) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: `Ocorreu um erro ao guardar a alteração: ${
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: `Ocorreu um erro ao guardar a alteração: ${
           err.response?.data?.message || err.message || err
         }.`,
-        onConfirm: undefined,
-      });
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
     }
   };
 
@@ -496,33 +506,39 @@ export default function ProfileScreen() {
       const res = await measuresService.update(goalMeasures._id, data);
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Alteração guardada com sucesso!",
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Alteração guardada com sucesso!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       } else {
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message:
-            "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
-          onConfirm: undefined,
-        });
+        
+Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       }
 
       fetchMeasures();
     } catch {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: "Não foi possível guardar o objetivo.",
-        onConfirm: undefined,
-      });
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Não foi possível guardar o objetivo.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
     }
   };
 
@@ -562,36 +578,42 @@ export default function ProfileScreen() {
     if (!roleChangeTarget) return;
     //passar esta confirmação para o backend
     if (roleChangeTarget._id === user._id) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: "Não podes alterar a tua própria role.",
-        onConfirm: undefined,
-      });
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Não podes alterar a tua própria role.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       return;
     }
     if (roleChangeTarget) {
       try {
         await userService.update(roleChangeTarget._id, { role: newRole });
-
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
 
         fetchUsers();
       } catch {
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Não foi possível alterar o role do utilizador.",
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Não foi possível alterar o role do utilizador.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
       }
     }
     setRoleModalVisible(false);
@@ -604,23 +626,28 @@ export default function ProfileScreen() {
         await userService.update(relationTarget.user._id, {
           coach: selectedPts,
         });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
 
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
-          onConfirm: undefined,
-        });
         fetchUsers();
       } catch {
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Não foi possível alterar os PTs do utilizador.",
-          onConfirm: undefined,
+        Toast.hide();
+        Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível alterar os PTs do utilizador.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
         });
+
       }
     }
     setPtsModalVisible(false);
@@ -632,22 +659,28 @@ export default function ProfileScreen() {
         await userService.update(relationTarget.user._id, {
           atheletes: selectedAthleteIds,
         });
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
         fetchUsers();
       } catch {
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Não foi possível alterar os atletas do utilizador.",
-          onConfirm: undefined,
+        Toast.hide();
+        Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível alterar os atletas do utilizador.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
         });
+
       }
     }
     setAthletesModalVisible(false);
@@ -743,12 +776,14 @@ export default function ProfileScreen() {
         if (availability[day].working) {
           for (const range of availability[day].intervals) {
             if (range.start >= range.end) {
-              setPopup({
-                visible: true,
-                type: "error",
-                title: "Erro",
-                message: `O horário de início não pode ser igual ou superior ao horário de término.`,
-                onConfirm: undefined,
+              Toast.hide();
+              Toast.show({
+              topOffset: 10,
+              type: "error",
+              text2: `O horário de início não pode ser igual ou superior ao horário de término.`,
+              position: "top",
+              visibilityTime: 2500,
+              autoHide: true,
               });
               return;
             }
@@ -767,13 +802,16 @@ export default function ProfileScreen() {
               !validateTimeFormat(range.start) ||
               !validateTimeFormat(range.end)
             ) {
-              setPopup({
-                visible: true,
-                type: "error",
-                title: "Erro",
-                message: `Formato de hora inválido. Use HH:MM.`,
-                onConfirm: undefined,
+              Toast.hide();
+              Toast.show({
+              topOffset: 10,
+              type: "error",
+              text2: `Formato de hora inválido. Use HH:MM.`,
+              position: "top",
+              visibilityTime: 2500,
+              autoHide: true,
               });
+
               return;
             }
           }
@@ -786,25 +824,29 @@ export default function ProfileScreen() {
       const res = await availabilityService.update(dataToSave);
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Disponibilidade guardada com sucesso!",
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Disponibilidade guardada com sucesso!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
         fetchAvailability();
       } else {
         throw new Error("Falha ao guardar");
       }
     } catch {
-      setPopup({
-        visible: true,
+      Toast.hide();
+        Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não foi possível guardar a disponibilidade.",
-        onConfirm: undefined,
-      });
+        text2: "Não foi possível guardar a disponibilidade.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+        });
     }
   };
 

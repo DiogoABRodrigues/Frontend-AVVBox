@@ -16,6 +16,7 @@ import { userService } from "../services/usersService";
 import { Weights, Exercise } from "../models/Exercise";
 import { exerciseService } from "../services/exerciseService";
 import Popup from "../componentes/Popup";
+import Toast from "react-native-toast-message";
 
 interface LocalMuscleGroup {
   key: string;
@@ -224,22 +225,27 @@ export default function ExerciseScreen() {
       }
       setInputValues({});
       setEditingExercise(null);
-      setPopup({
-        visible: true,
-        type: "success",
-        title: "Sucesso",
-        message: "Exercício removido com sucesso.",
-        onConfirm: undefined,
-      });
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Exercício removido com sucesso.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
     } catch {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message:
-          "Ocorreu um erro ao remover o exercício, tente novamente mais tarde.",
-        onConfirm: undefined,
+      Toast.hide();
+      Toast.show({
+      topOffset: 10,
+      type: "error",
+      text2: "Ocorreu um erro ao remover o exercício, tente novamente mais tarde.",
+      position: "top",
+      visibilityTime: 2500,
+      autoHide: true,
       });
+
     }
   };
 
@@ -292,15 +298,18 @@ export default function ExerciseScreen() {
         fetchUserWeights(selectedAthleteId);
       }
     } catch (error) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: `Ocorreu um erro ao realizar a ação: ${
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: `Ocorreu um erro ao realizar a ação: ${
           error.response?.data?.message || error.message || error
         }`,
-        onConfirm: undefined,
-      });
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
     }
 
     // Clear the input value for this exercise

@@ -17,6 +17,7 @@ import { Measures } from "../models/Measures";
 import { LineChart } from "react-native-chart-kit";
 import MeasuresModal from "../componentes/MeasuresModal";
 import Popup from "../componentes/Popup";
+import Toast from "react-native-toast-message";
 
 interface Athlete {
   id: string;
@@ -324,25 +325,30 @@ export default function MeasurementsScreen() {
       }
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Alteração guardada com sucesso!",
-          onConfirm: undefined,
-        });
+        Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Alteração guardada com sucesso!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
       }
 
       fetchMeasures();
       setShowMeasuresModal(false);
     } catch {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: "Não foi possível guardar as medidas.",
-        onConfirm: undefined,
-      });
+              Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Ocorreu um erro ao guardar as medidas.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
     }
   };
 
@@ -351,24 +357,29 @@ export default function MeasurementsScreen() {
       const res = await measuresService.delete(id);
 
       if (res && (res === 200 || res === 201)) {
-        setPopup({
-          visible: true,
-          type: "success",
-          title: "Sucesso",
-          message: "Registo eliminado com sucesso!",
-          onConfirm: undefined,
-        });
+                Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "success",
+ text2: "Registo eliminado com sucesso!",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
       }
 
       fetchMeasures();
     } catch {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: "Não foi possível eliminar o registo. ",
-        onConfirm: undefined,
-      });
+      Toast.hide();
+Toast.show({
+ topOffset: 10,
+ type: "error",
+ text2: "Não foi possível eliminar o registo.",
+ position: "top",
+ visibilityTime: 2500,
+ autoHide: true,
+});
+
       fetchMeasures();
     }
   };
