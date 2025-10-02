@@ -69,7 +69,7 @@ export default function NotificationsScreen() {
   }, []);
 
   // MARCAR TODAS COMO LIDAS
-  const handleMarkAllAsRead = async () => {
+  const handleMarkAllAsRead = async (animation: boolean) => {
     try {
       await Promise.all(
         notifications
@@ -78,9 +78,11 @@ export default function NotificationsScreen() {
             notificationService.markNotificationAsRead(n.id, user._id)
           )
       );
+      if(animation){
       notifications.forEach((n) => {
         if (!n.read) markAsRead(user._id, n.id);
       });
+    }
     } catch {
       console.error(
         "An error occurred while marking all notifications as read."
@@ -91,7 +93,7 @@ export default function NotificationsScreen() {
   // LIMPAR TODAS
   const handleClearAll = async () => {
     try {
-      await handleMarkAllAsRead();
+      handleMarkAllAsRead(false);
       await Promise.all(
         notifications.map((n) =>
           notificationService.deleteNotificationForUser(n.id, user._id)
@@ -160,7 +162,7 @@ export default function NotificationsScreen() {
       {/* Ações */}
       <View style={styles.actionHeader}>
         <TouchableOpacity
-          onPress={handleMarkAllAsRead}
+          onPress={() => handleMarkAllAsRead(true)}
           style={styles.actionButton}
         >
           <Text style={styles.actionButtonText}>Marcar como lidas</Text>

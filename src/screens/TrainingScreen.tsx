@@ -22,6 +22,7 @@ import { userService } from "../services/usersService";
 import Popup from "../componentes/Popup";
 import { Ionicons } from "@expo/vector-icons";
 import ExerciseScreen from "./ExerciseScreen";
+import Toast from 'react-native-toast-message';
 
 interface TimeSlot {
   time: string;
@@ -116,7 +117,7 @@ export default function TrainingScreen() {
   const [confirmedAll, setConfirmedAll] = useState<Training[]>([]);
   const [showFifteenDays, setShowFifteenDays] = useState(false);
 
-  const [allDays, setAllDays] = useState(false);
+  const [allDays, setAllDays] = useState(true);
 
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
 
@@ -226,10 +227,10 @@ export default function TrainingScreen() {
       });
 
       setTrainingsNeedMyAction(needsAction);
-      setConfirmedTrainings(upcoming);
       setPendingOtherPerson(pendingOthers);
+      setConfirmedTrainings(upcoming);
       setConfirmedFifteenDays(confirmedFifteenDays);
-      setConfirmedAll(confirmedAll);
+      setConfirmedAll(confirmedAll); 
     } catch {
       Alert.alert("Erro", "Não foi possível carregar os treinos");
     }
@@ -298,15 +299,15 @@ export default function TrainingScreen() {
   const handleScheduleTraining = async () => {
     if (selectedDay && selectedHour && trainer) {
       if (isPastSlot(selectedDay, selectedHour)) {
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Data Inválida",
-          message:
-            "Não é possível marcar um treino num dia/hora que já passou.",
-          style: {},
-          onConfirm: undefined,
-        });
+        Toast.hide();
+          Toast.show({
+            topOffset: 10,
+            type: "error",
+            text2: "Não é possível marcar um treino num dia/hora que já passou.",
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
+          });
         return;
       }
       try {
@@ -323,30 +324,33 @@ export default function TrainingScreen() {
 
         const membro = user.role === "atleta" ? "treinador" : "atleta";
         if (res && res._id) {
-          setPopup({
-            visible: true,
-            type: "success",
-            title: "Sucesso",
-            message:
-              "Treino agendado com sucesso! Aguarda a confirmação do " +
+                Toast.hide();
+                Toast.show({
+                  topOffset: 10,
+                  type: "success",
+                  text2:"Treino agendado com sucesso! Aguarda a confirmação do "+
               membro +
               ".",
-            style: {},
-            onConfirm: undefined,
-          });
+                  position: "top",
+                  visibilityTime: 2500,
+                  autoHide: true,
+                });
         }
         // Recarregar todos os treinos para atualizar as listas
         await loadAllTrainings();
         setDetails(null);
-      } catch {
-        setPopup({
-          visible: true,
-          type: "error",
-          title: "Erro",
-          message: "Ocorreu um erro ao agendar o treino.",
-          style: {},
-          onConfirm: undefined,
-        });
+      } catch (error) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: `${
+            error.response?.data?.error || error.message || error
+          }`,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
         await loadAllTrainings();
       }
     }
@@ -358,13 +362,14 @@ export default function TrainingScreen() {
       await loadAllTrainings();
     } catch {
       await loadAllTrainings();
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não foi possível confirmar o treino.",
-        style: {},
-        onConfirm: undefined,
+        text2: "Não foi possível confirmar o treino.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
@@ -380,22 +385,24 @@ export default function TrainingScreen() {
         try {
           await trainingService.delete(trainingId, user._id);
           await loadAllTrainings();
-          setPopup({
-            visible: false,
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
             type: "success",
-            title: "Treino Recusado",
-            message: "Treino recusado com sucesso.",
-            style: {},
-            onConfirm: undefined,
+            text2: "Treino Recusado com sucesso.",
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
           });
         } catch {
-          setPopup({
-            visible: true,
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
             type: "error",
-            title: "Erro",
-            message: "Não foi possível recusar o treino.",
-            style: {},
-            onConfirm: undefined,
+            text2: "Não foi possível recusar o treino.",
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
           });
           await loadAllTrainings();
         }
@@ -497,25 +504,28 @@ export default function TrainingScreen() {
       message: messageConfirmation,
       style: {},
       onConfirm: async () => {
+        setPopup((p) => ({ ...p, visible: false }));
         try {
           await trainingService.delete(training._id, user._id);
           await loadAllTrainings(); // Recarregar treinos
-          setPopup({
-            visible: false,
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
             type: "success",
-            title: "Sucesso",
-            message: messageAnswer,
-            style: {},
-            onConfirm: undefined,
+            text2: messageAnswer,
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
           });
         } catch {
-          setPopup({
-            visible: true,
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
             type: "error",
-            title: "Erro",
-            message: "Não foi possível eliminar o treino.",
-            style: {},
-            onConfirm: undefined,
+            text2: "Não foi possível eliminar o treino.",
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
           });
           await loadAllTrainings();
         }
@@ -535,6 +545,27 @@ export default function TrainingScreen() {
 
   const DaysSwitch = () => (
     <View style={styles.switchContainer}>
+      
+      <TouchableOpacity
+        style={[
+          styles.switchOption,
+          allDays && styles.switchOptionActive,
+        ]}
+        onPress={() => {
+          setAllDays(true);
+          setShowFifteenDays(false);
+        }}
+      >
+        <Text
+          style={[
+            styles.switchText,
+            allDays && styles.switchTextActive,
+          ]}
+        >
+          Todos
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[
           styles.switchOption,
@@ -572,26 +603,6 @@ export default function TrainingScreen() {
           ]}
         >
           15 dias
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.switchOption,
-          allDays && styles.switchOptionActive,
-        ]}
-        onPress={() => {
-          setAllDays(true);
-          setShowFifteenDays(false);
-        }}
-      >
-        <Text
-          style={[
-            styles.switchText,
-            allDays && styles.switchTextActive,
-          ]}
-        >
-          Todos
         </Text>
       </TouchableOpacity>
     </View>
@@ -642,8 +653,43 @@ export default function TrainingScreen() {
           Exercícios
         </Text>
       </TouchableOpacity>
-    </View>
-  );
+<TouchableOpacity
+      style={[styles.switchOption, { backgroundColor: "#ECFDF3" }]}
+  onPress={() => {
+    Toast.hide();
+    Toast.show({
+      topOffset: 10,
+      type: "success",
+      text2: "Os dados foram guardados com sucesso !",
+      position: "top",
+      visibilityTime: 2500,
+      autoHide: true,
+    });
+  }}
+    >
+      <Text style={{ color: "#067647", fontWeight: "600" }}>Sucesso</Text>
+    </TouchableOpacity>
+
+    {/* 🔹 Botão de teste Erro */}
+    <TouchableOpacity
+      style={[styles.switchOption, { backgroundColor: "#FEF3F2" }]}
+      onPress={() => {
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
+          type: "error",
+          text2:"Não foi possível guardar os dados.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
+      }
+      }
+    >
+      <Text style={{ color: "#D92D20", fontWeight: "600" }}>Erro</Text>
+    </TouchableOpacity>
+  </View>
+);
 
   // i para ver details
   //opções de editar treino

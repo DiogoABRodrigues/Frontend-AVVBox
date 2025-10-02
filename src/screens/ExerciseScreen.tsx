@@ -322,12 +322,12 @@ export default function ExerciseScreen() {
     }
 
     // Clear the input value
-    if (editingExercise) {
+    /*if (editingExercise) {
       setInputValues((prev) => ({
         ...prev,
         [editingExercise._id]: "",
       }));
-    }
+    }*/
 
     setEditingExercise(null);
   };
@@ -484,7 +484,7 @@ export default function ExerciseScreen() {
                                     style={styles.editInputSmall}
                                     value={
                                       inputValues[exercise._id] !== undefined
-                                        ? inputValues[exercise._id]
+                                        ? inputValues[exercise.weight]
                                         : exercise.weight.toString() || ""
                                     }
                                     onChangeText={(val) =>
