@@ -326,29 +326,28 @@ export default function MeasurementsScreen() {
 
       if (res && res._id) {
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: "Alteração guardada com sucesso!",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
-
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: "Alteração guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       }
 
       fetchMeasures();
       setShowMeasuresModal(false);
     } catch {
-              Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: "Ocorreu um erro ao guardar as medidas.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Ocorreu um erro ao guardar as medidas.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -357,28 +356,28 @@ Toast.show({
       const res = await measuresService.delete(id);
 
       if (res && (res === 200 || res === 201)) {
-                Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: "Registo eliminado com sucesso!",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: "Registo eliminado com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       }
 
       fetchMeasures();
     } catch {
       Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: "Não foi possível eliminar o registo.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível eliminar o registo.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
 
       fetchMeasures();
     }

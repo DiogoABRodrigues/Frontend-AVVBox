@@ -225,24 +225,24 @@ export default function ProfileScreen() {
               fetchUsers();
               Toast.hide();
               Toast.show({
-              topOffset: 10,
-              type: "success",
-              text2: `Utilizador ${
+                topOffset: 10,
+                type: "success",
+                text2: `Utilizador ${
                   targetUser.active ? "desativado" : "ativado"
                 } com sucesso!`,
-              position: "top",
-              visibilityTime: 2500,
-              autoHide: true,
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
             } catch {
               Toast.hide();
               Toast.show({
-              topOffset: 10,
-              type: "error",
-              text2: "Erro ao alterar status do utilizador.",
-              position: "top",
-              visibilityTime: 2500,
-              autoHide: true,
+                topOffset: 10,
+                type: "error",
+                text2: "Erro ao alterar status do utilizador.",
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
             }
           },
@@ -351,28 +351,27 @@ export default function ProfileScreen() {
       if (res && res._id) {
         Toast.hide();
         Toast.show({
-        topOffset: 10,
-        type: "success",
-        text2: "Alteração guardada com sucesso!",
-        position: "top",
-        visibilityTime: 2500,
-        autoHide: true,
+          topOffset: 10,
+          type: "success",
+          text2: "Alteração guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
       fetchUserData();
     } catch (err: any) {
       Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: `Ocorreu um erro ao guardar a alteração: ${
+      Toast.show({
+        topOffset: 10,
+        type: "success",
+        text2: `Ocorreu um erro ao guardar a alteração: ${
           err.response?.data?.message || err.message || err
         }.`,
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
-
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -507,38 +506,38 @@ Toast.show({
 
       if (res && res._id) {
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: "Alteração guardada com sucesso!",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: "Alteração guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       } else {
-        
-Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
+          type: "error",
+          text2:
+            "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       }
 
       fetchMeasures();
     } catch {
       Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: "Não foi possível guardar o objetivo.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível guardar o objetivo.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -579,41 +578,40 @@ Toast.show({
     //passar esta confirmação para o backend
     if (roleChangeTarget._id === user._id) {
       Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: "Não podes alterar a tua própria role.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não podes alterar a tua própria role.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
       return;
     }
     if (roleChangeTarget) {
       try {
         await userService.update(roleChangeTarget._id, { role: newRole });
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
 
         fetchUsers();
       } catch {
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: "Não foi possível alterar o role do utilizador.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
-
+        Toast.show({
+          topOffset: 10,
+          type: "error",
+          text2: "Não foi possível alterar o role do utilizador.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       }
     }
     setRoleModalVisible(false);
@@ -627,27 +625,26 @@ Toast.show({
           coach: selectedPts,
         });
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
 
         fetchUsers();
       } catch {
         Toast.hide();
         Toast.show({
-        topOffset: 10,
-        type: "error",
-        text2: "Não foi possível alterar os PTs do utilizador.",
-        position: "top",
-        visibilityTime: 2500,
-        autoHide: true,
+          topOffset: 10,
+          type: "error",
+          text2: "Não foi possível alterar os PTs do utilizador.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
-
       }
     }
     setPtsModalVisible(false);
@@ -660,27 +657,26 @@ Toast.show({
           atheletes: selectedAthleteIds,
         });
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
 
         fetchUsers();
       } catch {
         Toast.hide();
         Toast.show({
-        topOffset: 10,
-        type: "error",
-        text2: "Não foi possível alterar os atletas do utilizador.",
-        position: "top",
-        visibilityTime: 2500,
-        autoHide: true,
+          topOffset: 10,
+          type: "error",
+          text2: "Não foi possível alterar os atletas do utilizador.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
-
       }
     }
     setAthletesModalVisible(false);
@@ -778,12 +774,12 @@ Toast.show({
             if (range.start >= range.end) {
               Toast.hide();
               Toast.show({
-              topOffset: 10,
-              type: "error",
-              text2: `O horário de início não pode ser igual ou superior ao horário de término.`,
-              position: "top",
-              visibilityTime: 2500,
-              autoHide: true,
+                topOffset: 10,
+                type: "error",
+                text2: `O horário de início não pode ser igual ou superior ao horário de término.`,
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
               return;
             }
@@ -804,12 +800,12 @@ Toast.show({
             ) {
               Toast.hide();
               Toast.show({
-              topOffset: 10,
-              type: "error",
-              text2: `Formato de hora inválido. Use HH:MM.`,
-              position: "top",
-              visibilityTime: 2500,
-              autoHide: true,
+                topOffset: 10,
+                type: "error",
+                text2: `Formato de hora inválido. Use HH:MM.`,
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
 
               return;
@@ -825,28 +821,28 @@ Toast.show({
 
       if (res && res._id) {
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: "Disponibilidade guardada com sucesso!",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: "Disponibilidade guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
         fetchAvailability();
       } else {
         throw new Error("Falha ao guardar");
       }
     } catch {
       Toast.hide();
-        Toast.show({
+      Toast.show({
         topOffset: 10,
         type: "error",
         text2: "Não foi possível guardar a disponibilidade.",
         position: "top",
         visibilityTime: 2500,
         autoHide: true,
-        });
+      });
     }
   };
 

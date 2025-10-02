@@ -70,11 +70,11 @@ export default function NotificationsScreen() {
             notificationService.markNotificationAsRead(n.id, user._id)
           )
       );
-      if(animation){
-      notifications.forEach((n) => {
-        if (!n.read) markAsRead(user._id, n.id);
-      });
-    }
+      if (animation) {
+        notifications.forEach((n) => {
+          if (!n.read) markAsRead(user._id, n.id);
+        });
+      }
     } catch {
       console.error(
         "An error occurred while marking all notifications as read."
@@ -111,29 +111,28 @@ export default function NotificationsScreen() {
       });
       if (res && res.notification && res.notification._id) {
         Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: "Notificação enviada com sucesso!",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
-
+        Toast.show({
+          topOffset: 10,
+          type: "success",
+          text2: "Notificação enviada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       }
       fetchNotifications();
       setModalVisible(false);
     } catch (err: any) {
       Toast.hide();
       Toast.show({
-      topOffset: 10,
-      type: "success",
-      text2: `Ocorreu um erro ao enviar a notificação: ${
-                err.response?.data?.message || err.message || err
-              }`,
-      position: "top",
-      visibilityTime: 2500,
-      autoHide: true,
+        topOffset: 10,
+        type: "success",
+        text2: `Ocorreu um erro ao enviar a notificação: ${
+          err.response?.data?.message || err.message || err
+        }`,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };

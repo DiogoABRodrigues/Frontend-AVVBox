@@ -22,7 +22,7 @@ import { userService } from "../services/usersService";
 import Popup from "../componentes/Popup";
 import { Ionicons } from "@expo/vector-icons";
 import ExerciseScreen from "./ExerciseScreen";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 
 interface TimeSlot {
   time: string;
@@ -230,7 +230,7 @@ export default function TrainingScreen() {
       setPendingOtherPerson(pendingOthers);
       setConfirmedTrainings(upcoming);
       setConfirmedFifteenDays(confirmedFifteenDays);
-      setConfirmedAll(confirmedAll); 
+      setConfirmedAll(confirmedAll);
     } catch {
       Alert.alert("Erro", "Não foi possível carregar os treinos");
     }
@@ -300,14 +300,14 @@ export default function TrainingScreen() {
     if (selectedDay && selectedHour && trainer) {
       if (isPastSlot(selectedDay, selectedHour)) {
         Toast.hide();
-          Toast.show({
-            topOffset: 10,
-            type: "error",
-            text2: "Não é possível marcar um treino num dia/hora que já passou.",
-            position: "top",
-            visibilityTime: 2500,
-            autoHide: true,
-          });
+        Toast.show({
+          topOffset: 10,
+          type: "error",
+          text2: "Não é possível marcar um treino num dia/hora que já passou.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
         return;
       }
       try {
@@ -324,33 +324,32 @@ export default function TrainingScreen() {
 
         const membro = user.role === "atleta" ? "treinador" : "atleta";
         if (res && res._id) {
-                Toast.hide();
-                Toast.show({
-                  topOffset: 10,
-                  type: "success",
-                  text2:"Treino agendado com sucesso! Aguarda a confirmação do "+
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
+            type: "success",
+            text2:
+              "Treino agendado com sucesso! Aguarda a confirmação do " +
               membro +
               ".",
-                  position: "top",
-                  visibilityTime: 2500,
-                  autoHide: true,
-                });
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
+          });
         }
         // Recarregar todos os treinos para atualizar as listas
         await loadAllTrainings();
         setDetails(null);
       } catch (error) {
-      Toast.hide();
-      Toast.show({
-        topOffset: 10,
-        type: "error",
-        text2: `${
-            error.response?.data?.error || error.message || error
-          }`,
-        position: "top",
-        visibilityTime: 2500,
-        autoHide: true,
-      });
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
+          type: "error",
+          text2: `${error.response?.data?.error || error.message || error}`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
         await loadAllTrainings();
       }
     }
@@ -533,9 +532,7 @@ export default function TrainingScreen() {
     });
   };
 
-  const handleEditTraining = (training: Training) => {
-
-  };
+  const handleEditTraining = (training: Training) => {};
 
   const getTrainingsToShow = () => {
     if (allDays) return confirmedAll;
@@ -545,23 +542,14 @@ export default function TrainingScreen() {
 
   const DaysSwitch = () => (
     <View style={styles.switchContainer}>
-      
       <TouchableOpacity
-        style={[
-          styles.switchOption,
-          allDays && styles.switchOptionActive,
-        ]}
+        style={[styles.switchOption, allDays && styles.switchOptionActive]}
         onPress={() => {
           setAllDays(true);
           setShowFifteenDays(false);
         }}
       >
-        <Text
-          style={[
-            styles.switchText,
-            allDays && styles.switchTextActive,
-          ]}
-        >
+        <Text style={[styles.switchText, allDays && styles.switchTextActive]}>
           Todos
         </Text>
       </TouchableOpacity>
@@ -653,43 +641,42 @@ export default function TrainingScreen() {
           Exercícios
         </Text>
       </TouchableOpacity>
-<TouchableOpacity
-      style={[styles.switchOption, { backgroundColor: "#ECFDF3" }]}
-  onPress={() => {
-    Toast.hide();
-    Toast.show({
-      topOffset: 10,
-      type: "success",
-      text2: "Os dados foram guardados com sucesso !",
-      position: "top",
-      visibilityTime: 2500,
-      autoHide: true,
-    });
-  }}
-    >
-      <Text style={{ color: "#067647", fontWeight: "600" }}>Sucesso</Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.switchOption, { backgroundColor: "#ECFDF3" }]}
+        onPress={() => {
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
+            type: "success",
+            text2: "Os dados foram guardados com sucesso !",
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
+          });
+        }}
+      >
+        <Text style={{ color: "#067647", fontWeight: "600" }}>Sucesso</Text>
+      </TouchableOpacity>
 
-    {/* 🔹 Botão de teste Erro */}
-    <TouchableOpacity
-      style={[styles.switchOption, { backgroundColor: "#FEF3F2" }]}
-      onPress={() => {
-        Toast.hide();
-        Toast.show({
-          topOffset: 10,
-          type: "error",
-          text2:"Não foi possível guardar os dados.",
-          position: "top",
-          visibilityTime: 2500,
-          autoHide: true,
-        });
-      }
-      }
-    >
-      <Text style={{ color: "#D92D20", fontWeight: "600" }}>Erro</Text>
-    </TouchableOpacity>
-  </View>
-);
+      {/* 🔹 Botão de teste Erro */}
+      <TouchableOpacity
+        style={[styles.switchOption, { backgroundColor: "#FEF3F2" }]}
+        onPress={() => {
+          Toast.hide();
+          Toast.show({
+            topOffset: 10,
+            type: "error",
+            text2: "Não foi possível guardar os dados.",
+            position: "top",
+            visibilityTime: 2500,
+            autoHide: true,
+          });
+        }}
+      >
+        <Text style={{ color: "#D92D20", fontWeight: "600" }}>Erro</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   // i para ver details
   //opções de editar treino
@@ -1029,7 +1016,9 @@ export default function TrainingScreen() {
                   <Text style={styles.emptyStateText}>
                     {showFifteenDays
                       ? "Não existem treinos para os próximos 15 dias."
-                      : ( allDays ? "Não existem treinos marcados." : "Não existem treinos para os próximos 7 dias.")}
+                      : allDays
+                      ? "Não existem treinos marcados."
+                      : "Não existem treinos para os próximos 7 dias."}
                   </Text>
                 )}
               </View>

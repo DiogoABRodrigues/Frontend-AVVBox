@@ -226,26 +226,25 @@ export default function ExerciseScreen() {
       setInputValues({});
       setEditingExercise(null);
       Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "success",
- text2: "Exercício removido com sucesso.",
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
-
+      Toast.show({
+        topOffset: 10,
+        type: "success",
+        text2: "Exercício removido com sucesso.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     } catch {
       Toast.hide();
       Toast.show({
-      topOffset: 10,
-      type: "error",
-      text2: "Ocorreu um erro ao remover o exercício, tente novamente mais tarde.",
-      position: "top",
-      visibilityTime: 2500,
-      autoHide: true,
+        topOffset: 10,
+        type: "error",
+        text2:
+          "Ocorreu um erro ao remover o exercício, tente novamente mais tarde.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
-
     }
   };
 
@@ -299,17 +298,16 @@ Toast.show({
       }
     } catch (error) {
       Toast.hide();
-Toast.show({
- topOffset: 10,
- type: "error",
- text2: `Ocorreu um erro ao realizar a ação: ${
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: `Ocorreu um erro ao realizar a ação: ${
           error.response?.data?.message || error.message || error
         }`,
- position: "top",
- visibilityTime: 2500,
- autoHide: true,
-});
-
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
 
     // Clear the input value for this exercise

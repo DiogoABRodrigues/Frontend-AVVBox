@@ -11,7 +11,7 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { StatusBar } from "react-native";
 import registerNNPushToken from "native-notify";
 import Toast from "react-native-toast-message";
-import toastConfig from './src/componentes/toastConfig';
+import toastConfig from "./src/componentes/toastConfig";
 
 const Stack = createNativeStackNavigator();
 

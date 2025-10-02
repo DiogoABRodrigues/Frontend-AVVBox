@@ -27,7 +27,11 @@ const toastConfig: ToastConfig = {
           {text1}
         </Text>
       )}
-      {text2 && <Text style={{ color: "#D92D20", fontSize: 13, flexWrap: "wrap" }}>{text2}</Text>}
+      {text2 && (
+        <Text style={{ color: "#D92D20", fontSize: 13, flexWrap: "wrap" }}>
+          {text2}
+        </Text>
+      )}
     </View>
   ),
 
@@ -50,7 +54,9 @@ const toastConfig: ToastConfig = {
           {text1}
         </Text>
       )}
-      {text2 && <Text style={{ color: "#067647", flexWrap: "wrap" }}>{text2}</Text>}
+      {text2 && (
+        <Text style={{ color: "#067647", flexWrap: "wrap" }}>{text2}</Text>
+      )}
     </View>
   ),
 
@@ -69,11 +75,20 @@ const toastConfig: ToastConfig = {
       }}
     >
       {text1 && (
-        <Text style={{ color: "#D92D20", fontSize: 13, fontWeight: "600",flexWrap: "wrap" }}>
+        <Text
+          style={{
+            color: "#D92D20",
+            fontSize: 13,
+            fontWeight: "600",
+            flexWrap: "wrap",
+          }}
+        >
           {text1}
         </Text>
       )}
-      {text2 && <Text style={{ color: "#D92D20", flexWrap: "wrap", }}>{text2}</Text>}
+      {text2 && (
+        <Text style={{ color: "#D92D20", flexWrap: "wrap" }}>{text2}</Text>
+      )}
     </View>
   ),
 };
