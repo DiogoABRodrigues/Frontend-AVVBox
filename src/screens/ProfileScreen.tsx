@@ -1087,23 +1087,6 @@ export default function ProfileScreen() {
               <View style={styles.expandedContainer}>
                 <View style={styles.formContainer}>
                   <ScrollView showsVerticalScrollIndicator={false}>
-                    {/* Máximo de atletas por hora */}
-                    <View style={styles.inputGroup}>
-                      <Text style={styles.label}>
-                        Máximo de atletas por hora
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={styles.input}
-                        value={availability.maxAthletesPerHour.toString()}
-                        onChangeText={(val) =>
-                          setAvailability((prev) => ({
-                            ...prev,
-                            maxAthletesPerHour: parseInt(val) || 1,
-                          }))
-                        }
-                      />
-                    </View>
 
                     {/* Dias da semana */}
                     {(

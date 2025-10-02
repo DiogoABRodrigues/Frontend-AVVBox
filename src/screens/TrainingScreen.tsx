@@ -641,40 +641,6 @@ export default function TrainingScreen() {
           Exercícios
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.switchOption, { backgroundColor: "#ECFDF3" }]}
-        onPress={() => {
-          Toast.hide();
-          Toast.show({
-            topOffset: 10,
-            type: "success",
-            text2: "Os dados foram guardados com sucesso !",
-            position: "top",
-            visibilityTime: 2500,
-            autoHide: true,
-          });
-        }}
-      >
-        <Text style={{ color: "#067647", fontWeight: "600" }}>Sucesso</Text>
-      </TouchableOpacity>
-
-      {/* 🔹 Botão de teste Erro */}
-      <TouchableOpacity
-        style={[styles.switchOption, { backgroundColor: "#FEF3F2" }]}
-        onPress={() => {
-          Toast.hide();
-          Toast.show({
-            topOffset: 10,
-            type: "error",
-            text2: "Não foi possível guardar os dados.",
-            position: "top",
-            visibilityTime: 2500,
-            autoHide: true,
-          });
-        }}
-      >
-        <Text style={{ color: "#D92D20", fontWeight: "600" }}>Erro</Text>
-      </TouchableOpacity>
     </View>
   );
 
