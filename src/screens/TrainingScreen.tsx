@@ -112,7 +112,11 @@ export default function TrainingScreen() {
   const [confirmedFifteenDays, setConfirmedFifteenDays] = useState<Training[]>(
     []
   );
+
+  const [confirmedAll, setConfirmedAll] = useState<Training[]>([]);
   const [showFifteenDays, setShowFifteenDays] = useState(false);
+
+  const [allDays, setAllDays] = useState(false);
 
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
 
@@ -198,6 +202,8 @@ export default function TrainingScreen() {
         user._id
       );
 
+      const confirmedAll = await trainingService.getAllConfirmed(user._id);
+
       // Separar os treinos nas três categorias
       const needsAction: Training[] = [];
       const pendingOthers: Training[] = [];
@@ -223,6 +229,7 @@ export default function TrainingScreen() {
       setConfirmedTrainings(upcoming);
       setPendingOtherPerson(pendingOthers);
       setConfirmedFifteenDays(confirmedFifteenDays);
+      setConfirmedAll(confirmedAll);
     } catch {
       Alert.alert("Erro", "Não foi possível carregar os treinos");
     }
@@ -517,11 +524,13 @@ export default function TrainingScreen() {
   };
 
   const handleEditTraining = (training: Training) => {
-    // Lógica para editar o treino
+
   };
 
   const getTrainingsToShow = () => {
-    return showFifteenDays ? confirmedFifteenDays : confirmedTrainings;
+    if (allDays) return confirmedAll;
+    if (showFifteenDays) return confirmedFifteenDays;
+    return confirmedTrainings;
   };
 
   const DaysSwitch = () => (
@@ -529,9 +538,12 @@ export default function TrainingScreen() {
       <TouchableOpacity
         style={[
           styles.switchOption,
-          !showFifteenDays && styles.switchOptionActive,
+          !showFifteenDays && !allDays && styles.switchOptionActive,
         ]}
-        onPress={() => setShowFifteenDays(false)}
+        onPress={() => {
+          setAllDays(false);
+          setShowFifteenDays(false);
+        }}
       >
         <Text
           style={[
@@ -548,7 +560,10 @@ export default function TrainingScreen() {
           styles.switchOption,
           showFifteenDays && styles.switchOptionActive,
         ]}
-        onPress={() => setShowFifteenDays(true)}
+        onPress={() => {
+          setAllDays(false);
+          setShowFifteenDays(true);
+        }}
       >
         <Text
           style={[
@@ -557,6 +572,26 @@ export default function TrainingScreen() {
           ]}
         >
           15 dias
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[
+          styles.switchOption,
+          allDays && styles.switchOptionActive,
+        ]}
+        onPress={() => {
+          setAllDays(true);
+          setShowFifteenDays(false);
+        }}
+      >
+        <Text
+          style={[
+            styles.switchText,
+            allDays && styles.switchTextActive,
+          ]}
+        >
+          Todos
         </Text>
       </TouchableOpacity>
     </View>
@@ -918,7 +953,7 @@ export default function TrainingScreen() {
                       </Text>
 
                       <View style={styles.confirmedCardFooter}>
-                        <Text style={styles.pendingBadge}>Pendente</Text>
+                        <Text style={styles.confirmedBadge}>Confirmado</Text>
                         <View style={{ flexDirection: "row" }}>
                           <TouchableOpacity
                             onPress={() => handleEditTraining(training)}
@@ -948,7 +983,7 @@ export default function TrainingScreen() {
                   <Text style={styles.emptyStateText}>
                     {showFifteenDays
                       ? "Não existem treinos para os próximos 15 dias."
-                      : "Não existem treinos para os próximos 7 dias."}
+                      : ( allDays ? "Não existem treinos marcados." : "Não existem treinos para os próximos 7 dias.")}
                   </Text>
                 )}
               </View>

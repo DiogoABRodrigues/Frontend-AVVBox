@@ -37,6 +37,11 @@ export const trainingService = {
     return res.data;
   },
 
+  async getAllConfirmed(userId: string): Promise<Training[]> {
+    const res = await api.get(`${API_URL}/confirmed/${userId}`);
+    return res.data;
+  },
+
   async cancel(id: string): Promise<{ message: string }> {
     const res = await api.patch(`${API_URL}/${id}/cancel`);
     return res.data;
