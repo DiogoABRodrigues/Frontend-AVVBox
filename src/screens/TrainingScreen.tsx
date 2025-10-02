@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   TextInput,
 } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, RefreshControl } from "react-native-gesture-handler";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { styles } from "./styles/TrainingScreen.styles";
 import { Availability, DayAvailability } from "../models/Availability";
@@ -84,6 +84,8 @@ export default function TrainingScreen() {
     coach: [],
     atheletes: [],
   };
+
+  const [refreshing, setRefreshing] = useState(false);
 
   let { user } = useAuth();
 
@@ -381,6 +383,7 @@ export default function TrainingScreen() {
       message: "Tens a certeza que queres recusar este treino?",
       style: {},
       onConfirm: async () => {
+        setPopup((p) => ({ ...p, visible: false }));
         try {
           await trainingService.delete(trainingId, user._id);
           await loadAllTrainings();
@@ -649,8 +652,22 @@ export default function TrainingScreen() {
   const isDisabled =
     !selectedHour || (user.role !== "atleta" && !selectedAthleteId);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadAllTrainings();
+    await loadAvailability(trainer._id);
+
+    setRefreshing(false);
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Treino</Text>
         <TouchableOpacity onPress={async () => await loadAllTrainings()}>

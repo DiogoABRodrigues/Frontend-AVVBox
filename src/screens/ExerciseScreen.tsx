@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles/ExerciseScreen.styles";
@@ -56,6 +57,8 @@ export default function ExerciseScreen() {
   const [userWeights, setUserWeights] = useState<Weights | null>(null);
   const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const [popup, setPopup] = useState({
     visible: false,
     type: "success" as "success" | "error" | "confirm",
@@ -76,8 +79,8 @@ export default function ExerciseScreen() {
     { key: "extra", label: "Extra" },
   ];
 
-  useEffect(() => {
-    const fetchAthletes = async () => {
+  const fetchAthletes = async () => {
+    try {
       if (user.role !== "atleta") {
         // Carregar os atletas do treinador
         let athletes: User[] = [];
@@ -88,8 +91,33 @@ export default function ExerciseScreen() {
       } else {
         setSelectedAthleteId(user._id);
       }
-    };
-    fetchAthletes();
+    } catch (error) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao atualizar definições de notificação:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
+  };
+
+  useEffect(() => {
+    try {
+      fetchAthletes();
+    } catch (error) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao ir buscar atletas:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -113,7 +141,15 @@ export default function ExerciseScreen() {
       setUserWeights(weights);
       setExercisesByGroup(initialExercises);
     } catch (error) {
-      console.error("Error fetching user weights:", error);
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao ir buscar pesos do utilizador:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -339,9 +375,21 @@ export default function ExerciseScreen() {
     setEditingExercise(null);
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchUserWeights(selectedAthleteId || user._id);
+    await fetchAthletes();
+    setRefreshing(false);
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* Se for Admin ou PT, mostrar dropdown de atletas */}
         {isPT && (
           <View style={styles.dropdownSection}>

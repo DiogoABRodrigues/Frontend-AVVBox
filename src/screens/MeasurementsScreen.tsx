@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
@@ -71,6 +72,8 @@ export default function MeasurementsScreen() {
     message: "",
     onConfirm: undefined as (() => void) | undefined,
   });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   // FETCH atletas
   const fetchAthletes = async () => {
@@ -433,9 +436,22 @@ export default function MeasurementsScreen() {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchAthletes();
+    await fetchMeasures();
+    setRefreshing(false);
+  };
+
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Medidas</Text>
           <TouchableOpacity onPress={async () => await fetchMeasures()}>

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
@@ -125,6 +126,8 @@ export default function ProfileScreen() {
     trainingCanceled: false,
   });
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const toggleExpand = (title: string) => {
     setExpandedAction((prev) => (prev === title ? null : title));
     // Close any open menus when expanding/collapsing sections
@@ -216,6 +219,7 @@ export default function ProfileScreen() {
             targetUser.active ? "desativar" : "ativar"
           } o utilizador ${targetUser.name}?`,
           onConfirm: async () => {
+            setPopup((p) => ({ ...p, visible: false }));
             try {
               if (targetUser.active) {
                 await userService.deactivate(userId);
@@ -552,15 +556,27 @@ export default function ProfileScreen() {
   const handleNotificationToggle = (
     setting: keyof typeof notificationSettings
   ) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [setting]: !prev[setting],
-    }));
+    try {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [setting]: !prev[setting],
+      }));
 
-    settingsService.update(user._id, {
-      ...notificationSettings,
-      [setting]: !notificationSettings[setting],
-    });
+      settingsService.update(user._id, {
+        ...notificationSettings,
+        [setting]: !notificationSettings[setting],
+      });
+    } catch (err) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao atualizar definições de notificação:" + err,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
   };
 
   const [copiedId, setCopiedId] = useState<string>("");
@@ -846,8 +862,25 @@ export default function ProfileScreen() {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchNotificationSettings();
+    await fetchAvailability();
+    await fetchMeasures();
+    await fetchUserData();
+    await fetchUsers();
+    await fetchPtsAndAdmins();
+    setRefreshing(false);
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Perfil</Text>
       </View>
@@ -1087,7 +1120,6 @@ export default function ProfileScreen() {
               <View style={styles.expandedContainer}>
                 <View style={styles.formContainer}>
                   <ScrollView showsVerticalScrollIndicator={false}>
-
                     {/* Dias da semana */}
                     {(
                       [
