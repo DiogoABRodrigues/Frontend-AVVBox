@@ -75,15 +75,15 @@ export default function NotificationsScreen() {
         notifications
           .filter((n) => !n.read)
           .map((n) =>
-            notificationService.markNotificationAsRead(n.id, user._id),
-          ),
+            notificationService.markNotificationAsRead(n.id, user._id)
+          )
       );
       notifications.forEach((n) => {
         if (!n.read) markAsRead(user._id, n.id);
       });
     } catch {
       console.error(
-        "An error occurred while marking all notifications as read.",
+        "An error occurred while marking all notifications as read."
       );
     }
   };
@@ -94,8 +94,8 @@ export default function NotificationsScreen() {
       await handleMarkAllAsRead();
       await Promise.all(
         notifications.map((n) =>
-          notificationService.deleteNotificationForUser(n.id, user._id),
-        ),
+          notificationService.deleteNotificationForUser(n.id, user._id)
+        )
       );
       fetchNotifications();
     } catch (err) {
@@ -107,7 +107,7 @@ export default function NotificationsScreen() {
   const handleSendNotification = async (
     title: string,
     body: string,
-    target: string[],
+    target: string[]
   ) => {
     try {
       const res = await notificationService.createNotification(user._id, {
@@ -131,7 +131,9 @@ export default function NotificationsScreen() {
         visible: true,
         type: "error",
         title: "Erro",
-        message: `Ocorreu um erro ao enviar a notificação: ${err.response?.data?.message || err.message || err}`,
+        message: `Ocorreu um erro ao enviar a notificação: ${
+          err.response?.data?.message || err.message || err
+        }`,
         onConfirm: undefined,
       });
     }
@@ -142,7 +144,7 @@ export default function NotificationsScreen() {
     if (!notification.read) {
       await notificationService.markNotificationAsRead(
         notification.id,
-        user._id,
+        user._id
       );
       markAsRead(user._id, notification.id);
     }
@@ -212,7 +214,7 @@ export default function NotificationsScreen() {
                     onPress={async () => {
                       await notificationService.deleteNotificationForUser(
                         n.id,
-                        user._id,
+                        user._id
                       );
                       fetchNotifications();
                     }}

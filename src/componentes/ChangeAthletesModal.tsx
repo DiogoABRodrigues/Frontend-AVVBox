@@ -24,7 +24,7 @@ export default function ChangeAthletesModal({
     setSelectedAthletes((prev) =>
       prev.includes(id)
         ? prev.filter((athlete) => athlete !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 

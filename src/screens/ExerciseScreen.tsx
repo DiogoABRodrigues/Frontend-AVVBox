@@ -40,7 +40,7 @@ export default function ExerciseScreen() {
     user = emptyUser; // Garantir que user nunca é null
   }
   const [expandedMuscleGroup, setExpandedMuscleGroup] = useState<string | null>(
-    null,
+    null
   );
   const [exercisesByGroup, setExercisesByGroup] = useState<
     Record<string, Exercise[]>
@@ -48,7 +48,7 @@ export default function ExerciseScreen() {
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
-    null,
+    null
   );
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
   const isPT = user?.role === "PT" || user?.role === "Admin";
@@ -126,7 +126,7 @@ export default function ExerciseScreen() {
           ...prev,
           [expandedMuscleGroup]:
             prev[expandedMuscleGroup]?.filter(
-              (ex) => !ex._id.startsWith("temp-"),
+              (ex) => !ex._id.startsWith("temp-")
             ) || [],
         }));
       }
@@ -148,7 +148,7 @@ export default function ExerciseScreen() {
       ...prev,
       [expandedMuscleGroup]:
         prev[expandedMuscleGroup]?.filter(
-          (ex) => !ex._id.startsWith("temp-"),
+          (ex) => !ex._id.startsWith("temp-")
         ) || [],
     }));
 
@@ -247,13 +247,13 @@ export default function ExerciseScreen() {
     groupKey: string,
     exerciseId: string,
     field: keyof Exercise,
-    value: string | number,
+    value: string | number
   ) => {
     setExercisesByGroup((prev) => ({
       ...prev,
       [groupKey]:
         prev[groupKey]?.map((ex) =>
-          ex._id === exerciseId ? { ...ex, [field]: value } : ex,
+          ex._id === exerciseId ? { ...ex, [field]: value } : ex
         ) || [],
     }));
   };
@@ -263,7 +263,7 @@ export default function ExerciseScreen() {
 
     const group = expandedMuscleGroup!;
     const exercise = exercisesByGroup[group].find(
-      (ex) => ex._id === editingExercise._id,
+      (ex) => ex._id === editingExercise._id
     );
     if (!exercise) return;
 
@@ -296,7 +296,9 @@ export default function ExerciseScreen() {
         visible: true,
         type: "error",
         title: "Erro",
-        message: `Ocorreu um erro ao realizar a ação: ${error.response?.data?.message || error.message || error}`,
+        message: `Ocorreu um erro ao realizar a ação: ${
+          error.response?.data?.message || error.message || error
+        }`,
         onConfirm: undefined,
       });
     }
@@ -393,7 +395,7 @@ export default function ExerciseScreen() {
                                     group.key,
                                     exercise?._id,
                                     "name",
-                                    value,
+                                    value
                                   )
                                 }
                               />
@@ -409,7 +411,7 @@ export default function ExerciseScreen() {
                                     group.key,
                                     exercise?._id,
                                     "details",
-                                    value,
+                                    value
                                   )
                                 }
                                 multiline={true}
@@ -450,7 +452,7 @@ export default function ExerciseScreen() {
                                     group.key,
                                     exercise?._id,
                                     "name",
-                                    value,
+                                    value
                                   )
                                 }
                               />
@@ -503,7 +505,7 @@ export default function ExerciseScreen() {
                                       group.key,
                                       exercise._id,
                                       "reps",
-                                      parseFloat(value) || 0,
+                                      parseFloat(value) || 0
                                     )
                                   }
                                   keyboardType="decimal-pad"
@@ -520,7 +522,7 @@ export default function ExerciseScreen() {
                                       group.key,
                                       exercise._id,
                                       "sets",
-                                      parseFloat(value) || 0,
+                                      parseFloat(value) || 0
                                     )
                                   }
                                   keyboardType="decimal-pad"

@@ -55,7 +55,7 @@ export default function NotificationModal({
           (u: { _id: string; name: string }) => ({
             id: u._id,
             name: u.name,
-          }),
+          })
         );
         usersToShow.sort((a, b) => a.name.localeCompare(b.name));
         setUsers(usersToShow);
@@ -174,7 +174,7 @@ export default function NotificationModal({
                   notification.body,
                   recipientOption === "individual"
                     ? notification.target
-                    : [recipientOption],
+                    : [recipientOption]
                 );
                 resetNotification();
                 onClose();

@@ -9,6 +9,7 @@ import LoginScreen from "./src/screens/LoginScreen";
 import { NotificationsProvider } from "./src/context/NotificationsContext";
 import { Provider as PaperProvider } from "react-native-paper";
 import { StatusBar } from "react-native";
+import registerNNPushToken from "native-notify";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function App() {
   useEffect(() => {
     async function loadFonts() {
       setFontsLoaded(true);
+      registerNNPushToken(32298, "FJv06dvuLO2xdBkaBSxXog");
     }
     loadFonts();
   }, []);

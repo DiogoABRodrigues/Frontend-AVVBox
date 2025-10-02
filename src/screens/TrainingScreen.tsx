@@ -91,7 +91,7 @@ export default function TrainingScreen() {
   }
 
   const [activeTab, setActiveTab] = useState<"schedule" | "exercises">(
-    "schedule",
+    "schedule"
   );
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -110,7 +110,7 @@ export default function TrainingScreen() {
   const [confirmedTrainings, setConfirmedTrainings] = useState<Training[]>([]);
   const [pendingOtherPerson, setPendingOtherPerson] = useState<Training[]>([]);
   const [confirmedFifteenDays, setConfirmedFifteenDays] = useState<Training[]>(
-    [],
+    []
   );
   const [showFifteenDays, setShowFifteenDays] = useState(false);
 
@@ -182,7 +182,7 @@ export default function TrainingScreen() {
       console.error("Failed to load availability for trainer:", user);
       Alert.alert(
         "Erro",
-        "Não foi possível carregar a disponibilidade do treinador",
+        "Não foi possível carregar a disponibilidade do treinador"
       );
     }
   };
@@ -195,7 +195,7 @@ export default function TrainingScreen() {
       ]);
 
       const confirmedFifteenDays = await trainingService.getNextFifteenDays(
-        user._id,
+        user._id
       );
 
       // Separar os treinos nas três categorias
@@ -252,7 +252,9 @@ export default function TrainingScreen() {
       // Gerar todos os slots de 15 em 15 minutos para este intervalo
       for (let hour = startHour; hour < endHour; hour++) {
         for (let minute = 0; minute < 60; minute += 15) {
-          const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+          const time = `${hour.toString().padStart(2, "0")}:${minute
+            .toString()
+            .padStart(2, "0")}`;
           const slot = { time, formattedTime: time };
 
           if (hour < 13) {
@@ -721,7 +723,7 @@ export default function TrainingScreen() {
                           <Text style={styles.dropdownButtonText}>
                             {selectedAthleteId
                               ? mineAthletes.find(
-                                  (a) => a._id === selectedAthleteId,
+                                  (a) => a._id === selectedAthleteId
                                 )?.name
                               : "Escolher atleta..."}
                           </Text>
@@ -820,34 +822,33 @@ export default function TrainingScreen() {
                       <View key={training._id} style={styles.actionNeededCard}>
                         <Text style={styles.trainingText}>
                           {formatDate(training.date, training.hour)}
-                                                  <TouchableOpacity
-                          onPress={() => {
-                            setPopup({
-                              visible: true,
-                              type: "success",
-                              title: "Detalhes do Treino",
-                              message:
-                                training.details || "Sem detalhes adicionais",
-                              style: { textAlign: "left", lineHeight: 22 },
-                              onConfirm: () =>
-                                setPopup((p) => ({ ...p, visible: false })),
-                            });
-                          }}
-                          style={{ padding: 4 }}
-                        >
-                          <Ionicons
-                            name="information-circle-outline"
-                            size={22}
-                            color="#1e293b"
-                          />
-                        </TouchableOpacity>
-                          
+                          <TouchableOpacity
+                            onPress={() => {
+                              setPopup({
+                                visible: true,
+                                type: "success",
+                                title: "Detalhes do Treino",
+                                message:
+                                  training.details || "Sem detalhes adicionais",
+                                style: { textAlign: "left", lineHeight: 22 },
+                                onConfirm: () =>
+                                  setPopup((p) => ({ ...p, visible: false })),
+                              });
+                            }}
+                            style={{ padding: 4 }}
+                          >
+                            <Ionicons
+                              name="information-circle-outline"
+                              size={22}
+                              color="#1e293b"
+                            />
+                          </TouchableOpacity>
+
                           {"\n"}
                           {user.role === "atleta"
                             ? training.PT.name
                             : training.athlete.name}
                         </Text>
-
 
                         <View style={styles.confirmedCardFooter}>
                           <Text style={styles.actionNeededBadge}>
@@ -889,7 +890,7 @@ export default function TrainingScreen() {
                     <View key={training._id} style={styles.confirmedCard}>
                       <Text style={styles.trainingText}>
                         {formatDate(training.date, training.hour)}
-                                                <TouchableOpacity
+                        <TouchableOpacity
                           onPress={() => {
                             setPopup({
                               visible: true,
@@ -917,15 +918,15 @@ export default function TrainingScreen() {
                       </Text>
 
                       <View style={styles.confirmedCardFooter}>
-                          <Text style={styles.pendingBadge}>Pendente</Text>
-                          <View style={{ flexDirection: "row" }}>
-                            <TouchableOpacity
-                              onPress={() => handleEditTraining(training)}
-                              style={styles.editButtonContainer}
-                            >
-                              <Ionicons
-                                name="create-outline"
-                                size={18}
+                        <Text style={styles.pendingBadge}>Pendente</Text>
+                        <View style={{ flexDirection: "row" }}>
+                          <TouchableOpacity
+                            onPress={() => handleEditTraining(training)}
+                            style={styles.editButtonContainer}
+                          >
+                            <Ionicons
+                              name="create-outline"
+                              size={18}
                               color="#1e293b"
                             />
                           </TouchableOpacity>
@@ -939,7 +940,7 @@ export default function TrainingScreen() {
                               color="#ef4444"
                             />
                           </TouchableOpacity>
-                          </View>
+                        </View>
                       </View>
                     </View>
                   ))
@@ -963,27 +964,27 @@ export default function TrainingScreen() {
                       <View key={training._id} style={styles.pendingCard}>
                         <Text style={styles.trainingText}>
                           {formatDate(training.date, training.hour)}
-                                                  <TouchableOpacity
-                          onPress={() => {
-                            setPopup({
-                              visible: true,
-                              type: "success",
-                              title: "Detalhes do Treino",
-                              message:
-                                training.details || "Sem detalhes adicionais",
-                              style: { textAlign: "left", lineHeight: 22 },
-                              onConfirm: () =>
-                                setPopup((p) => ({ ...p, visible: false })),
-                            });
-                          }}
-                          style={{ padding: 4 }}
-                        >
-                          <Ionicons
-                            name="information-circle-outline"
-                            size={22}
-                            color="#1e293b"
-                          />
-                        </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setPopup({
+                                visible: true,
+                                type: "success",
+                                title: "Detalhes do Treino",
+                                message:
+                                  training.details || "Sem detalhes adicionais",
+                                style: { textAlign: "left", lineHeight: 22 },
+                                onConfirm: () =>
+                                  setPopup((p) => ({ ...p, visible: false })),
+                              });
+                            }}
+                            style={{ padding: 4 }}
+                          >
+                            <Ionicons
+                              name="information-circle-outline"
+                              size={22}
+                              color="#1e293b"
+                            />
+                          </TouchableOpacity>
                           {"\n"}
                           {user.role === "atleta"
                             ? training.PT.name
@@ -1000,19 +1001,19 @@ export default function TrainingScreen() {
                               <Ionicons
                                 name="create-outline"
                                 size={18}
-                              color="#1e293b"
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => handleDeleteTraining(training)}
-                            style={styles.deleteButtonContainer}
-                          >
-                            <Ionicons
-                              name="trash-outline"
-                              size={18}
-                              color="#ef4444"
-                            />
-                          </TouchableOpacity>
+                                color="#1e293b"
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => handleDeleteTraining(training)}
+                              style={styles.deleteButtonContainer}
+                            >
+                              <Ionicons
+                                name="trash-outline"
+                                size={18}
+                                color="#ef4444"
+                              />
+                            </TouchableOpacity>
                           </View>
                         </View>
                       </View>

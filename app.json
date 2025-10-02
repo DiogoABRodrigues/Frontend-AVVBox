@@ -18,24 +18,24 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/avvb.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": false,
       "package": "com.anonymous.AVVBox",
       "useNextNotificationsApi": true,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./android/app/google-services.json"
     },
     "web": {
       "favicon": "assets/avvb.png"
     },
-        "plugins": [
+    "plugins": [
       [
-         "expo-notifications",
-         {
-             "icon": "./assets/notification-icon.png"
-         }
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png"
+        }
       ]
-   ],
+    ],
     "extra": {
       "eas": {
         "projectId": "243d43fd-5861-4710-bc1c-3ee9be00b58f"

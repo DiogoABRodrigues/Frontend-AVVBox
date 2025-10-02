@@ -66,7 +66,7 @@ export default function ProfileScreen() {
   });
 
   const [measuresInput, setMeasuresInput] = useState<Record<string, string>>(
-    {},
+    {}
   );
 
   const [users, setUsers] = useState<User[]>([]);
@@ -84,7 +84,7 @@ export default function ProfileScreen() {
 
   const [roleChangeTarget, setRoleChangeTarget] = useState<User | null>(null);
   const [selectedRole, setSelectedRole] = useState<"atleta" | "PT" | "Admin">(
-    "atleta",
+    "atleta"
   );
 
   const [relationTarget, setRelationTarget] = useState<{
@@ -211,7 +211,9 @@ export default function ProfileScreen() {
           title: targetUser.active
             ? "Desativar Utilizador"
             : "Ativar Utilizador",
-          message: `Tem certeza que deseja ${targetUser.active ? "desativar" : "ativar"} o utilizador ${targetUser.name}?`,
+          message: `Tem certeza que deseja ${
+            targetUser.active ? "desativar" : "ativar"
+          } o utilizador ${targetUser.name}?`,
           onConfirm: async () => {
             try {
               if (targetUser.active) {
@@ -224,7 +226,9 @@ export default function ProfileScreen() {
                 visible: true,
                 type: "success",
                 title: "Sucesso",
-                message: `Utilizador ${targetUser.active ? "desativado" : "ativado"} com sucesso!`,
+                message: `Utilizador ${
+                  targetUser.active ? "desativado" : "ativado"
+                } com sucesso!`,
                 onConfirm: undefined,
               });
             } catch {
@@ -354,7 +358,9 @@ export default function ProfileScreen() {
         visible: true,
         type: "error",
         title: "Erro",
-        message: `Ocorreu um erro ao guardar a alteração: ${err.response?.data?.message || err.message || err}.`,
+        message: `Ocorreu um erro ao guardar a alteração: ${
+          err.response?.data?.message || err.message || err
+        }.`,
         onConfirm: undefined,
       });
     }
@@ -435,7 +441,7 @@ export default function ProfileScreen() {
       }
       if (users.length > 0) {
         const filtered = users.filter(
-          (u) => (u.role === "PT" || u.role === "Admin") && u.active,
+          (u) => (u.role === "PT" || u.role === "Admin") && u.active
         );
         setPtsAndAdmins(filtered);
         return;
@@ -529,7 +535,7 @@ export default function ProfileScreen() {
   };
 
   const handleNotificationToggle = (
-    setting: keyof typeof notificationSettings,
+    setting: keyof typeof notificationSettings
   ) => {
     setNotificationSettings((prev) => ({
       ...prev,
@@ -671,7 +677,7 @@ export default function ProfileScreen() {
   };
 
   const addTimeRange = (
-    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
+    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">
   ) => {
     setAvailability((prev) => ({
       ...prev,
@@ -684,7 +690,7 @@ export default function ProfileScreen() {
 
   const removeTimeRange = (
     day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
-    index: number,
+    index: number
   ) => {
     setAvailability((prev) => ({
       ...prev,
@@ -699,7 +705,7 @@ export default function ProfileScreen() {
     day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
     index: number,
     field: "start" | "end",
-    value: string,
+    value: string
   ) => {
     // Formata o input automaticamente
     const formattedValue = formatTimeInput(value);
@@ -715,7 +721,7 @@ export default function ProfileScreen() {
   };
 
   const toggleWorkingDay = (
-    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
+    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">
   ) => {
     setAvailability((prev) => ({
       ...prev,
@@ -1007,7 +1013,7 @@ export default function ProfileScreen() {
                       style={styles.notificationItem}
                       onPress={() =>
                         handleNotificationToggle(
-                          notification.key as keyof typeof notificationSettings,
+                          notification.key as keyof typeof notificationSettings
                         )
                       }
                     >
@@ -1092,16 +1098,16 @@ export default function ProfileScreen() {
                             {day === "Monday"
                               ? "Segunda"
                               : day === "Tuesday"
-                                ? "Terça"
-                                : day === "Wednesday"
-                                  ? "Quarta"
-                                  : day === "Thursday"
-                                    ? "Quinta"
-                                    : day === "Friday"
-                                      ? "Sexta"
-                                      : day === "Saturday"
-                                        ? "Sábado"
-                                        : "Domingo"}
+                              ? "Terça"
+                              : day === "Wednesday"
+                              ? "Quarta"
+                              : day === "Thursday"
+                              ? "Quinta"
+                              : day === "Friday"
+                              ? "Sexta"
+                              : day === "Saturday"
+                              ? "Sábado"
+                              : "Domingo"}
                           </Text>
 
                           <TouchableOpacity
@@ -1473,7 +1479,7 @@ export default function ProfileScreen() {
           relationTarget.user &&
           Array.isArray(relationTarget.user.coach)
             ? relationTarget.user.coach.map((c) =>
-                typeof c === "string" ? c : c._id,
+                typeof c === "string" ? c : c._id
               )
             : []
         }

@@ -25,7 +25,7 @@ import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
 import * as Notifications from "expo-notifications";
-import  { registerIndieID }  from "native-notify";
+import { registerIndieID } from "native-notify";
 
 interface PopupState {
   visible: boolean;
@@ -60,7 +60,7 @@ export default function LoginScreen() {
     message: string,
     type: "success" | "error" | "confirm" = "success",
     title?: string,
-    onConfirm?: () => void,
+    onConfirm?: () => void
   ) => {
     setPopup({
       visible: true,
@@ -97,7 +97,7 @@ export default function LoginScreen() {
       showPopup(
         err.response?.data?.message || "Erro ao solicitar redefinição",
         "error",
-        "Erro",
+        "Erro"
       );
     } finally {
       setLoading(false);
@@ -124,7 +124,7 @@ export default function LoginScreen() {
       showPopup(
         err.response?.data?.message || "Código inválido ou expirado",
         "error",
-        "Erro",
+        "Erro"
       );
     } finally {
       setLoading(false);
@@ -134,8 +134,8 @@ export default function LoginScreen() {
   const [showTransition, setShowTransition] = React.useState(false);
 
   const handleLogin = async () => {
-
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
 
     if (existingStatus !== "granted") {
       await Notifications.requestPermissionsAsync();
@@ -168,16 +168,16 @@ export default function LoginScreen() {
               showPopup(
                 "Email de verificação reenviado!",
                 "success",
-                "Sucesso",
+                "Sucesso"
               );
             } catch (err: any) {
               showPopup(
                 err.response?.data?.message || "Erro ao reenviar email",
                 "error",
-                "Erro",
+                "Erro"
               );
             }
-          },
+          }
         );
         return;
       }
@@ -186,22 +186,21 @@ export default function LoginScreen() {
         showPopup(
           "Conta desativada. Contacte o suporte.",
           "error",
-          "Conta desativada",
+          "Conta desativada"
         );
         return;
       }
-            const userId = (user._id || "").toString();
-       registerIndieID(userId, 32298, 'FJv06dvuLO2xdBkaBSxXog');
+      const userId = (user._id || "").toString();
+      registerIndieID(userId, 32298, "FJv06dvuLO2xdBkaBSxXog");
       login(user, rememberMe);
       if (rememberMe) {
         await AsyncStorage.setItem("user", JSON.stringify(user));
       }
-
     } catch (err: any) {
       showPopup(
         err.response?.data?.message || "Erro ao solicitar redefinição",
         "error",
-        "Erro",
+        "Erro"
       );
     } finally {
       setLoading(false);
@@ -221,7 +220,7 @@ export default function LoginScreen() {
       showPopup(
         "A senha deve ter pelo menos 6 caracteres",
         "error",
-        "Senha inválida",
+        "Senha inválida"
       );
       return;
     }
@@ -244,7 +243,7 @@ export default function LoginScreen() {
       showPopup(
         "Conta criada com sucesso! Verifique o seu email para confirmar a conta. O email pode estar na pasta de spam.",
         "success",
-        "Conta criada",
+        "Conta criada"
       );
       setIsRegistering(false);
     } catch (err: any) {
@@ -256,7 +255,7 @@ export default function LoginScreen() {
         showPopup(
           "Este email já está registado. Tente login ou outro email.",
           "error",
-          "Email já existe",
+          "Email já existe"
         );
       } else if (
         errorMessage.toLowerCase().includes("telefone") ||
@@ -265,7 +264,7 @@ export default function LoginScreen() {
         showPopup(
           "Este número já está registado. Tente outro.",
           "error",
-          "Telemóvel já existe",
+          "Telemóvel já existe"
         );
       } else {
         showPopup(errorMessage, "error", "Erro no registo");
@@ -330,8 +329,8 @@ export default function LoginScreen() {
                 {resetStep !== "none"
                   ? "Recuperar Senha"
                   : isRegistering
-                    ? "Criar Conta"
-                    : "Bem-vindo"}
+                  ? "Criar Conta"
+                  : "Bem-vindo"}
               </Text>
               <Text style={styles.subtitle}>
                 {resetStep === "email" &&

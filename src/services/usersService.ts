@@ -9,7 +9,7 @@ const API_URL = `${API_BASE_URL}/users`;
 export const userService = {
   async login(
     email: string,
-    password: string,
+    password: string
   ): Promise<{ token: string; user: User }> {
     const res = await api.post(`${API_URL}/login`, { login: email, password });
 
@@ -39,7 +39,7 @@ export const userService = {
   async resetPasswordWithCode(
     email: string,
     code: string,
-    newPassword: string,
+    newPassword: string
   ): Promise<{ message: string }> {
     const res = await api.post(`${API_URL}/reset-password-with-code`, {
       email,

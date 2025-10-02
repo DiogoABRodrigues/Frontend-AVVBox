@@ -85,7 +85,7 @@ export default function MeasurementsScreen() {
         (a) => ({
           id: a._id,
           name: a.name,
-        }),
+        })
       );
 
       setAthletes(athletesData);
@@ -101,26 +101,30 @@ export default function MeasurementsScreen() {
     try {
       if (!selectedAthleteId) return;
 
-      let athleteMeasures =
-        await measuresService.getAtualByUser(selectedAthleteId);
+      let athleteMeasures = await measuresService.getAtualByUser(
+        selectedAthleteId
+      );
       if (athleteMeasures === null) {
         athleteMeasures = emptyMeasures;
       }
 
-      let athleteGoalMeasures =
-        await measuresService.getGoalByUser(selectedAthleteId);
+      let athleteGoalMeasures = await measuresService.getGoalByUser(
+        selectedAthleteId
+      );
       if (athleteGoalMeasures === null) {
         athleteGoalMeasures = emptyMeasures;
       }
 
-      let athleteLastMeasures =
-        await measuresService.getLastByUser(selectedAthleteId);
+      let athleteLastMeasures = await measuresService.getLastByUser(
+        selectedAthleteId
+      );
       if (athleteLastMeasures === null) {
         athleteLastMeasures = emptyMeasures;
       }
 
-      const historyMeasures =
-        await measuresService.getByUser(selectedAthleteId);
+      const historyMeasures = await measuresService.getByUser(
+        selectedAthleteId
+      );
 
       setHistoryDates(historyMeasures);
       // Pode ser usado para mostrar histórico, se necessário
@@ -153,7 +157,7 @@ export default function MeasurementsScreen() {
     ? formatMeasurements(
         selectedAthleteData.currentMeasurements,
         selectedAthleteData.lastMeasurement,
-        selectedAthleteData.goalMeasurement,
+        selectedAthleteData.goalMeasurement
       )
     : [];
 
@@ -163,8 +167,8 @@ export default function MeasurementsScreen() {
       measurement.color === "green"
         ? "#22c55e"
         : measurement.color === "red"
-          ? "#ef4444"
-          : "#6b7280";
+        ? "#ef4444"
+        : "#6b7280";
 
     if (measurement.reachedGoal) {
       return (
@@ -217,7 +221,7 @@ export default function MeasurementsScreen() {
   const latest =
     historyDates.length > 0
       ? historyDates.reduce((latest, curr) =>
-          new Date(curr.date) > new Date(latest.date) ? curr : latest,
+          new Date(curr.date) > new Date(latest.date) ? curr : latest
         )
       : null;
 
@@ -266,7 +270,7 @@ export default function MeasurementsScreen() {
   const filteredHistory = filterHistory();
 
   const historyDatesSorted = [...filteredHistory].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
   // Verificar se há dados válidos para a métrica selecionada
@@ -279,7 +283,7 @@ export default function MeasurementsScreen() {
     new Date(m.date).toLocaleDateString("pt-PT", {
       month: "short",
       day: "numeric",
-    }),
+    })
   );
 
   // Reduzir labels para evitar sobreposição
@@ -313,7 +317,7 @@ export default function MeasurementsScreen() {
       ) {
         res = await measuresService.update(
           selectedAthleteData.goalMeasurement._id,
-          data,
+          data
         );
       } else {
         res = await measuresService.create(data);
@@ -533,8 +537,8 @@ export default function MeasurementsScreen() {
                           m.color === "green"
                             ? "#22c55e"
                             : m.color === "red"
-                              ? "#ef4444"
-                              : "#6b7280",
+                            ? "#ef4444"
+                            : "#6b7280",
                       },
                     ]}
                   >

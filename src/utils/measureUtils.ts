@@ -79,7 +79,9 @@ export const formatMeasurements = (current: any, last: any, goal: any) => {
       deltaLabel = "—";
     } else {
       const sign = roundedDelta! > 0 ? "+" : "";
-      deltaLabel = `${arrow === "up" ? "↑" : arrow === "down" ? "↓" : "—"} ${sign}${roundedDelta}${units[key]}`;
+      deltaLabel = `${
+        arrow === "up" ? "↑" : arrow === "down" ? "↓" : "—"
+      } ${sign}${roundedDelta}${units[key]}`;
     }
 
     return {

@@ -31,7 +31,7 @@ export const fetchAllAllUsers = createAsyncThunk(
   async () => {
     const users = await userService.getAllAll();
     return users;
-  },
+  }
 );
 
 export const fetchMyUsers = createAsyncThunk(
@@ -39,7 +39,7 @@ export const fetchMyUsers = createAsyncThunk(
   async (trainerId: string) => {
     const users = await userService.getMyAthletes(trainerId);
     return users;
-  },
+  }
 );
 
 // Função utilitária para ordenar pelo nome
@@ -70,7 +70,7 @@ const usersSlice = createSlice({
       (state, action: PayloadAction<User[]>) => {
         state.allUsers = sortUsersByName(action.payload);
         state.loading = false;
-      },
+      }
     );
     builder.addCase(fetchAllUsers.rejected, (state, action) => {
       state.loading = false;
@@ -87,7 +87,7 @@ const usersSlice = createSlice({
       (state, action: PayloadAction<User[]>) => {
         state.allAllUsers = sortUsersByName(action.payload);
         state.loading = false;
-      },
+      }
     );
     builder.addCase(fetchAllAllUsers.rejected, (state, action) => {
       state.loading = false;
@@ -104,7 +104,7 @@ const usersSlice = createSlice({
       (state, action: PayloadAction<User[]>) => {
         state.myAthletes = sortUsersByName(action.payload);
         state.loading = false;
-      },
+      }
     );
     builder.addCase(fetchMyUsers.rejected, (state, action) => {
       state.loading = false;
