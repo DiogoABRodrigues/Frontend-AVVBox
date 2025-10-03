@@ -5,7 +5,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Alert,
   ActivityIndicator,
   TextInput,
   Modal,
@@ -199,7 +198,15 @@ export default function TrainingScreen() {
 
       await loadAllTrainings();
     } catch {
-      Alert.alert("Erro", "Não foi possível carregar os dados");
+      Toast.hide();
+                    Toast.show({
+                      topOffset: 10,
+                      type: "error",
+                      text2: "Não foi possível carregar os dados",
+                      position: "top",
+                      visibilityTime: 2500,
+                      autoHide: true,
+                    });
     } finally {
       setLoading(false);
     }
@@ -210,11 +217,15 @@ export default function TrainingScreen() {
       const trainerAvailability = await availabilityService.getByPT(trainerId);
       setAvailability(trainerAvailability);
     } catch {
-      console.error("Failed to load availability for trainer:", user);
-      Alert.alert(
-        "Erro",
-        "Não foi possível carregar a disponibilidade do treinador"
-      );
+      Toast.hide();
+                    Toast.show({
+                      topOffset: 10,
+                      type: "error",
+                      text2: "Não foi possível carregar a disponibilidade do treinador",
+                      position: "top",
+                      visibilityTime: 2500,
+                      autoHide: true,
+                    });
     }
   };
 
@@ -258,7 +269,15 @@ export default function TrainingScreen() {
       setConfirmedFifteenDays(confirmedFifteenDays);
       setConfirmedAll(confirmedAll);
     } catch {
-      Alert.alert("Erro", "Não foi possível carregar os treinos");
+            Toast.hide();
+                    Toast.show({
+                      topOffset: 10,
+                      type: "error",
+                      text2: "Não foi possível carregar os treinos",
+                      position: "top",
+                      visibilityTime: 2500,
+                      autoHide: true,
+                    });
     }
   };
 
@@ -611,6 +630,8 @@ export default function TrainingScreen() {
     try {
       const updatedTraining = {
         date: editingDay,
+        PT: editingTraining.PT._id,
+        athlete: editingTraining.athlete._id,
         hour: editingHour,
         details: editingDetails,
         userId: user._id, // ID do usuário que está fazendo a edição
@@ -637,7 +658,7 @@ export default function TrainingScreen() {
       Toast.show({
         topOffset: 10,
         type: "error",
-        text2: "Erro ao editar treino:" + error,
+        text2: "Erro ao editar treino:" + error.err.message,
         position: "top",
         visibilityTime: 2500,
         autoHide: true,
@@ -995,7 +1016,7 @@ export default function TrainingScreen() {
                                   setPopup((p) => ({ ...p, visible: false })),
                               });
                             }}
-                            style={{ padding: 4 }}
+                            style={{ padding: 4, alignItems: "center", justifyContent: "center" }}
                           >
                             <Ionicons
                               name="information-circle-outline"
@@ -1139,7 +1160,7 @@ export default function TrainingScreen() {
                                   setPopup((p) => ({ ...p, visible: false })),
                               });
                             }}
-                            style={{ padding: 4 }}
+                            style={{ paddingTop: 4}}
                           >
                             <Ionicons
                               name="information-circle-outline"

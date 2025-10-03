@@ -615,6 +615,8 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 24,
     marginBottom: 4,
+    alignItems: "center",
+    justifyContent: "center"
   },
 
   // Melhor hierarquia visual para as ações
