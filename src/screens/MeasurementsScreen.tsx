@@ -454,9 +454,6 @@ export default function MeasurementsScreen() {
       >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Medidas</Text>
-          <TouchableOpacity onPress={async () => await fetchMeasures()}>
-            <Ionicons name="refresh-circle-outline" size={40} color="#1e293b" />
-          </TouchableOpacity>
         </View>
 
         {/* Filtro Row */}

@@ -8,6 +8,7 @@ import {
   Alert,
   ActivityIndicator,
   TextInput,
+  Modal,
 } from "react-native";
 import { ScrollView, RefreshControl } from "react-native-gesture-handler";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -104,6 +105,12 @@ export default function TrainingScreen() {
   const [availability, setAvailability] = useState<Availability | null>(null);
   const [morningSlots, setMorningSlots] = useState<TimeSlot[]>([]);
   const [afternoonSlots, setAfternoonSlots] = useState<TimeSlot[]>([]);
+  const [editingMorningSlots, setEditingMorningSlots] = useState<TimeSlot[]>(
+    []
+  );
+  const [editingAfternoonSlots, setEditingAfternoonSlots] = useState<
+    TimeSlot[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   // Estados separados para os diferentes tipos de treinos
@@ -126,6 +133,13 @@ export default function TrainingScreen() {
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string>("");
 
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingTraining, setEditingTraining] = useState(null);
+
+  const [editingDay, setEditingDay] = useState<string | null>(null);
+  const [editingHour, setEditingHour] = useState<string | null>(null);
+  const [editingDetails, setEditingDetails] = useState<string | null>(null);
+
   const [popup, setPopup] = useState({
     visible: false,
     type: "success" as "success" | "error" | "confirm",
@@ -146,10 +160,20 @@ export default function TrainingScreen() {
   }, [trainer]);
 
   useEffect(() => {
-    if (selectedDay && availability) {
-      updateAvailableHours();
+    if (availability && selectedDay) {
+      updateAvailableHours(selectedDay, setMorningSlots, setAfternoonSlots);
     }
   }, [selectedDay, availability]);
+
+  useEffect(() => {
+    if (availability && editingDay) {
+      updateAvailableHours(
+        editingDay,
+        setEditingMorningSlots,
+        setEditingAfternoonSlots
+      );
+    }
+  }, [editingDay, availability]);
 
   useEffect(() => {
     const fetchAthletes = async () => {
@@ -238,17 +262,22 @@ export default function TrainingScreen() {
     }
   };
 
-  const updateAvailableHours = () => {
-    if (!selectedDay || !availability) return;
+  const updateAvailableHours = (
+    date: string | null,
+    setMorning: React.Dispatch<React.SetStateAction<TimeSlot[]>>,
+    setAfternoon: React.Dispatch<React.SetStateAction<TimeSlot[]>>
+  ) => {
+    console.log("Updating available hours for date:", date);
+    if (!date || !availability) return;
 
-    const dayOfWeek = getDayOfWeek(selectedDay);
+    const dayOfWeek = getDayOfWeek(date);
     const dayAvailability = availability[
       dayOfWeek as keyof Availability
     ] as DayAvailability;
 
     if (!dayAvailability.working) {
-      setMorningSlots([]);
-      setAfternoonSlots([]);
+      setMorning([]);
+      setAfternoon([]);
       return;
     }
 
@@ -259,7 +288,6 @@ export default function TrainingScreen() {
       const startHour = parseInt(interval.start.split(":")[0]);
       const endHour = parseInt(interval.end.split(":")[0]);
 
-      // Gerar todos os slots de 15 em 15 minutos para este intervalo
       for (let hour = startHour; hour < endHour; hour++) {
         for (let minute = 0; minute < 60; minute += 15) {
           const time = `${hour.toString().padStart(2, "0")}:${minute
@@ -276,12 +304,12 @@ export default function TrainingScreen() {
       }
     });
 
-    // Ordenar os slots
+    // ordenar
     morning.sort((a, b) => a.time.localeCompare(b.time));
     afternoon.sort((a, b) => a.time.localeCompare(b.time));
 
-    setMorningSlots(morning);
-    setAfternoonSlots(afternoon);
+    setMorning(morning);
+    setAfternoon(afternoon);
   };
 
   const getDayOfWeek = (dateString: string): string => {
@@ -469,6 +497,39 @@ export default function TrainingScreen() {
     );
   };
 
+  const renderTimeSlotEditing = (item: TimeSlot) => {
+    if (!editingDay) return null;
+
+    if (isPastSlot(editingDay, item.time)) {
+      // Podes retornar null (não mostrar) ou um botão desativado
+      return (
+        <View key={item.time} style={[styles.hourBox, { opacity: 0.3 }]}>
+          <Text style={styles.hourText}>{item.formattedTime}</Text>
+        </View>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        key={item.time}
+        style={[
+          styles.hourBox,
+          editingHour === item.time && styles.hourBoxSelected,
+        ]}
+        onPress={() => setEditingHour(item.time)}
+      >
+        <Text
+          style={[
+            styles.hourText,
+            editingHour === item.time && styles.hourTextSelected,
+          ]}
+        >
+          {item.formattedTime}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -535,7 +596,59 @@ export default function TrainingScreen() {
     });
   };
 
-  const handleEditTraining = (training: Training) => {};
+  const openEditModal = (training) => {
+    setEditingTraining(training);
+    const day = new Date(training.date); // AAAA-MM-DD e remover T00:00:00.000Z
+    const formattedDay = day.toISOString().split("T")[0];
+    setEditingDay(formattedDay); // pré-seleciona o dia
+    setEditingHour(training.hour); // pré-seleciona a hora
+    setEditingDetails(training.details); // pré-preenche detalhes
+    setEditModalVisible(true);
+    console.log("Editing training:", training);
+    console.log("editingDay:", editingDay);
+    console.log("editingHour:", editingHour);
+    console.log("editingDetails:", editingDetails);
+  };
+  // Função para salvar
+  const handleEditTraining = async () => {
+    if (!editingTraining) return;
+
+    try {
+      const updatedTraining = {
+        ...editingTraining,
+        date: editingDay,
+        hour: editingHour,
+        details: editingDetails,
+      };
+      // Aqui fazes a chamada à API de update
+      await trainingService.update(editingTraining._id, updatedTraining);
+      setEditingTraining(null);
+      setEditingDay(null);
+      setEditingHour(null);
+      setEditingDetails("");
+      setEditModalVisible(false);
+      await loadAllTrainings();
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "success",
+        text2: "Treino editado com sucesso.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    } catch (error) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao editar treino:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
+  };
 
   const getTrainingsToShow = () => {
     if (allDays) return confirmedAll;
@@ -652,6 +765,8 @@ export default function TrainingScreen() {
   const isDisabled =
     !selectedHour || (user.role !== "atleta" && !selectedAthleteId);
 
+  const isDisabledEditing = !editingHour || !editingDay;
+
   const onRefresh = async () => {
     setRefreshing(true);
     await loadAllTrainings();
@@ -670,9 +785,6 @@ export default function TrainingScreen() {
     >
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Treino</Text>
-        <TouchableOpacity onPress={async () => await loadAllTrainings()}>
-          <Ionicons name="refresh-circle-outline" size={40} color="#1e293b" />
-        </TouchableOpacity>
       </View>
 
       {/* Switch Principal */}
@@ -691,6 +803,7 @@ export default function TrainingScreen() {
             <>
               {/* Calendar */}
               <Calendar
+                id="mainCalendar"
                 onDayPress={(day) => {
                   if (selectedDay === day.dateString) {
                     // Se já está selecionado, desmarcar
@@ -830,6 +943,7 @@ export default function TrainingScreen() {
                         <TextInput
                           style={styles.detailsInput}
                           placeholder="Plano de treino, objetivos, etc."
+                          placeholderTextColor={"#9ca3af"}
                           multiline
                           numberOfLines={5}
                           value={details || ""}
@@ -972,7 +1086,7 @@ export default function TrainingScreen() {
                         <Text style={styles.confirmedBadge}>Confirmado</Text>
                         <View style={{ flexDirection: "row" }}>
                           <TouchableOpacity
-                            onPress={() => handleEditTraining(training)}
+                            onPress={() => openEditModal(training)}
                             style={styles.editButtonContainer}
                           >
                             <Ionicons
@@ -1048,7 +1162,7 @@ export default function TrainingScreen() {
                           <Text style={styles.pendingBadge}>Pendente</Text>
                           <View style={{ flexDirection: "row" }}>
                             <TouchableOpacity
-                              onPress={() => handleEditTraining(training)}
+                              onPress={() => openEditModal(training)}
                               style={styles.editButtonContainer}
                             >
                               <Ionicons
@@ -1098,6 +1212,123 @@ export default function TrainingScreen() {
         onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
         onClose={() => setPopup((p) => ({ ...p, visible: false }))}
       />
+
+      <Modal visible={editModalVisible} animationType="none" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <ScrollView>
+              <Text style={styles.modalTitle}>Editar Treino</Text>
+
+              {/* Calendar */}
+              <Calendar
+                id="editCalendar"
+                onDayPress={(day) => {
+                  setEditingDay(day.dateString);
+                  setEditingHour(null); // Reset hora ao mudar dia
+                }}
+                markedDates={{
+                  [editingDay]: {
+                    selected: true,
+                    selectedColor: "#2563eb",
+                    selectedTextColor: "#fff",
+                  },
+                }}
+                theme={{
+                  todayTextColor: "#2563eb",
+                  arrowColor: "#2563eb",
+                }}
+                style={styles.calendar}
+              />
+
+              {/* Lista de horários disponíveis */}
+                {/* Horários da Manhã */}
+                {editingMorningSlots.length > 0 && (
+                  <View style={styles.timeSection}>
+                    <Text style={styles.timeSectionHeader}>Manhã</Text>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      nestedScrollEnabled
+                      scrollEnabled={true}
+                      style={styles.timeRow}
+                      onStartShouldSetResponderCapture={() => true}
+                    >
+                      {editingMorningSlots.map(renderTimeSlotEditing)}
+                    </ScrollView>
+                  </View>
+                )}
+
+                {/* Horários da Tarde */}
+                {editingAfternoonSlots.length > 0 && (
+                  <View style={styles.timeSection}>
+                    <Text style={styles.timeSectionHeader}>Tarde</Text>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      style={styles.timeRow}
+                    >
+                      {editingAfternoonSlots.map(renderTimeSlotEditing)}
+                    </ScrollView>
+                  </View>
+                )}
+
+                {editingDay &&
+                  editingMorningSlots.length === 0 &&
+                  editingAfternoonSlots.length === 0 && (
+                    <Text style={[styles.noAvailabilityText]}>
+                      Nenhum horário disponível neste dia
+                    </Text>
+                  )}
+
+                {/* Se for Admin ou PT */}
+                {(user.role === "Admin" || user.role === "PT") && (
+                  <View style={styles.dropdownSection}>
+                    {/* Campo opcional de detalhes do treino */}
+                    <Text style={styles.detailsLabel}>
+                      Detalhes do Treino (opcional)
+                    </Text>
+                    <TextInput
+                      style={styles.detailsInput}
+                      placeholder="Plano de treino, objetivos, etc."
+                      placeholderTextColor={"#9ca3af"}
+                      multiline
+                      numberOfLines={5}
+                      value={editingDetails || ""}
+                      onChangeText={setEditingDetails}
+                    />
+                  </View>
+                )}
+
+              {/* Botões */}
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => {
+                    setEditingTraining(null);
+                    setEditingDay(null);
+                    setEditingHour(null);
+                    setEditingDetails(null);
+                    setEditModalVisible(false);
+                  }}
+                >
+                  <Text>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                      styles.actionButton,
+                      { elevation: 0 },
+                      isDisabledEditing && { opacity: 0.5 }, // deixa opaco quando desativado
+                    ]}
+                    onPress={handleEditTraining}
+                    disabled={isDisabledEditing} // controla clique
+                  >
+                  <Text style={[styles.actionButtonText]}>Guardar Alterações</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }

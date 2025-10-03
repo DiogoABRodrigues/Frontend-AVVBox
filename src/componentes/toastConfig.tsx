@@ -28,7 +28,14 @@ const toastConfig: ToastConfig = {
         </Text>
       )}
       {text2 && (
-        <Text style={{ color: "#D92D20", fontSize: 13, flexWrap: "wrap" }}>
+        <Text
+          style={{
+            color: "#D92D20",
+            fontSize: 13,
+            flexWrap: "wrap",
+            fontWeight: "600",
+          }}
+        >
           {text2}
         </Text>
       )}
@@ -55,7 +62,9 @@ const toastConfig: ToastConfig = {
         </Text>
       )}
       {text2 && (
-        <Text style={{ color: "#067647", flexWrap: "wrap" }}>{text2}</Text>
+        <Text style={{ color: "#067647", flexWrap: "wrap", fontWeight: "600" }}>
+          {text2}
+        </Text>
       )}
     </View>
   ),

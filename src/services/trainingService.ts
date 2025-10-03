@@ -51,4 +51,9 @@ export const trainingService = {
     const res = await api.get(`${API_URL}/next15days/${userId}`);
     return res.data;
   },
+
+  async update(id: string, data: Partial<TrainingRequest>): Promise<Training> {
+    const res = await api.put(`${API_URL}/${id}`, data);
+    return res.data;
+  },
 };

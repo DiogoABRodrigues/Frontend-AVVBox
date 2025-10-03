@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
+    elevation: 3,
     marginBottom: 16,
     overflow: "hidden",
   },
@@ -149,7 +149,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 4,
+    elevation: 1,
   },
 
   // Loading and Error States
@@ -907,5 +907,65 @@ export const styles = StyleSheet.create({
     textAlignVertical: "top", // importante para multiline
     minHeight: 80,
     maxHeight: 300,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 70, // margem em cima/baixo
+  },
+
+  modalContainer: {
+    width: "90%",
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
+    padding: 12,
+    shadowColor: "#ffffffff",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
+  },
+
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#1e293b",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+
+modalButtons: {
+  flexDirection: "row",
+  justifyContent: "center", // centraliza o conjunto
+  alignItems: "center",
+  marginTop: -15,
+  gap: 12, // espaço entre os botões
+  alignSelf: "center", // impede de esticar full width
+},
+
+  cancelButton: {
+    backgroundColor: "#f3f4f6",
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: "center",
+    marginTop: 24,
+    paddingHorizontal: 20,
+  },
+
+  cancelButtonText: {
+    color: "#ffffff",
+    fontWeight: "700",
+    fontSize: 17,
+    letterSpacing: 0.3,
+  },
+
+  noAvailabilityText2: {
+    textAlign: "center",
+    color: "#64748b",
+    fontSize: 16,
+    fontStyle: "italic",
+    elevation: 4,
   },
 });
