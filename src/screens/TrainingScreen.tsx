@@ -267,7 +267,6 @@ export default function TrainingScreen() {
     setMorning: React.Dispatch<React.SetStateAction<TimeSlot[]>>,
     setAfternoon: React.Dispatch<React.SetStateAction<TimeSlot[]>>
   ) => {
-    console.log("Updating available hours for date:", date);
     if (!date || !availability) return;
 
     const dayOfWeek = getDayOfWeek(date);
@@ -604,10 +603,6 @@ export default function TrainingScreen() {
     setEditingHour(training.hour); // pré-seleciona a hora
     setEditingDetails(training.details); // pré-preenche detalhes
     setEditModalVisible(true);
-    console.log("Editing training:", training);
-    console.log("editingDay:", editingDay);
-    console.log("editingHour:", editingHour);
-    console.log("editingDetails:", editingDetails);
   };
   // Função para salvar
   const handleEditTraining = async () => {
@@ -615,10 +610,10 @@ export default function TrainingScreen() {
 
     try {
       const updatedTraining = {
-        ...editingTraining,
         date: editingDay,
         hour: editingHour,
         details: editingDetails,
+        userId: user._id, // ID do usuário que está fazendo a edição
       };
       // Aqui fazes a chamada à API de update
       await trainingService.update(editingTraining._id, updatedTraining);
@@ -1293,7 +1288,7 @@ export default function TrainingScreen() {
                       placeholderTextColor={"#9ca3af"}
                       multiline
                       numberOfLines={5}
-                      value={editingDetails || ""}
+                      value={editingDetails}
                       onChangeText={setEditingDetails}
                     />
                   </View>

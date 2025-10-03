@@ -1078,6 +1078,10 @@ export default function ProfileScreen() {
                       key: "trainingCanceled",
                       label: "Quando um treino é cancelado",
                     },
+                    {
+                      key: "trainingUpdated",
+                      label: "Quando um treino é alterado",
+                    },
                   ].map((notification) => (
                     <TouchableOpacity
                       key={notification.key}

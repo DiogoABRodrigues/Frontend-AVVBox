@@ -10,4 +10,5 @@ export interface Settings {
   trainingApproved?: boolean;
   trainingRejected?: boolean;
   trainingCanceled?: boolean;
+  trainingUpdated?: boolean;
 }

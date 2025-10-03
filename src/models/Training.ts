@@ -25,4 +25,5 @@ export interface TrainingRequest {
   PT?: string; // ID do PT
   athlete?: string; // ID do atleta
   proposedBy?: "PT" | "Athlete" | "Admin";
+  userId?: string; // ID do usuário que está fazendo a solicitação
 }
