@@ -5,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { styles } from "../componentes/styles/EditTrainingModal.styles";
@@ -47,9 +48,9 @@ export const EditTrainingModal: React.FC<EditTrainingModalProps> = ({
   handleEditTraining,
   renderTimeSlotEditing,
 }) => {
-  if (!visible) return null; // não renderiza nada se não estiver visível
 
   return (
+    <Modal visible={visible} transparent animationType="none">
     <View style={styles.modalOverlay}>
       <View style={styles.modalContainer}>
         <ScrollView>
@@ -158,5 +159,6 @@ export const EditTrainingModal: React.FC<EditTrainingModalProps> = ({
         </ScrollView>
       </View>
     </View>
+    </Modal>
   );
 };

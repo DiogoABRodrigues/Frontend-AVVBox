@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   TextInput,
-  Modal,
 } from "react-native";
 import { ScrollView, RefreshControl } from "react-native-gesture-handler";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -23,7 +22,7 @@ import Popup from "../componentes/Popup";
 import { Ionicons } from "@expo/vector-icons";
 import ExerciseScreen from "./ExerciseScreen";
 import Toast from "react-native-toast-message";
-
+import { EditTrainingModal } from "../componentes/EditTrainingModal";
 interface TimeSlot {
   time: string;
   formattedTime: string;
@@ -132,12 +131,13 @@ export default function TrainingScreen() {
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string>("");
 
-  const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingTraining, setEditingTraining] = useState(null);
 
   const [editingDay, setEditingDay] = useState<string | null>(null);
   const [editingHour, setEditingHour] = useState<string | null>(null);
   const [editingDetails, setEditingDetails] = useState<string | null>(null);
+
+  const [showModal, setShowModal] = useState(false);
 
   const [popup, setPopup] = useState({
     visible: false,
@@ -621,7 +621,6 @@ export default function TrainingScreen() {
     setEditingDay(formattedDay); // pré-seleciona o dia
     setEditingHour(training.hour); // pré-seleciona a hora
     setEditingDetails(training.details); // pré-preenche detalhes
-    setEditModalVisible(true);
   };
   // Função para salvar
   const handleEditTraining = async () => {
@@ -642,7 +641,7 @@ export default function TrainingScreen() {
       setEditingDay(null);
       setEditingHour(null);
       setEditingDetails("");
-      setEditModalVisible(false);
+      setShowModal(false);
       await loadAllTrainings();
       Toast.hide();
       Toast.show({
@@ -1102,7 +1101,10 @@ export default function TrainingScreen() {
                         <Text style={styles.confirmedBadge}>Confirmado</Text>
                         <View style={{ flexDirection: "row" }}>
                           <TouchableOpacity
-                            onPress={() => openEditModal(training)}
+                            onPress={() => {
+                              openEditModal(training);
+                              setShowModal(true);
+                            }}
                             style={styles.editButtonContainer}
                           >
                             <Ionicons
@@ -1178,7 +1180,10 @@ export default function TrainingScreen() {
                           <Text style={styles.pendingBadge}>Pendente</Text>
                           <View style={{ flexDirection: "row" }}>
                             <TouchableOpacity
-                              onPress={() => openEditModal(training)}
+                              onPress={() => {
+                              openEditModal(training);
+                              setShowModal(true);
+                            }}
                               style={styles.editButtonContainer}
                             >
                               <Ionicons
@@ -1229,122 +1234,22 @@ export default function TrainingScreen() {
         onClose={() => setPopup((p) => ({ ...p, visible: false }))}
       />
 
-      <Modal visible={editModalVisible} animationType="none" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <ScrollView>
-              <Text style={styles.modalTitle}>Editar Treino</Text>
-
-              {/* Calendar */}
-              <Calendar
-                id="editCalendar"
-                onDayPress={(day) => {
-                  setEditingDay(day.dateString);
-                  setEditingHour(null); // Reset hora ao mudar dia
-                }}
-                markedDates={{
-                  [editingDay]: {
-                    selected: true,
-                    selectedColor: "#2563eb",
-                    selectedTextColor: "#fff",
-                  },
-                }}
-                theme={{
-                  todayTextColor: "#2563eb",
-                  arrowColor: "#2563eb",
-                }}
-                style={styles.calendar}
-              />
-
-              {/* Lista de horários disponíveis */}
-                {/* Horários da Manhã */}
-                {editingMorningSlots.length > 0 && (
-                  <View style={styles.timeSection}>
-                    <Text style={styles.timeSectionHeader}>Manhã</Text>
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      nestedScrollEnabled
-                      scrollEnabled={true}
-                      style={styles.timeRow}
-                      onStartShouldSetResponderCapture={() => true}
-                    >
-                      {editingMorningSlots.map(renderTimeSlotEditing)}
-                    </ScrollView>
-                  </View>
-                )}
-
-                {/* Horários da Tarde */}
-                {editingAfternoonSlots.length > 0 && (
-                  <View style={styles.timeSection}>
-                    <Text style={styles.timeSectionHeader}>Tarde</Text>
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      style={styles.timeRow}
-                    >
-                      {editingAfternoonSlots.map(renderTimeSlotEditing)}
-                    </ScrollView>
-                  </View>
-                )}
-
-                {editingDay &&
-                  editingMorningSlots.length === 0 &&
-                  editingAfternoonSlots.length === 0 && (
-                    <Text style={[styles.noAvailabilityText]}>
-                      Nenhum horário disponível neste dia
-                    </Text>
-                  )}
-
-                {/* Se for Admin ou PT */}
-                {(user.role === "Admin" || user.role === "PT") && (
-                  <View style={styles.dropdownSection}>
-                    {/* Campo opcional de detalhes do treino */}
-                    <Text style={styles.detailsLabel}>
-                      Detalhes do Treino (opcional)
-                    </Text>
-                    <TextInput
-                      style={styles.detailsInput}
-                      placeholder="Plano de treino, objetivos, etc."
-                      placeholderTextColor={"#9ca3af"}
-                      multiline
-                      numberOfLines={5}
-                      value={editingDetails}
-                      onChangeText={setEditingDetails}
-                    />
-                  </View>
-                )}
-
-              {/* Botões */}
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={() => {
-                    setEditingTraining(null);
-                    setEditingDay(null);
-                    setEditingHour(null);
-                    setEditingDetails(null);
-                    setEditModalVisible(false);
-                  }}
-                >
-                  <Text>Cancelar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                      styles.actionButton,
-                      { elevation: 0 },
-                      isDisabledEditing && { opacity: 0.5 }, // deixa opaco quando desativado
-                    ]}
-                    onPress={handleEditTraining}
-                    disabled={isDisabledEditing} // controla clique
-                  >
-                  <Text style={[styles.actionButtonText]}>Guardar Alterações</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
+      <EditTrainingModal
+          visible={showModal}
+          editingDay={editingDay}
+          editingMorningSlots={editingMorningSlots}
+          editingAfternoonSlots={editingAfternoonSlots}
+          editingDetails={editingDetails}
+          userRole={user.role}
+          isDisabledEditing={isDisabledEditing}
+          setEditingDay={setEditingDay}
+          setEditingHour={setEditingHour}
+          setEditingDetails={setEditingDetails}
+          setEditingTraining={setEditingTraining}
+          onClose={() => setShowModal(false)}
+          handleEditTraining={handleEditTraining}
+          renderTimeSlotEditing={renderTimeSlotEditing}
+        />
     </ScrollView>
   );
 }
