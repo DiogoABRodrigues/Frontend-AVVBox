@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "assets/avvb2.jpg",
+      "image": "assets/avvb2.png",
       "resizeMode": "contain",
       "backgroundColor": "#191818"
     },
@@ -22,7 +22,6 @@
       },
       "edgeToEdgeEnabled": false,
       "package": "com.anonymous.AVVBox",
-      "useNextNotificationsApi": true,
       "googleServicesFile": "./android/app/google-services.json"
     },
     "web": {
