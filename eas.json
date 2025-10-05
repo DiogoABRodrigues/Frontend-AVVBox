@@ -14,10 +14,17 @@
     "production": {
       "autoIncrement": true,
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "env": {
+          "GOOGLE_SERVICES_JSON": "@GOOGLE_SERVICES_JSON"
+        },
+        "prebuildCommand": "node -e \"require('fs').writeFileSync('android/app/google-services.json', process.env.GOOGLE_SERVICES_JSON)\""
       }
-    }
-  },
+    },
+  "hooks": {
+    "pre-build": "node scripts/create-google-services.js"
+  }
+},
   "submit": {
     "production": {}
   }
