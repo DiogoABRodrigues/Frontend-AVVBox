@@ -2,6 +2,7 @@
   "name": "avvbox",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "prebuild": "node scripts/create-google-services.js",
     "start": "expo start",
