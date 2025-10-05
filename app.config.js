@@ -41,6 +41,7 @@ export default () => {
           backgroundColor: '#191818',
         },
         edgeToEdgeEnabled: false,
+        googleServicesFile: process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
         package: 'com.anonymous.AVVBox',
       },
       web: {
