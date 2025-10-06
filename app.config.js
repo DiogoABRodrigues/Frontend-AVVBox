@@ -22,7 +22,7 @@ export default () => {
   return {
     expo: {
       name: 'AVVBox',
-      slug: 'AVVBox',
+      slug: 'AVVBox-second',
       version: '1.0.0',
       orientation: 'portrait',
       icon: 'assets/avvb.png',
@@ -55,7 +55,7 @@ export default () => {
       ],
       extra: {
         eas: {
-          projectId: '243d43fd-5861-4710-bc1c-3ee9be00b58f',
+          projectId: '042b94ba-8aa8-4747-9209-1464f5c2a095',
         },
       },
     },

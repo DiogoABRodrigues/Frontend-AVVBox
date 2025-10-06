@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "eas-build-pre-install": "node scripts/create-google-services.js",
     "prebuild": "node scripts/create-google-services.js",
     "start": "expo start",
     "android": "expo run:android",
