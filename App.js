@@ -12,12 +12,17 @@ import { StatusBar } from "react-native";
 import registerNNPushToken from "native-notify";
 import Toast from "react-native-toast-message";
 import toastConfig from "./src/componentes/toastConfig";
+import * as SplashScreen from 'expo-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
 function AppNavigator() {
-  const { user } = useAuth();
+  const { user, loadingUser } = useAuth();
 
+  if (loadingUser) {
+    return null; // ou um ActivityIndicator
+  }
+  
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
@@ -33,6 +38,7 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
     async function loadFonts() {
+      await SplashScreen.preventAutoHideAsync();
       setFontsLoaded(true);
       registerNNPushToken(32298, "FJv06dvuLO2xdBkaBSxXog");
     }

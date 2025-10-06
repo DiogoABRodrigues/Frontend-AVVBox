@@ -50,7 +50,7 @@ export default function NotificationsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [recipientOption, setRecipientOption] = useState<
     "all" | "my" | "individual"
-  >("all");
+  >("my");
 
   const { notifications, refreshNotifications, markAsRead } =
     useNotifications();

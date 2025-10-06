@@ -15,13 +15,11 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
-import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userService } from "../services/usersService";
 import { styles } from "./styles/LoginScreen.styles";
 import Popup from "../componentes/Popup";
 import avvbLogo from "../../assets/avvb.png";
-import LoginTransition from "./LoginTransition";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
 import * as Notifications from "expo-notifications";
@@ -55,7 +53,6 @@ export default function LoginScreen() {
   });
 
   const { login } = useAuth();
-  const navigation = useNavigation<any>();
 
   const showPopup = (
     message: string,
@@ -171,8 +168,6 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
-
-  const [showTransition, setShowTransition] = React.useState(false);
 
   const handleLogin = async () => {
     const { status: existingStatus } =
@@ -399,15 +394,6 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Transição de login */}
-      {showTransition && (
-        <LoginTransition
-          onFinish={() => {
-            console.log("Transição terminou - navegando");
-            setShowTransition(false);
-            navigation.reset({ index: 0, routes: [{ name: "Athlete" }] });
-          }}
-        />
-      )}
       <LinearGradient
         colors={["#1a1a1a", "#2d2d2d", "#1a1a1a"]}
         style={styles.gradient}
