@@ -3,22 +3,22 @@ import path from "path";
 
 const googleServicesPath = path.join("android/app/google-services.json");
 
-const rawValue = process.env.GOOGLE_SERVICES_JSON;
+const filePath = process.env.GOOGLE_SERVICES_JSON;
 
-if (!rawValue) {
+if (!filePath) {
   console.error("⚠️ Variável GOOGLE_SERVICES_JSON não definida!");
   process.exit(1);
 }
 
 try {
-  // Se o valor for um JSON válido (EAS envia o ficheiro como texto completo)
-  const json = JSON.parse(rawValue);
+  // Lê o ficheiro temporário fornecido pelo EAS
+  const rawContent = fs.readFileSync(filePath, "utf-8");
 
   fs.mkdirSync(path.dirname(googleServicesPath), { recursive: true });
-  fs.writeFileSync(googleServicesPath, JSON.stringify(json, null, 2));
+  fs.writeFileSync(googleServicesPath, rawContent);
 
   console.log("✅ google-services.json criado com sucesso!");
-} catch {
-  console.error("❌ Erro ao analisar GOOGLE_SERVICES_JSON. Verifica se o valor é um JSON válido.");
+} catch (e) {
+  console.error("❌ Erro ao ler/escrever google-services.json:", e);
   process.exit(1);
 }
