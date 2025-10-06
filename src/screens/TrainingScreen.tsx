@@ -303,24 +303,30 @@ export default function TrainingScreen() {
     const afternoon: TimeSlot[] = [];
 
     dayAvailability.intervals.forEach((interval) => {
-      const startHour = parseInt(interval.start.split(":")[0]);
-      const endHour = parseInt(interval.end.split(":")[0]);
+    const [startHour, startMinute] = interval.start.split(":").map(Number);
+    const [endHour, endMinute] = interval.end.split(":").map(Number);
 
-      for (let hour = startHour; hour < endHour; hour++) {
-        for (let minute = 0; minute < 60; minute += 15) {
-          const time = `${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`;
-          const slot = { time, formattedTime: time };
+    for (let hour = startHour; hour <= endHour; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        // Ignorar minutos antes do início (para a primeira hora)
+        if (hour === startHour && minute < startMinute) continue;
+        // Parar quando ultrapassar o fim (na última hora)
+        if (hour === endHour && minute > endMinute) break;
 
-          if (hour < 13) {
-            morning.push(slot);
-          } else {
-            afternoon.push(slot);
-          }
+        const time = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
+
+        const slot = { time, formattedTime: time };
+
+        if (hour <= 13) {
+          morning.push(slot);
+        } else {
+          afternoon.push(slot);
         }
       }
-    });
+    }
+  });
 
     // ordenar
     morning.sort((a, b) => a.time.localeCompare(b.time));
