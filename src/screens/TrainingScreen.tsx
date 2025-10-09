@@ -138,7 +138,7 @@ export default function TrainingScreen() {
   const [editingDetails, setEditingDetails] = useState<string | null>(null);
 
   const [expandedTraining, setExpandedTraining] = useState<string | null>(null);
-  
+
   const [showModal, setShowModal] = useState(false);
 
   const [popup, setPopup] = useState({
@@ -201,14 +201,14 @@ export default function TrainingScreen() {
       await loadAllTrainings();
     } catch {
       Toast.hide();
-                    Toast.show({
-                      topOffset: 10,
-                      type: "error",
-                      text2: "Não foi possível carregar os dados",
-                      position: "top",
-                      visibilityTime: 2500,
-                      autoHide: true,
-                    });
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível carregar os dados",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -220,14 +220,14 @@ export default function TrainingScreen() {
       setAvailability(trainerAvailability);
     } catch {
       Toast.hide();
-                    Toast.show({
-                      topOffset: 10,
-                      type: "error",
-                      text2: "Não foi possível carregar a disponibilidade do treinador",
-                      position: "top",
-                      visibilityTime: 2500,
-                      autoHide: true,
-                    });
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível carregar a disponibilidade do treinador",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -271,15 +271,15 @@ export default function TrainingScreen() {
       setConfirmedFifteenDays(confirmedFifteenDays);
       setConfirmedAll(confirmedAll);
     } catch {
-            Toast.hide();
-                    Toast.show({
-                      topOffset: 10,
-                      type: "error",
-                      text2: "Não foi possível carregar os treinos",
-                      position: "top",
-                      visibilityTime: 2500,
-                      autoHide: true,
-                    });
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Não foi possível carregar os treinos",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -305,30 +305,30 @@ export default function TrainingScreen() {
     const afternoon: TimeSlot[] = [];
 
     dayAvailability.intervals.forEach((interval) => {
-    const [startHour, startMinute] = interval.start.split(":").map(Number);
-    const [endHour, endMinute] = interval.end.split(":").map(Number);
+      const [startHour, startMinute] = interval.start.split(":").map(Number);
+      const [endHour, endMinute] = interval.end.split(":").map(Number);
 
-    for (let hour = startHour; hour <= endHour; hour++) {
-      for (let minute = 0; minute < 60; minute += 15) {
-        // Ignorar minutos antes do início (para a primeira hora)
-        if (hour === startHour && minute < startMinute) continue;
-        // Parar quando ultrapassar o fim (na última hora)
-        if (hour === endHour && minute > endMinute) break;
+      for (let hour = startHour; hour <= endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += 15) {
+          // Ignorar minutos antes do início (para a primeira hora)
+          if (hour === startHour && minute < startMinute) continue;
+          // Parar quando ultrapassar o fim (na última hora)
+          if (hour === endHour && minute > endMinute) break;
 
-        const time = `${hour.toString().padStart(2, "0")}:${minute
-          .toString()
-          .padStart(2, "0")}`;
+          const time = `${hour.toString().padStart(2, "0")}:${minute
+            .toString()
+            .padStart(2, "0")}`;
 
-        const slot = { time, formattedTime: time };
+          const slot = { time, formattedTime: time };
 
-        if (hour <= 13) {
-          morning.push(slot);
-        } else {
-          afternoon.push(slot);
+          if (hour <= 13) {
+            morning.push(slot);
+          } else {
+            afternoon.push(slot);
+          }
         }
       }
-    }
-  });
+    });
 
     // ordenar
     morning.sort((a, b) => a.time.localeCompare(b.time));
@@ -783,7 +783,6 @@ export default function TrainingScreen() {
     </View>
   );
 
-  // i para ver details
   //opções de editar treino
   const isDisabled =
     !selectedHour || (user.role !== "atleta" && !selectedAthleteId);
@@ -1019,17 +1018,23 @@ export default function TrainingScreen() {
                         <TouchableOpacity
                           onPress={() => {
                             setExpandedTraining(
-                              expandedTraining === training._id ? null : training._id
+                              expandedTraining === training._id
+                                ? null
+                                : training._id
                             );
                           }}
-                          style={{ 
-                            flexDirection: "row", 
-                            alignItems: "center", 
-                            marginTop: 8,
-                            marginBottom: 12 
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
                           }}
                         >
-                          <Text style={{ color: "#313131ff", fontSize: 14, marginRight: 4 }}>
+                          <Text
+                            style={{
+                              color: "#313131ff",
+                              fontSize: 14,
+                              marginRight: 4,
+                            }}
+                          >
                             {expandedTraining === training._id
                               ? "Ocultar detalhes do treino"
                               : "Ver detalhes do treino"}
@@ -1046,16 +1051,20 @@ export default function TrainingScreen() {
                         </TouchableOpacity>
 
                         {expandedTraining === training._id && (
-                          <View style={{ 
-                            backgroundColor: "#f8fafc", 
-                            padding: 12, 
-                            borderRadius: 8,
-                            marginBottom: 12 
-                          }}>
-                            <Text style={{ 
-                              color: "#475569", 
-                              fontSize: 14, 
-                            }}>
+                          <View
+                            style={{
+                              backgroundColor: "#f8fafc",
+                              padding: 12,
+                              borderRadius: 8,
+                              marginTop: 4,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "#475569",
+                                fontSize: 14,
+                              }}
+                            >
                               {training.details || "Sem detalhes adicionais"}
                             </Text>
                           </View>
@@ -1088,207 +1097,227 @@ export default function TrainingScreen() {
               )}
               {/* SECÇÃO 2: Próximos Treinos Confirmados */}
               <View style={styles.sectionHeader}>
-  <Text style={styles.sectionTitle}>
-    Próximos Treinos Confirmados
-  </Text>
-  <DaysSwitch />
-</View>
+                <Text style={styles.sectionTitle}>
+                  Próximos Treinos Confirmados
+                </Text>
+                <DaysSwitch />
+              </View>
 
-<View style={styles.confirmedContainer}>
-  {getTrainingsToShow().length > 0 ? (
-    getTrainingsToShow().map((training) => (
-      <View key={training._id} style={styles.confirmedCard}>
-        <Text style={styles.trainingText}>
-          {formatDate(training.date, training.hour)}
-          {"\n"}
-          {user.role === "atleta"
-            ? training.PT.name
-            : training.athlete.name}
-        </Text>
+              <View style={styles.confirmedContainer}>
+                {getTrainingsToShow().length > 0 ? (
+                  getTrainingsToShow().map((training) => (
+                    <View key={training._id} style={styles.confirmedCard}>
+                      <Text style={styles.trainingText}>
+                        {formatDate(training.date, training.hour)}
+                        {"\n"}
+                        {user.role === "atleta"
+                          ? training.PT.name
+                          : training.athlete.name}
+                      </Text>
 
-        <TouchableOpacity
-          onPress={() => {
-            setExpandedTraining(
-              expandedTraining === training._id ? null : training._id
-            );
-          }}
-          style={{ 
-            flexDirection: "row", 
-            alignItems: "center", 
-            marginTop: 8,
-            marginBottom: 12 
-          }}
-        >
-          <Text style={{ color: "#313131ff", fontSize: 14, marginRight: 4 }}>
-            {expandedTraining === training._id
-              ? "Ocultar detalhes do treino"
-              : "Ver detalhes do treino"}
-          </Text>
-          <Ionicons
-            name={
-              expandedTraining === training._id
-                ? "chevron-up-outline"
-                : "chevron-down-outline"
-            }
-            size={18}
-            color="#313131ff"
-          />
-        </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setExpandedTraining(
+                            expandedTraining === training._id
+                              ? null
+                              : training._id
+                          );
+                        }}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: "#313131ff",
+                            fontSize: 14,
+                            marginRight: 4,
+                          }}
+                        >
+                          {expandedTraining === training._id
+                            ? "Ocultar detalhes do treino"
+                            : "Ver detalhes do treino"}
+                        </Text>
+                        <Ionicons
+                          name={
+                            expandedTraining === training._id
+                              ? "chevron-up-outline"
+                              : "chevron-down-outline"
+                          }
+                          size={18}
+                          color="#313131ff"
+                        />
+                      </TouchableOpacity>
 
-        {expandedTraining === training._id && (
-          <View style={{ 
-            backgroundColor: "#f8fafc", 
-            padding: 12, 
-            borderRadius: 8,
-            marginBottom: 12 
-          }}>
-            <Text style={{ 
-              color: "#475569", 
-              fontSize: 14, 
-              lineHeight: 22 
-            }}>
-              {training.details || "Sem detalhes adicionais"}
-            </Text>
-          </View>
-        )}
+                      {expandedTraining === training._id && (
+                        <View
+                          style={{
+                            backgroundColor: "#f8fafc",
+                            padding: 12,
+                            borderRadius: 8,
+                            marginTop: 4,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "#475569",
+                              fontSize: 14,
+                              lineHeight: 22,
+                            }}
+                          >
+                            {training.details || "Sem detalhes adicionais"}
+                          </Text>
+                        </View>
+                      )}
 
-        <View style={styles.confirmedCardFooter}>
-          <Text style={styles.confirmedBadge}>Confirmado</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={() => {
-                openEditModal(training);
-                setShowModal(true);
-              }}
-              style={styles.editButtonContainer}
-            >
-              <Ionicons
-                name="create-outline"
-                size={18}
-                color="#1e293b"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleDeleteTraining(training)}
-              style={styles.deleteButtonContainer}
-            >
-              <Ionicons
-                name="trash-outline"
-                size={18}
-                color="#ef4444"
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    ))
-  ) : (
-    <Text style={styles.emptyStateText}>
-      {showFifteenDays
-        ? "Não existem treinos para os próximos 15 dias."
-        : allDays
-        ? "Não existem treinos marcados."
-        : "Não existem treinos para os próximos 7 dias."}
-    </Text>
-  )}
-</View>
+                      <View style={styles.confirmedCardFooter}>
+                        <Text style={styles.confirmedBadge}>Confirmado</Text>
+                        <View style={{ flexDirection: "row" }}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              openEditModal(training);
+                              setShowModal(true);
+                            }}
+                            style={styles.editButtonContainer}
+                          >
+                            <Ionicons
+                              name="create-outline"
+                              size={18}
+                              color="#1e293b"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleDeleteTraining(training)}
+                            style={styles.deleteButtonContainer}
+                          >
+                            <Ionicons
+                              name="trash-outline"
+                              size={18}
+                              color="#ef4444"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  ))
+                ) : (
+                  <Text style={styles.emptyStateText}>
+                    {showFifteenDays
+                      ? "Não existem treinos para os próximos 15 dias."
+                      : allDays
+                      ? "Não existem treinos marcados."
+                      : "Não existem treinos para os próximos 7 dias."}
+                  </Text>
+                )}
+              </View>
 
               {/* SECÇÃO 3: À Espera de Confirmação */}
-{pendingOtherPerson.length > 0 && (
-  <>
-    <Text style={styles.sectionTitle}>
-      À Espera de Confirmação
-    </Text>
-    <View style={styles.pendingContainer}>
-      {pendingOtherPerson.map((training) => (
-        <View key={training._id} style={styles.pendingCard}>
-          <Text style={styles.trainingText}>
-            {formatDate(training.date, training.hour)}
-            {"\n"}
-            {user.role === "atleta"
-              ? training.PT.name
-              : training.athlete.name}
-          </Text>
+              {pendingOtherPerson.length > 0 && (
+                <>
+                  <Text style={styles.sectionTitle}>
+                    À Espera de Confirmação
+                  </Text>
+                  <View style={styles.pendingContainer}>
+                    {pendingOtherPerson.map((training) => (
+                      <View key={training._id} style={styles.pendingCard}>
+                        <Text style={styles.trainingText}>
+                          {formatDate(training.date, training.hour)}
+                          {"\n"}
+                          {user.role === "atleta"
+                            ? training.PT.name
+                            : training.athlete.name}
+                        </Text>
 
-          <TouchableOpacity
-            onPress={() => {
-              setExpandedTraining(
-                expandedTraining === training._id ? null : training._id
-              );
-            }}
-            style={{ 
-              flexDirection: "row", 
-              alignItems: "center", 
-              marginTop: 8,
-              marginBottom: 12 
-            }}
-          >
-            <Text style={{ color: "#313131ff", fontSize: 14, marginRight: 4 }}>
-              {expandedTraining === training._id
-                ? "Ocultar detalhes do treino"
-                : "Ver detalhes do treino"}
-            </Text>
-            <Ionicons
-              name={
-                expandedTraining === training._id
-                  ? "chevron-up-outline"
-                  : "chevron-down-outline"
-              }
-              size={18}
-              color="#313131ff"
-            />
-          </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setExpandedTraining(
+                              expandedTraining === training._id
+                                ? null
+                                : training._id
+                            );
+                          }}
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "#313131ff",
+                              fontSize: 14,
+                              marginRight: 4,
+                            }}
+                          >
+                            {expandedTraining === training._id
+                              ? "Ocultar detalhes do treino"
+                              : "Ver detalhes do treino"}
+                          </Text>
+                          <Ionicons
+                            name={
+                              expandedTraining === training._id
+                                ? "chevron-up-outline"
+                                : "chevron-down-outline"
+                            }
+                            size={18}
+                            color="#313131ff"
+                          />
+                        </TouchableOpacity>
 
-          {expandedTraining === training._id && (
-            <View style={{ 
-              backgroundColor: "#f8fafc", 
-              padding: 12, 
-              borderRadius: 8,
-              marginBottom: 12 
-            }}>
-              <Text style={{ 
-                color: "#475569", 
-                fontSize: 14, 
-                lineHeight: 22 
-              }}>
-                {training.details || "Sem detalhes adicionais"}
-              </Text>
-            </View>
-          )}
+                        {expandedTraining === training._id && (
+                          <View
+                            style={{
+                              backgroundColor: "#f8fafc",
+                              padding: 12,
+                              borderRadius: 8,
+                              marginTop: 4,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "#475569",
+                                fontSize: 14,
+                                lineHeight: 22,
+                              }}
+                            >
+                              {training.details || "Sem detalhes adicionais"}
+                            </Text>
+                          </View>
+                        )}
 
-          <View style={styles.confirmedCardFooter}>
-            <Text style={styles.pendingBadge}>Pendente</Text>
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity
-                onPress={() => {
-                  openEditModal(training);
-                  setShowModal(true);
-                }}
-                style={styles.editButtonContainer}
-              >
-                <Ionicons
-                  name="create-outline"
-                  size={18}
-                  color="#1e293b"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleDeleteTraining(training)}
-                style={styles.deleteButtonContainer}
-              >
-                <Ionicons
-                  name="trash-outline"
-                  size={18}
-                  color="#ef4444"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      ))}
-    </View>
-  </>
-)}
+                        <View style={styles.confirmedCardFooter}>
+                          <Text style={styles.pendingBadge}>Pendente</Text>
+                          <View style={{ flexDirection: "row" }}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                openEditModal(training);
+                                setShowModal(true);
+                              }}
+                              style={styles.editButtonContainer}
+                            >
+                              <Ionicons
+                                name="create-outline"
+                                size={18}
+                                color="#1e293b"
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => handleDeleteTraining(training)}
+                              style={styles.deleteButtonContainer}
+                            >
+                              <Ionicons
+                                name="trash-outline"
+                                size={18}
+                                color="#ef4444"
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </>
+              )}
             </>
           </>
         </View>
@@ -1315,21 +1344,21 @@ export default function TrainingScreen() {
       />
 
       <EditTrainingModal
-          visible={showModal}
-          editingDay={editingDay}
-          editingMorningSlots={editingMorningSlots}
-          editingAfternoonSlots={editingAfternoonSlots}
-          editingDetails={editingDetails}
-          userRole={user.role}
-          isDisabledEditing={isDisabledEditing}
-          setEditingDay={setEditingDay}
-          setEditingHour={setEditingHour}
-          setEditingDetails={setEditingDetails}
-          setEditingTraining={setEditingTraining}
-          onClose={() => setShowModal(false)}
-          handleEditTraining={handleEditTraining}
-          renderTimeSlotEditing={renderTimeSlotEditing}
-        />
+        visible={showModal}
+        editingDay={editingDay}
+        editingMorningSlots={editingMorningSlots}
+        editingAfternoonSlots={editingAfternoonSlots}
+        editingDetails={editingDetails}
+        userRole={user.role}
+        isDisabledEditing={isDisabledEditing}
+        setEditingDay={setEditingDay}
+        setEditingHour={setEditingHour}
+        setEditingDetails={setEditingDetails}
+        setEditingTraining={setEditingTraining}
+        onClose={() => setShowModal(false)}
+        handleEditTraining={handleEditTraining}
+        renderTimeSlotEditing={renderTimeSlotEditing}
+      />
     </ScrollView>
   );
 }

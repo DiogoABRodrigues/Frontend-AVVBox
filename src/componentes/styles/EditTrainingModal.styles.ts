@@ -616,7 +616,7 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 4,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 
   // Melhor hierarquia visual para as ações
@@ -938,14 +938,14 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-modalButtons: {
-  flexDirection: "row",
-  justifyContent: "center", // centraliza o conjunto
-  alignItems: "center",
-  marginTop: -15,
-  gap: 12, // espaço entre os botões
-  alignSelf: "center", // impede de esticar full width
-},
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "center", // centraliza o conjunto
+    alignItems: "center",
+    marginTop: -15,
+    gap: 12, // espaço entre os botões
+    alignSelf: "center", // impede de esticar full width
+  },
 
   cancelButton: {
     backgroundColor: "#f3f4f6",

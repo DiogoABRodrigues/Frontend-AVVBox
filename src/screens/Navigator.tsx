@@ -27,8 +27,8 @@ export default function AthleteTabs() {
         return "notifications-outline";
       case "Medidas":
         return "scale-outline";
-      case "Perfil":
-        return "person-outline";
+      case "Definições":
+        return "settings-outline";
       default:
         return "home-outline";
     }

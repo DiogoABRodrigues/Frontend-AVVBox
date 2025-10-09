@@ -9,12 +9,51 @@ import LoginScreen from "./src/screens/LoginScreen";
 import { NotificationsProvider } from "./src/context/NotificationsContext";
 import { Provider as PaperProvider } from "react-native-paper";
 import { StatusBar } from "react-native";
-import registerNNPushToken from "native-notify";
+import registerNNPushToken, { NativeNotify } from "native-notify";
 import Toast from "react-native-toast-message";
 import toastConfig from "./src/componentes/toastConfig";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
+
+const setupDataNotifications = () => {
+  NativeNotify.setDataNotificationHandler(async (data) => {
+    console.log("📱 Notificação de dados recebida:", data);
+
+    try {
+      // 1. Salvar no storage local
+      const notificationKey = `msg_${Date.now()}`;
+      const notificationData = {
+        ...data,
+        id: data.message_id || notificationKey,
+        received_at: new Date().toISOString(),
+        read: false,
+      };
+
+      await AsyncStorage.setItem(
+        notificationKey,
+        JSON.stringify(notificationData)
+      );
+      console.log("💾 Notificação salva localmente:", notificationKey);
+
+      // 2. Criar notificação local com ID único
+      const notificationId = data.message_id
+        ? parseInt(data.message_id.replace(/\D/g, "").slice(-9))
+        : Date.now();
+
+      await NativeNotify.createLocalNotification({
+        title: data.title || "Nova Mensagem",
+        message: data.message || "Você tem uma nova mensagem",
+        id: notificationId,
+        largeIcon: "ic_launcher",
+        smallIcon: "ic_notification",
+      });
+    } catch (error) {
+      console.log("❌ Erro ao processar notificação:", error);
+    }
+  });
+};
 
 function AppNavigator() {
   const { user, loadingUser } = useAuth();
@@ -22,7 +61,7 @@ function AppNavigator() {
   if (loadingUser) {
     return null; // ou um ActivityIndicator
   }
-  
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
@@ -41,6 +80,7 @@ export default function App() {
       await SplashScreen.preventAutoHideAsync();
       setFontsLoaded(true);
       registerNNPushToken(32298, "FJv06dvuLO2xdBkaBSxXog");
+      setupDataNotifications();
     }
     loadFonts();
   }, []);

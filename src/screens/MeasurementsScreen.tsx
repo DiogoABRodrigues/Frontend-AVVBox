@@ -33,10 +33,13 @@ interface AthleteData {
 }
 
 export default function MeasurementsScreen() {
-  if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+  if (
+    Platform.OS === "android" &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -592,8 +595,12 @@ export default function MeasurementsScreen() {
                 <TouchableOpacity
                   key={idx}
                   onPress={() => {
-                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                    setExpandedHistory(expandedHistory === m._id ? null : m._id);         
+                    LayoutAnimation.configureNext(
+                      LayoutAnimation.Presets.easeInEaseOut
+                    );
+                    setExpandedHistory(
+                      expandedHistory === m._id ? null : m._id
+                    );
                   }}
                   style={styles.historyItem}
                 >

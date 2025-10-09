@@ -1,8 +1,11 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 export default () => {
-  const googleServicesPath = path.join(__dirname, 'android/app/google-services.json');
+  const googleServicesPath = path.join(
+    __dirname,
+    "android/app/google-services.json"
+  );
 
   // Cria o google-services.json a partir da variável de ambiente
   if (process.env.GOOGLE_SERVICES_JSON) {
@@ -11,51 +14,49 @@ export default () => {
     try {
       const json = JSON.parse(process.env.GOOGLE_SERVICES_JSON);
       fs.writeFileSync(googleServicesPath, JSON.stringify(json, null, 2));
-      console.log('✅ google-services.json criado com sucesso!');
+      console.log("✅ google-services.json criado com sucesso!");
     } catch (err) {
-      console.error('❌ Erro ao parsear GOOGLE_SERVICES_JSON:', err);
+      console.error("❌ Erro ao parsear GOOGLE_SERVICES_JSON:", err);
     }
   } else {
-    console.warn('⚠️ Variável GOOGLE_SERVICES_JSON não definida!');
+    console.warn("⚠️ Variável GOOGLE_SERVICES_JSON não definida!");
   }
 
   return {
     expo: {
-      name: 'AVVBox',
-      slug: 'AVVBox-second',
-      version: '1.0.0',
-      orientation: 'portrait',
-      icon: 'assets/avvb.png',
-      userInterfaceStyle: 'light',
+      name: "AVVBox",
+      slug: "AVVBox-second",
+      version: "1.0.0",
+      orientation: "portrait",
+      icon: "assets/avvb.png",
+      userInterfaceStyle: "light",
       splash: {
-        image: 'assets/avvb2.png',
-        resizeMode: 'contain',
-        backgroundColor: '#191818',
+        image: "assets/avvb2.png",
+        resizeMode: "contain",
+        backgroundColor: "#191818",
       },
       ios: {
         supportsTablet: true,
       },
       android: {
         adaptiveIcon: {
-          foregroundImage: './assets/avvb.png',
-          backgroundColor: '#191818',
+          foregroundImage: "./assets/avvb.png",
+          backgroundColor: "#191818",
         },
         edgeToEdgeEnabled: false,
-        googleServicesFile: process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
-        package: 'com.anonymous.AVVBox',
+        googleServicesFile:
+          process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
+        package: "com.anonymous.AVVBox",
       },
       web: {
-        favicon: 'assets/avvb.png',
+        favicon: "assets/avvb.png",
       },
       plugins: [
-        [
-          'expo-notifications',
-          { icon: './assets/notification-icon.png' },
-        ],
+        ["expo-notifications", { icon: "./assets/notification-icon.png" }],
       ],
       extra: {
         eas: {
-          projectId: '042b94ba-8aa8-4747-9209-1464f5c2a095',
+          projectId: "042b94ba-8aa8-4747-9209-1464f5c2a095",
         },
       },
     },
