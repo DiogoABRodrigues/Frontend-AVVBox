@@ -19,6 +19,7 @@ import { LineChart } from "react-native-chart-kit";
 import MeasuresModal from "../componentes/MeasuresModal";
 import Popup from "../componentes/Popup";
 import Toast from "react-native-toast-message";
+import { LayoutAnimation, UIManager, Platform } from "react-native";
 
 interface Athlete {
   id: string;
@@ -32,7 +33,10 @@ interface AthleteData {
 }
 
 export default function MeasurementsScreen() {
-  const { user } = useAuth();
+  if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+  const { user } = useAuth(); 
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -587,9 +591,10 @@ export default function MeasurementsScreen() {
               {historyDates.map((m, idx) => (
                 <TouchableOpacity
                   key={idx}
-                  onPress={() =>
-                    setExpandedHistory(expandedHistory === m._id ? null : m._id)
-                  }
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setExpandedHistory(expandedHistory === m._id ? null : m._id);         
+                  }}
                   style={styles.historyItem}
                 >
                   <View style={styles.historyActionContainer}>

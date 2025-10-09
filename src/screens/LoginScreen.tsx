@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userService } from "../services/usersService";
 import { styles } from "./styles/LoginScreen.styles";
 import Popup from "../componentes/Popup";
+// @ts-expect-error not a real error
 import avvbLogo from "../../assets/avvb.png";
 import { API_BASE_URL } from "../../config";
 import api from "../../api";
