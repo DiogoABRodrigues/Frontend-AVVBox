@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
-  container: {
+export const profileStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
     flex: 1,
     paddingHorizontal: 16,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
   },
 
   header: {
@@ -105,9 +107,6 @@ export const styles = StyleSheet.create({
   // Expanded Container Styles
   expandedContainer: {
     backgroundColor: "#ffffff",
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
     borderColor: "#e2e8f0",
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,

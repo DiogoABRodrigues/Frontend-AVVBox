@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
-import { styles } from "./styles/ProfileScreen.styles";
+import { profileStyles } from "./styles/ProfileScreen.styles";
 import { measuresService } from "../services/measuresService";
 import { userService } from "../services/usersService";
 import { Measures } from "../models/Measures";
@@ -25,8 +25,13 @@ import ChangeRoleModal from "../componentes/ChangeRoleModal";
 import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
 import Toast from "react-native-toast-message";
+//import { Button } from "react-native-paper";
+import { useThemeContext } from "../context/ThemeContext";
 
 export default function ProfileScreen() {
+  const { colors } = useThemeContext();
+  const styles = profileStyles(colors);
+
   const emptyUser: User = {
     _id: "",
     name: "",
@@ -873,6 +878,8 @@ export default function ProfileScreen() {
     setRefreshing(false);
   };
 
+  //const { toggleTheme, isDarkMode } = useThemeContext();
+
   return (
     <ScrollView
       style={styles.container}
@@ -893,7 +900,11 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Ações */}
+      {/* Ações 
+              <Button mode="contained" onPress={toggleTheme}>
+      Mudar para {isDarkMode ? "modo claro ☀️" : "modo escuro 🌙"}
+    </Button>
+    */}
       {actions.map((action, index) => (
         <View key={index} style={styles.actionContainer}>
           <TouchableOpacity
