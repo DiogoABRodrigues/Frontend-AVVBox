@@ -85,6 +85,7 @@ export default function ExerciseScreen() {
         // Carregar os atletas do treinador
         let athletes: User[] = [];
         athletes = await userService.getMyAthletes(user._id);
+        athletes.sort((a, b) => a.name.localeCompare(b.name));
         athletes.unshift(user); // Adiciona o treinador no topo
         setMineAthletes(athletes);
         setSelectedAthleteId(user._id);

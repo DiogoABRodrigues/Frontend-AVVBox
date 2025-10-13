@@ -87,6 +87,13 @@ export default function MeasurementsScreen() {
     try {
       if (!isPT || !user) return;
       const fetched = await userService.getAll();
+            fetched.sort((a, b) => a.name.localeCompare(b.name));
+      // remover user antes de adicionar no topo se já existir
+      const existingIndex = fetched.findIndex((u) => u._id === user?._id);
+      if (existingIndex !== -1) {
+        fetched.splice(existingIndex, 1);
+      }
+      fetched.unshift(user);
 
       interface FetchedAthlete {
         _id: string;

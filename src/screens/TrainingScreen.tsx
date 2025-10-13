@@ -181,7 +181,9 @@ export default function TrainingScreen() {
       if (user && user.role !== "atleta") {
         // Carregar os atletas do treinador
         const athletes = await userService.getMyAthletes(user._id);
-        athletes.push(user);
+        // ordenar por nome
+        athletes.sort((a, b) => a.name.localeCompare(b.name));
+        athletes.unshift(user);
         setMineAthletes(athletes);
       }
     };

@@ -443,7 +443,13 @@ export default function ProfileScreen() {
     try {
       if (!isAdmin || !user) return;
       const fetched = await userService.getAllAll();
-
+      fetched.sort((a, b) => a.name.localeCompare(b.name));
+      // remover user antes de adicionar no topo se já existir
+      const existingIndex = fetched.findIndex((u) => u._id === user?._id);
+      if (existingIndex !== -1) {
+        fetched.splice(existingIndex, 1);
+      }
+      fetched.unshift(user);
       setUsers(fetched);
     } catch (err) {
       console.error("Erro ao ir buscar users", err);
