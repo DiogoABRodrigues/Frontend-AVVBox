@@ -18,7 +18,7 @@ export const profileStyles = (colors: any) =>
   headerTitle: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   profileHeader: {
@@ -49,7 +49,7 @@ export const profileStyles = (colors: any) =>
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 4,
-    color: "#1e293b",
+    color: colors.header,
   },
   email: {
     fontSize: 16,
@@ -124,7 +124,7 @@ export const profileStyles = (colors: any) =>
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
     marginBottom: 20,
     textAlign: "center",
   },
@@ -330,7 +330,7 @@ export const profileStyles = (colors: any) =>
   userName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: colors.header,
     marginBottom: 4,
   },
 
@@ -432,7 +432,7 @@ export const profileStyles = (colors: any) =>
 
   copyDescription: {
     fontSize: 14,
-    color: "#1e293b",
+    color: colors.header,
     textAlign: "center",
     lineHeight: 20,
   },
@@ -513,7 +513,7 @@ export const profileStyles = (colors: any) =>
   contactName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: colors.header,
     marginBottom: 4,
   },
 
@@ -579,7 +579,7 @@ export const profileStyles = (colors: any) =>
   dayTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   workingDayToggle: {

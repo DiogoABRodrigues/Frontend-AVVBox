@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const trainingeStyles = (colors: any) =>
+  StyleSheet.create({
   container: {
     flexGrow: 1,
     paddingHorizontal: 16,
@@ -17,13 +19,13 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28, // Mudança: fonte maior e mais consistente
     fontWeight: "700", // Mudança: peso de fonte mais específico
-    color: "#1e293b", // Mudança: cor mais escura e moderna
+    color: colors.header, // Mudança: cor mais escura e moderna
   },
 
   sectionTitle: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
     marginBottom: 20,
     marginTop: 8,
   },
@@ -34,7 +36,7 @@ export const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     borderRadius: 20,
     backgroundColor: "#ffffff",
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.12,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -51,7 +53,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: "#e2e8f0",
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.1,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 6 },
@@ -215,7 +217,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#e2e8f0",
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.08,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -313,7 +315,7 @@ export const styles = StyleSheet.create({
   trainerName: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   sectionListContent: {
@@ -371,7 +373,7 @@ export const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     borderRadius: 12,
     marginTop: 4,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.15,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -438,7 +440,7 @@ export const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     padding: 16,
     marginBottom: 20,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.08,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -470,7 +472,7 @@ export const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     padding: 16,
     marginBottom: 20,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.08,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -519,7 +521,7 @@ export const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     padding: 16,
     marginBottom: 20,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.08,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -611,7 +613,7 @@ export const styles = StyleSheet.create({
   // Training text mais elegante
   trainingText: {
     fontSize: 16,
-    color: "#1e293b",
+    color: colors.header,
     fontWeight: "600",
     lineHeight: 24,
     marginBottom: 4,
@@ -657,7 +659,7 @@ export const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#1e293b",
+    borderColor: colors.header,
     shadowColor: "#ffffffff",
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -865,7 +867,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.15,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -905,7 +907,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontSize: 15,
-    color: "#1e293b",
+    color: colors.header,
     textAlignVertical: "top", // importante para multiline
     minHeight: 80,
     maxHeight: 300,
@@ -933,7 +935,7 @@ export const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
     marginBottom: 20,
     textAlign: "center",
   },

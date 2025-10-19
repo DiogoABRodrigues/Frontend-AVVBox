@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const measuresStyles = (colors: any) =>
+  StyleSheet.create({
   // Container Principal
   container: {
     flex: 1,
@@ -22,7 +24,7 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   // Filter Row (Dropdowns e botões)
@@ -79,7 +81,7 @@ export const styles = StyleSheet.create({
   picker: {
     height: 56,
     width: "100%",
-    color: "#1e293b",
+    color: colors.header,
     fontSize: 16,
     fontWeight: "500",
   },
@@ -194,7 +196,7 @@ export const styles = StyleSheet.create({
   measureValue: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
   },
   deltaText: {
     marginLeft: 2,
@@ -206,7 +208,7 @@ export const styles = StyleSheet.create({
   subTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
     marginTop: 10,
     marginBottom: 16,
   },
@@ -481,7 +483,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.15,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -499,7 +501,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.15,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },

@@ -853,7 +853,7 @@ export default function TrainingScreen() {
                   arrowColor: "#2563eb",
                   selectedDayBackgroundColor: "#2563eb",
                   selectedDayTextColor: "#ffffff",
-                  monthTextColor: "#1e293b",
+                  monthTextColor: colors.header,
                   textDayFontWeight: "500",
                   textMonthFontWeight: "700",
                   textDayHeaderFontWeight: "600",
@@ -1186,7 +1186,7 @@ export default function TrainingScreen() {
                             <Ionicons
                               name="create-outline"
                               size={18}
-                              color="#1e293b"
+                              color=colors.header
                             />
                           </TouchableOpacity>
                           <TouchableOpacity
@@ -1300,7 +1300,7 @@ export default function TrainingScreen() {
                               <Ionicons
                                 name="create-outline"
                                 size={18}
-                                color="#1e293b"
+                                color=colors.header
                               />
                             </TouchableOpacity>
                             <TouchableOpacity

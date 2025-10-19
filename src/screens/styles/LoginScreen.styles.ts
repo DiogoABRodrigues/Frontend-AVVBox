@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const loginStyles = (colors: any) =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },

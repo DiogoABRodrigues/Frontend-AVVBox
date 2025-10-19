@@ -898,7 +898,7 @@ export default function ProfileScreen() {
         <Text style={styles.headerTitle}>Perfil</Text>
       </View>
       <View style={styles.profileHeader}>
-        <Ionicons name="person-circle-outline" size={100} color="#1e293b" />
+        <Ionicons name="person-circle-outline" size={100} color=colors.header />
         <View style={styles.userInfo}>
           <Text style={styles.name}>{userData?.name}</Text>
           <Text style={styles.email}>{userData?.phoneNumber}</Text>
@@ -929,7 +929,7 @@ export default function ProfileScreen() {
               <Ionicons
                 name={action.icon as any}
                 size={24}
-                color={action.isLogout ? "#ff4d4d" : "#1E293B"}
+                color={action.isLogout ? "#ff4d4d" : colors.header}
                 style={styles.actionIcon}
               />
               <Text
@@ -1374,7 +1374,7 @@ export default function ProfileScreen() {
                               <Ionicons
                                 name="copy-outline"
                                 size={24}
-                                color="#1e293b"
+                                color=colors.header
                               />
                               <Text style={styles.copyDescription}>
                                 {copiedId === contact._id

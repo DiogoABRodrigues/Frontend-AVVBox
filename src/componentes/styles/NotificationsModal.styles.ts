@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 24,
     textAlign: "center",
-    color: "#1e293b",
+    color: colors.header,
     letterSpacing: -0.5,
   },
 
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
     backgroundColor: "#f8fafc",
-    color: "#1e293b",
+    color: colors.header,
     fontWeight: "500",
     shadowColor: "#000",
     shadowOpacity: 0.05,

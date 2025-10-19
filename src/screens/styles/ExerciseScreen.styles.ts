@@ -1,10 +1,11 @@
-// styles/ExerciseScreen.styles.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const exerciseStyles = (colors: any) =>
+  StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
   },
 
   header: {
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
   },
   // Adicione estas propriedades ao seu stylesheet
   dragHandle: {
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#1e293b",
+    color:  colors.header,
     marginTop: 8,
   },
 
@@ -90,7 +91,7 @@ export const styles = StyleSheet.create({
   muscleGroupText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   muscleGroupRight: {
@@ -148,7 +149,7 @@ export const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: colors.header,
     marginBottom: 4,
   },
 
@@ -446,7 +447,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.15,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -513,7 +514,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e2e8f0",
     borderRadius: 12,
-    shadowColor: "#1e293b",
+    shadowColor: colors.header,
     shadowOpacity: 0.25,
     shadowRadius: 15,
     shadowOffset: { width: 0, height: 8 },

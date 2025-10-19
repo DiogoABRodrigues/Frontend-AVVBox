@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const modalStyles = (colors: any) =>
+  StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -25,7 +27,7 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   // Listas (roles, PTs, atletas)
@@ -86,7 +88,7 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#1e293b",
+    color: colors.header,
     textAlign: "left",
   },
 
@@ -168,7 +170,7 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
   },
   notificationTitleUnread: {
-    color: "#1e293b",
+    color: colors.header,
     fontWeight: "700",
   },
   notificationBody: {
@@ -231,7 +233,7 @@ export const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
-    color: "#1e293b",
+    color: colors.header,
   },
 
   // Form Inputs
@@ -378,7 +380,7 @@ export const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#1e293b",
+    borderColor: colors.header,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -386,7 +388,7 @@ export const styles = StyleSheet.create({
     height: 10,
     width: 10,
     borderRadius: 5,
-    backgroundColor: "#1e293b",
+    backgroundColor: colors.header,
   },
   radioText: {
     marginLeft: 10,
@@ -405,7 +407,7 @@ export const styles = StyleSheet.create({
     width: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: "#1e293b",
+    borderColor: colors.header,
     alignItems: "center",
     justifyContent: "center",
   },

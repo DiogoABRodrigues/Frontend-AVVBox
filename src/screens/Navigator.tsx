@@ -70,7 +70,7 @@ export default function AthleteTabs() {
               <Ionicons
                 name={iconName as keyof typeof Ionicons}
                 size={24}
-                color={focused ? "#1E293B" : "#64748b"}
+                color={focused ? colors.header : "#64748b"}
               />
               <Text
                 style={[styles.tabLabel, focused && styles.tabLabelFocused]}

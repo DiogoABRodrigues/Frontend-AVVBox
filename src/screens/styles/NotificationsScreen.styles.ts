@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const notificationStyles = (colors: any) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8fafc", // Mudança: cor de fundo mais suave
@@ -17,7 +19,7 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28, // Mudança: fonte maior e mais consistente
     fontWeight: "700", // Mudança: peso de fonte mais específico
-    color: "#1e293b", // Mudança: cor mais escura e moderna
+    color: colors.header, // Mudança: cor mais escura e moderna
   },
 
   // Header para os botões de ação
@@ -52,7 +54,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffffffff", // Mudança: cor primária azul
   },
   actionButtonText: {
-    color: "#1E293B", // Mudança: texto branco
+    color: colors.header, // Mudança: texto branco
     fontWeight: "600", // Mudança: peso mais específico
     fontSize: 14,
   },
@@ -131,7 +133,7 @@ export const styles = StyleSheet.create({
   },
   notificationTitleUnread: {
     fontWeight: "700", // Mudança: peso mais específico
-    color: "#1e293b", // Mudança: cor mais escura para não lidas
+    color: colors.header, // Mudança: cor mais escura para não lidas
   },
   notificationBody: {
     color: "#64748b", // Mudança: cor mais suave
@@ -169,7 +171,7 @@ export const styles = StyleSheet.create({
     fontWeight: "700", // Mudança: peso mais específico
     fontSize: 20, // Mudança: fonte maior
     marginBottom: 16, // Mudança: espaçamento maior
-    color: "#1e293b", // Mudança: cor mais consistente
+    color: colors.header, // Mudança: cor mais consistente
   },
   modalInput: {
     borderWidth: 1,

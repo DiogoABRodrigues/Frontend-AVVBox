@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
   },
 
   tabLabelFocused: {
-    color: "#1E293B", // Mudança: azul escuro consistente
+    color: colors.header, // Mudança: azul escuro consistente
     fontWeight: "600",
   },
   badge: {
@@ -97,10 +97,10 @@ export const styles = StyleSheet.create({
     fontSize: 24, // Mudança: fonte ligeiramente menor para mobile
     fontWeight: "700", // Mudança: peso mais específico
     marginLeft: 12, // Mudança: espaçamento ajustado
-    color: "#1e293b", // Mudança: cor consistente
+    color: colors.header, // Mudança: cor consistente
   },
 
   headerIcon: {
-    color: "#1E293B", // Mudança: cor azul consistente
+    color: colors.header, // Mudança: cor azul consistente
   },
 });
