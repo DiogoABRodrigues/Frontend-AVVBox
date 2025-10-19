@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles/ExerciseScreen.styles";
@@ -16,6 +17,7 @@ import { userService } from "../services/usersService";
 import { Weights, Exercise } from "../models/Exercise";
 import { exerciseService } from "../services/exerciseService";
 import Popup from "../componentes/Popup";
+import Toast from "react-native-toast-message";
 
 interface LocalMuscleGroup {
   key: string;
@@ -40,7 +42,7 @@ export default function ExerciseScreen() {
     user = emptyUser; // Garantir que user nunca é null
   }
   const [expandedMuscleGroup, setExpandedMuscleGroup] = useState<string | null>(
-    null,
+    null
   );
   const [exercisesByGroup, setExercisesByGroup] = useState<
     Record<string, Exercise[]>
@@ -48,12 +50,14 @@ export default function ExerciseScreen() {
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
   const [showAthleteDropdown, setShowAthleteDropdown] = useState(false);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
-    null,
+    null
   );
   const [mineAthletes, setMineAthletes] = useState<User[]>([]);
   const isPT = user?.role === "PT" || user?.role === "Admin";
   const [userWeights, setUserWeights] = useState<Weights | null>(null);
   const [inputValues, setInputValues] = useState<Record<string, string>>({});
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const [popup, setPopup] = useState({
     visible: false,
@@ -75,20 +79,46 @@ export default function ExerciseScreen() {
     { key: "extra", label: "Extra" },
   ];
 
-  useEffect(() => {
-    const fetchAthletes = async () => {
+  const fetchAthletes = async () => {
+    try {
       if (user.role !== "atleta") {
         // Carregar os atletas do treinador
         let athletes: User[] = [];
         athletes = await userService.getMyAthletes(user._id);
+        athletes.sort((a, b) => a.name.localeCompare(b.name));
         athletes.unshift(user); // Adiciona o treinador no topo
         setMineAthletes(athletes);
         setSelectedAthleteId(user._id);
       } else {
         setSelectedAthleteId(user._id);
       }
-    };
-    fetchAthletes();
+    } catch (error) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao atualizar definições de notificação:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
+  };
+
+  useEffect(() => {
+    try {
+      fetchAthletes();
+    } catch (error) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao ir buscar atletas:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -112,7 +142,15 @@ export default function ExerciseScreen() {
       setUserWeights(weights);
       setExercisesByGroup(initialExercises);
     } catch (error) {
-      console.error("Error fetching user weights:", error);
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao ir buscar pesos do utilizador:" + error,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
     }
   };
 
@@ -126,7 +164,7 @@ export default function ExerciseScreen() {
           ...prev,
           [expandedMuscleGroup]:
             prev[expandedMuscleGroup]?.filter(
-              (ex) => !ex._id.startsWith("temp-"),
+              (ex) => !ex._id.startsWith("temp-")
             ) || [],
         }));
       }
@@ -148,7 +186,7 @@ export default function ExerciseScreen() {
       ...prev,
       [expandedMuscleGroup]:
         prev[expandedMuscleGroup]?.filter(
-          (ex) => !ex._id.startsWith("temp-"),
+          (ex) => !ex._id.startsWith("temp-")
         ) || [],
     }));
 
@@ -224,21 +262,25 @@ export default function ExerciseScreen() {
       }
       setInputValues({});
       setEditingExercise(null);
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "success",
-        title: "Sucesso",
-        message: "Exercício removido com sucesso.",
-        onConfirm: undefined,
+        text2: "Exercício removido com sucesso.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     } catch {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message:
+        text2:
           "Ocorreu um erro ao remover o exercício, tente novamente mais tarde.",
-        onConfirm: undefined,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
@@ -247,13 +289,13 @@ export default function ExerciseScreen() {
     groupKey: string,
     exerciseId: string,
     field: keyof Exercise,
-    value: string | number,
+    value: string | number
   ) => {
     setExercisesByGroup((prev) => ({
       ...prev,
       [groupKey]:
         prev[groupKey]?.map((ex) =>
-          ex._id === exerciseId ? { ...ex, [field]: value } : ex,
+          ex._id === exerciseId ? { ...ex, [field]: value } : ex
         ) || [],
     }));
   };
@@ -263,7 +305,7 @@ export default function ExerciseScreen() {
 
     const group = expandedMuscleGroup!;
     const exercise = exercisesByGroup[group].find(
-      (ex) => ex._id === editingExercise._id,
+      (ex) => ex._id === editingExercise._id
     );
     if (!exercise) return;
 
@@ -292,12 +334,16 @@ export default function ExerciseScreen() {
         fetchUserWeights(selectedAthleteId);
       }
     } catch (error) {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: `Ocorreu um erro ao realizar a ação: ${error.response?.data?.message || error.message || error}`,
-        onConfirm: undefined,
+        text2: `Ocorreu um erro ao realizar a ação: ${
+          error.response?.data?.message || error.message || error
+        }`,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
 
@@ -320,19 +366,31 @@ export default function ExerciseScreen() {
     }
 
     // Clear the input value
-    if (editingExercise) {
+    /*if (editingExercise) {
       setInputValues((prev) => ({
         ...prev,
         [editingExercise._id]: "",
       }));
-    }
+    }*/
 
     setEditingExercise(null);
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchUserWeights(selectedAthleteId || user._id);
+    await fetchAthletes();
+    setRefreshing(false);
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* Se for Admin ou PT, mostrar dropdown de atletas */}
         {isPT && (
           <View style={styles.dropdownSection}>
@@ -393,7 +451,7 @@ export default function ExerciseScreen() {
                                     group.key,
                                     exercise?._id,
                                     "name",
-                                    value,
+                                    value
                                   )
                                 }
                               />
@@ -409,7 +467,7 @@ export default function ExerciseScreen() {
                                     group.key,
                                     exercise?._id,
                                     "details",
-                                    value,
+                                    value
                                   )
                                 }
                                 multiline={true}
@@ -450,7 +508,7 @@ export default function ExerciseScreen() {
                                     group.key,
                                     exercise?._id,
                                     "name",
-                                    value,
+                                    value
                                   )
                                 }
                               />
@@ -482,7 +540,7 @@ export default function ExerciseScreen() {
                                     style={styles.editInputSmall}
                                     value={
                                       inputValues[exercise._id] !== undefined
-                                        ? inputValues[exercise._id]
+                                        ? inputValues[exercise.weight]
                                         : exercise.weight.toString() || ""
                                     }
                                     onChangeText={(val) =>
@@ -503,7 +561,7 @@ export default function ExerciseScreen() {
                                       group.key,
                                       exercise._id,
                                       "reps",
-                                      parseFloat(value) || 0,
+                                      parseFloat(value) || 0
                                     )
                                   }
                                   keyboardType="decimal-pad"
@@ -520,7 +578,7 @@ export default function ExerciseScreen() {
                                       group.key,
                                       exercise._id,
                                       "sets",
-                                      parseFloat(value) || 0,
+                                      parseFloat(value) || 0
                                     )
                                   }
                                   keyboardType="decimal-pad"

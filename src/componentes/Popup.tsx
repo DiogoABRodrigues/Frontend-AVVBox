@@ -24,7 +24,7 @@ export default function Popup({
   style,
 }: PopupProps) {
   return (
-    <Modal visible={visible} transparent animationType="fade">
+    <Modal visible={visible} transparent>
       <View style={styles.overlay}>
         <View style={[styles.container]}>
           {title && <Text style={styles.title}>{title}</Text>}

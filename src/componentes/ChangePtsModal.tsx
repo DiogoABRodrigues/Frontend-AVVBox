@@ -20,7 +20,7 @@ export default function ChangePtsModal({
   selected,
 }: Props) {
   const [selectedPt, setSelectedPt] = useState<string | null>(
-    selected[0] || null,
+    selected[0] || null
   ); // apenas 1 coach
 
   const toggleSelection = (id: string) => {

@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../models/User";
 import { userService } from "@/services/usersService";
 import { unregisterIndieDevice } from "native-notify";
+import * as SplashScreen from "expo-splash-screen";
 
 interface AuthContextType {
   user: User | null;
@@ -20,6 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   // Recupera usuário do AsyncStorage ao iniciar o app
   useEffect(() => {
@@ -28,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedUser = await AsyncStorage.getItem("user");
         if (storedUser) {
           const userRefresh = await userService.getById(
-            JSON.parse(storedUser)._id,
+            JSON.parse(storedUser)._id
           );
           //guardar o usuário atualizado no async storage
           await AsyncStorage.setItem("user", JSON.stringify(userRefresh));
@@ -36,6 +38,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch (err) {
         console.log("Erro ao carregar usuário localmente:", err);
+      } finally {
+        setLoadingUser(false);
+        await SplashScreen.hideAsync(); // esconde o splash só depois do loading
       }
     };
     loadUser();
@@ -55,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setUser(null);
     try {
-      unregisterIndieDevice(user?._id, 32295, "wyhRSJsJFB6gxzAT0mmfaF");
+      unregisterIndieDevice(user?._id, 32298, "FJv06dvuLO2xdBkaBSxXog");
     } catch (err) {
       console.log("Erro ao desregistrar dispositivo:", err);
     }

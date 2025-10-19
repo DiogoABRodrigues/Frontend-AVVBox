@@ -27,8 +27,8 @@ export default function AthleteTabs() {
         return "notifications-outline";
       case "Medidas":
         return "scale-outline";
-      case "Perfil":
-        return "person-outline";
+      case "Definições":
+        return "settings-outline";
       default:
         return "home-outline";
     }
@@ -94,7 +94,7 @@ export default function AthleteTabs() {
       <Tab.Screen name="Treino" component={TrainingScreen} />
       <Tab.Screen name="Notificações" component={NotificationsScreen} />
       <Tab.Screen name="Medidas" component={MeasuresScreen} />
-      <Tab.Screen name="Perfil" component={ProfileScreen} />
+      <Tab.Screen name="Definições" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

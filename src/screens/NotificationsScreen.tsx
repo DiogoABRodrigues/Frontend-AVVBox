@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import NotificationModal from "../componentes/NotificationsModal";
@@ -8,8 +14,9 @@ import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationsContext";
 import { notificationService } from "../services/notificationService";
 import { styles } from "./styles/NotificationsScreen.styles";
-import Popup from "../componentes/Popup";
 import { User } from "../models/User";
+import Toast from "react-native-toast-message";
+
 interface Notification {
   id: string;
   title: string;
@@ -33,6 +40,8 @@ export default function NotificationsScreen() {
 
   let { user } = useAuth();
 
+  const [refreshing, setRefreshing] = useState(false);
+
   if (!user) {
     user = emptyUser; // Garantir que user nunca é null
   }
@@ -41,18 +50,10 @@ export default function NotificationsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [recipientOption, setRecipientOption] = useState<
     "all" | "my" | "individual"
-  >("all");
+  >("my");
 
   const { notifications, refreshNotifications, markAsRead } =
     useNotifications();
-
-  const [popup, setPopup] = useState({
-    visible: false,
-    type: "success" as "success" | "error" | "confirm",
-    title: "",
-    message: "",
-    onConfirm: undefined as (() => void) | undefined,
-  });
 
   // FETCH
   const fetchNotifications = async () => {
@@ -69,21 +70,23 @@ export default function NotificationsScreen() {
   }, []);
 
   // MARCAR TODAS COMO LIDAS
-  const handleMarkAllAsRead = async () => {
+  const handleMarkAllAsRead = async (animation: boolean) => {
     try {
       await Promise.all(
         notifications
           .filter((n) => !n.read)
           .map((n) =>
-            notificationService.markNotificationAsRead(n.id, user._id),
-          ),
+            notificationService.markNotificationAsRead(n.id, user._id)
+          )
       );
-      notifications.forEach((n) => {
-        if (!n.read) markAsRead(user._id, n.id);
-      });
+      if (animation) {
+        notifications.forEach((n) => {
+          if (!n.read) markAsRead(user._id, n.id);
+        });
+      }
     } catch {
       console.error(
-        "An error occurred while marking all notifications as read.",
+        "An error occurred while marking all notifications as read."
       );
     }
   };
@@ -91,11 +94,11 @@ export default function NotificationsScreen() {
   // LIMPAR TODAS
   const handleClearAll = async () => {
     try {
-      await handleMarkAllAsRead();
+      handleMarkAllAsRead(false);
       await Promise.all(
         notifications.map((n) =>
-          notificationService.deleteNotificationForUser(n.id, user._id),
-        ),
+          notificationService.deleteNotificationForUser(n.id, user._id)
+        )
       );
       fetchNotifications();
     } catch (err) {
@@ -107,7 +110,7 @@ export default function NotificationsScreen() {
   const handleSendNotification = async (
     title: string,
     body: string,
-    target: string[],
+    target: string[]
   ) => {
     try {
       const res = await notificationService.createNotification(user._id, {
@@ -116,23 +119,29 @@ export default function NotificationsScreen() {
         target,
       });
       if (res && res.notification && res.notification._id) {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: "Notificação enviada com sucesso!",
-          onConfirm: undefined,
+          text2: "Notificação enviada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
       fetchNotifications();
       setModalVisible(false);
     } catch (err: any) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: `Ocorreu um erro ao enviar a notificação: ${err.response?.data?.message || err.message || err}`,
-        onConfirm: undefined,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "success",
+        text2: `Ocorreu um erro ao enviar a notificação: ${
+          err.response?.data?.message || err.message || err
+        }`,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
@@ -142,47 +151,54 @@ export default function NotificationsScreen() {
     if (!notification.read) {
       await notificationService.markNotificationAsRead(
         notification.id,
-        user._id,
+        user._id
       );
       markAsRead(user._id, notification.id);
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchNotifications(); // chama o teu método de buscar notificações
+    setRefreshing(false);
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.titleHeader}>
-        <Text style={styles.headerTitle}>Notificações</Text>
-      </View>
-
-      {/* Ações */}
-      <View style={styles.actionHeader}>
-        <TouchableOpacity
-          onPress={handleMarkAllAsRead}
-          style={styles.actionButton}
-        >
-          <Text style={styles.actionButtonText}>Marcar como lidas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleClearAll} style={styles.clearButton}>
-          <Text style={styles.clearButtonText}>Limpar todas</Text>
-        </TouchableOpacity>
-        {isPT && (
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={styles.actionButton}
-          >
-            <Text style={styles.actionButtonText}>Criar Notificação</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <View style={styles.separator} />
-
-      {/* Lista */}
       <ScrollView
         style={styles.notificationsList}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
+        <View style={styles.titleHeader}>
+          <Text style={styles.headerTitle}>Notificações</Text>
+        </View>
+
+        {/* Ações */}
+        <View style={styles.actionHeader}>
+          <TouchableOpacity
+            onPress={() => handleMarkAllAsRead(true)}
+            style={styles.actionButton}
+          >
+            <Text style={styles.actionButtonText}>Marcar como lidas</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleClearAll} style={styles.clearButton}>
+            <Text style={styles.clearButtonText}>Limpar todas</Text>
+          </TouchableOpacity>
+          {isPT && (
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              style={styles.actionButton}
+            >
+              <Text style={styles.actionButtonText}>Criar Notificação</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={styles.separator} />
         {notifications.length === 0 ? (
           <View style={styles.emptyStateContainer}>
             <Ionicons name="notifications-off-outline" size={64} color="#ccc" />
@@ -212,7 +228,7 @@ export default function NotificationsScreen() {
                     onPress={async () => {
                       await notificationService.deleteNotificationForUser(
                         n.id,
-                        user._id,
+                        user._id
                       );
                       fetchNotifications();
                     }}
@@ -251,15 +267,6 @@ export default function NotificationsScreen() {
             </Swipeable>
           ))
         )}
-        <Popup
-          visible={popup.visible}
-          type={popup.type as any}
-          title={popup.title}
-          message={popup.message}
-          onConfirm={popup.onConfirm}
-          onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
-          onClose={() => setPopup((p) => ({ ...p, visible: false }))}
-        />
       </ScrollView>
 
       {/* Modal */}

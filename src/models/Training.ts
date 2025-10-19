@@ -22,7 +22,8 @@ export interface TrainingRequest {
   hour: string;
   duration?: number;
   details?: string;
-  PT: string; // ID do PT
-  athlete: string; // ID do atleta
-  proposedBy: "PT" | "Athlete" | "Admin";
+  PT?: string; // ID do PT
+  athlete?: string; // ID do atleta
+  proposedBy?: "PT" | "Athlete" | "Admin";
+  userId?: string; // ID do usuário que está fazendo a solicitação
 }

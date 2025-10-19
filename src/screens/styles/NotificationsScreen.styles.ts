@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16, // Mudança: espaçamento ajustado
     flexWrap: "wrap",
+    marginLeft: 2, // Mudança: ajuste para espaçamento consistente
     gap: 12, // Mudança: gap consistente
   },
 

@@ -11,7 +11,7 @@ const API_URL = `${API_BASE_URL}/notifications`;
 export const notificationService = {
   async createNotification(
     senderId: string,
-    data: { title: string; body: string; target: "all" | "my" | string[] },
+    data: { title: string; body: string; target: "all" | "my" | string[] }
   ) {
     const res = await api.post(`${API_URL}/${senderId}`, data);
     return res.data;

@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
@@ -17,6 +18,8 @@ import { Measures } from "../models/Measures";
 import { LineChart } from "react-native-chart-kit";
 import MeasuresModal from "../componentes/MeasuresModal";
 import Popup from "../componentes/Popup";
+import Toast from "react-native-toast-message";
+import { LayoutAnimation, UIManager, Platform } from "react-native";
 
 interface Athlete {
   id: string;
@@ -30,6 +33,12 @@ interface AthleteData {
 }
 
 export default function MeasurementsScreen() {
+  if (
+    Platform.OS === "android" &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
   const { user } = useAuth();
   const isPT = user?.role === "PT" || user?.role === "Admin";
 
@@ -71,11 +80,20 @@ export default function MeasurementsScreen() {
     onConfirm: undefined as (() => void) | undefined,
   });
 
+  const [refreshing, setRefreshing] = useState(false);
+
   // FETCH atletas
   const fetchAthletes = async () => {
     try {
       if (!isPT || !user) return;
       const fetched = await userService.getAll();
+            fetched.sort((a, b) => a.name.localeCompare(b.name));
+      // remover user antes de adicionar no topo se já existir
+      const existingIndex = fetched.findIndex((u) => u._id === user?._id);
+      if (existingIndex !== -1) {
+        fetched.splice(existingIndex, 1);
+      }
+      fetched.unshift(user);
 
       interface FetchedAthlete {
         _id: string;
@@ -85,7 +103,7 @@ export default function MeasurementsScreen() {
         (a) => ({
           id: a._id,
           name: a.name,
-        }),
+        })
       );
 
       setAthletes(athletesData);
@@ -101,26 +119,30 @@ export default function MeasurementsScreen() {
     try {
       if (!selectedAthleteId) return;
 
-      let athleteMeasures =
-        await measuresService.getAtualByUser(selectedAthleteId);
+      let athleteMeasures = await measuresService.getAtualByUser(
+        selectedAthleteId
+      );
       if (athleteMeasures === null) {
         athleteMeasures = emptyMeasures;
       }
 
-      let athleteGoalMeasures =
-        await measuresService.getGoalByUser(selectedAthleteId);
+      let athleteGoalMeasures = await measuresService.getGoalByUser(
+        selectedAthleteId
+      );
       if (athleteGoalMeasures === null) {
         athleteGoalMeasures = emptyMeasures;
       }
 
-      let athleteLastMeasures =
-        await measuresService.getLastByUser(selectedAthleteId);
+      let athleteLastMeasures = await measuresService.getLastByUser(
+        selectedAthleteId
+      );
       if (athleteLastMeasures === null) {
         athleteLastMeasures = emptyMeasures;
       }
 
-      const historyMeasures =
-        await measuresService.getByUser(selectedAthleteId);
+      const historyMeasures = await measuresService.getByUser(
+        selectedAthleteId
+      );
 
       setHistoryDates(historyMeasures);
       // Pode ser usado para mostrar histórico, se necessário
@@ -153,7 +175,7 @@ export default function MeasurementsScreen() {
     ? formatMeasurements(
         selectedAthleteData.currentMeasurements,
         selectedAthleteData.lastMeasurement,
-        selectedAthleteData.goalMeasurement,
+        selectedAthleteData.goalMeasurement
       )
     : [];
 
@@ -163,8 +185,8 @@ export default function MeasurementsScreen() {
       measurement.color === "green"
         ? "#22c55e"
         : measurement.color === "red"
-          ? "#ef4444"
-          : "#6b7280";
+        ? "#ef4444"
+        : "#6b7280";
 
     if (measurement.reachedGoal) {
       return (
@@ -217,7 +239,7 @@ export default function MeasurementsScreen() {
   const latest =
     historyDates.length > 0
       ? historyDates.reduce((latest, curr) =>
-          new Date(curr.date) > new Date(latest.date) ? curr : latest,
+          new Date(curr.date) > new Date(latest.date) ? curr : latest
         )
       : null;
 
@@ -266,7 +288,7 @@ export default function MeasurementsScreen() {
   const filteredHistory = filterHistory();
 
   const historyDatesSorted = [...filteredHistory].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
   // Verificar se há dados válidos para a métrica selecionada
@@ -279,7 +301,7 @@ export default function MeasurementsScreen() {
     new Date(m.date).toLocaleDateString("pt-PT", {
       month: "short",
       day: "numeric",
-    }),
+    })
   );
 
   // Reduzir labels para evitar sobreposição
@@ -313,31 +335,35 @@ export default function MeasurementsScreen() {
       ) {
         res = await measuresService.update(
           selectedAthleteData.goalMeasurement._id,
-          data,
+          data
         );
       } else {
         res = await measuresService.create(data);
       }
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: "Alteração guardada com sucesso!",
-          onConfirm: undefined,
+          text2: "Alteração guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
 
       fetchMeasures();
       setShowMeasuresModal(false);
     } catch {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não foi possível guardar as medidas.",
-        onConfirm: undefined,
+        text2: "Ocorreu um erro ao guardar as medidas.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
@@ -347,24 +373,29 @@ export default function MeasurementsScreen() {
       const res = await measuresService.delete(id);
 
       if (res && (res === 200 || res === 201)) {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: "Registo eliminado com sucesso!",
-          onConfirm: undefined,
+          text2: "Registo eliminado com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
 
       fetchMeasures();
     } catch {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não foi possível eliminar o registo. ",
-        onConfirm: undefined,
+        text2: "Não foi possível eliminar o registo.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
+
       fetchMeasures();
     }
   };
@@ -419,14 +450,24 @@ export default function MeasurementsScreen() {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchAthletes();
+    await fetchMeasures();
+    setRefreshing(false);
+  };
+
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Medidas</Text>
-          <TouchableOpacity onPress={async () => await fetchMeasures()}>
-            <Ionicons name="refresh-circle-outline" size={40} color="#1e293b" />
-          </TouchableOpacity>
         </View>
 
         {/* Filtro Row */}
@@ -533,8 +574,8 @@ export default function MeasurementsScreen() {
                           m.color === "green"
                             ? "#22c55e"
                             : m.color === "red"
-                              ? "#ef4444"
-                              : "#6b7280",
+                            ? "#ef4444"
+                            : "#6b7280",
                       },
                     ]}
                   >
@@ -560,9 +601,14 @@ export default function MeasurementsScreen() {
               {historyDates.map((m, idx) => (
                 <TouchableOpacity
                   key={idx}
-                  onPress={() =>
-                    setExpandedHistory(expandedHistory === m._id ? null : m._id)
-                  }
+                  onPress={() => {
+                    LayoutAnimation.configureNext(
+                      LayoutAnimation.Presets.easeInEaseOut
+                    );
+                    setExpandedHistory(
+                      expandedHistory === m._id ? null : m._id
+                    );
+                  }}
                   style={styles.historyItem}
                 >
                   <View style={styles.historyActionContainer}>

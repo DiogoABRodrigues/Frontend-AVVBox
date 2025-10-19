@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   tabBar: {
@@ -28,7 +30,7 @@ export const styles = StyleSheet.create({
     borderRadius: 12, // Mudança: border radius consistente
     borderWidth: 1, // Mudança: borda sutil
     borderColor: "#bfdbfe",
-    shadowColor: "#2563eb", // Mudança: sombra colorida
+    shadowColor: "#ffffffff", // Mudança: sombra colorida
     shadowOpacity: 0.2,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },

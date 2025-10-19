@@ -67,8 +67,8 @@ export const NotificationsProvider = ({
       prev.map((n) =>
         n.id === notificationId
           ? { ...n, read: true, readBy: [...n.readBy, userId] }
-          : n,
-      ),
+          : n
+      )
     );
   };
 
@@ -97,7 +97,7 @@ export const useNotifications = () => {
   const context = useContext(NotificationsContext);
   if (!context)
     throw new Error(
-      "useNotifications must be used within NotificationsProvider",
+      "useNotifications must be used within NotificationsProvider"
     );
   return context;
 };

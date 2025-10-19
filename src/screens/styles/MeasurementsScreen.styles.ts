@@ -33,6 +33,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 16,
     gap: 12,
+    zIndex: 1000, 
+    elevation: 1000,
   },
 
   // Dropdown Styles Melhorados
@@ -159,7 +161,7 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     elevation: 0,
-    zIndex: 0,
+    zIndex: 1,
   },
   measureItem: {
     width: "48%",
@@ -174,6 +176,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
+    zIndex: 2,
   },
   measureLabel: {
     fontSize: 13,
@@ -182,6 +185,7 @@ export const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 8,
+    zIndex: 3,
   },
   measureValueContainer: {
     flexDirection: "row",
@@ -428,9 +432,9 @@ export const styles = StyleSheet.create({
   dropdownSection: {
     flex: 1,
     marginBottom: 20,
-    zIndex: 100,
+    zIndex: 1001,
     position: "relative",
-    elevation: 100,
+    elevation: 1001,
   },
 
   dropdownLabel: {
@@ -482,8 +486,8 @@ export const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
     elevation: 1001,
-    maxHeight: 200, // 👈 limite
-    overflow: "hidden", // 👈 evita passar do container
+    maxHeight: 200, 
+    overflow: "hidden", 
     left: 15,
     right: 45,
     zIndex: 1001,

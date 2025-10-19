@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
-import { styles } from "./styles/ProfileScreen.styles";
+import { profileStyles } from "./styles/ProfileScreen.styles";
 import { measuresService } from "../services/measuresService";
 import { userService } from "../services/usersService";
 import { Measures } from "../models/Measures";
@@ -23,8 +24,14 @@ import ChangePtsModal from "../componentes/ChangePtsModal";
 import ChangeRoleModal from "../componentes/ChangeRoleModal";
 import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
+import Toast from "react-native-toast-message";
+//import { Button } from "react-native-paper";
+import { useThemeContext } from "../context/ThemeContext";
 
 export default function ProfileScreen() {
+  const { colors } = useThemeContext();
+  const styles = profileStyles(colors);
+
   const emptyUser: User = {
     _id: "",
     name: "",
@@ -66,7 +73,7 @@ export default function ProfileScreen() {
   });
 
   const [measuresInput, setMeasuresInput] = useState<Record<string, string>>(
-    {},
+    {}
   );
 
   const [users, setUsers] = useState<User[]>([]);
@@ -84,7 +91,7 @@ export default function ProfileScreen() {
 
   const [roleChangeTarget, setRoleChangeTarget] = useState<User | null>(null);
   const [selectedRole, setSelectedRole] = useState<"atleta" | "PT" | "Admin">(
-    "atleta",
+    "atleta"
   );
 
   const [relationTarget, setRelationTarget] = useState<{
@@ -123,6 +130,8 @@ export default function ProfileScreen() {
     trainingRejected: false,
     trainingCanceled: false,
   });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const toggleExpand = (title: string) => {
     setExpandedAction((prev) => (prev === title ? null : title));
@@ -211,8 +220,11 @@ export default function ProfileScreen() {
           title: targetUser.active
             ? "Desativar Utilizador"
             : "Ativar Utilizador",
-          message: `Tem certeza que deseja ${targetUser.active ? "desativar" : "ativar"} o utilizador ${targetUser.name}?`,
+          message: `Tem certeza que deseja ${
+            targetUser.active ? "desativar" : "ativar"
+          } o utilizador ${targetUser.name}?`,
           onConfirm: async () => {
+            setPopup((p) => ({ ...p, visible: false }));
             try {
               if (targetUser.active) {
                 await userService.deactivate(userId);
@@ -220,20 +232,26 @@ export default function ProfileScreen() {
                 await userService.activate(userId);
               }
               fetchUsers();
-              setPopup({
-                visible: true,
+              Toast.hide();
+              Toast.show({
+                topOffset: 10,
                 type: "success",
-                title: "Sucesso",
-                message: `Utilizador ${targetUser.active ? "desativado" : "ativado"} com sucesso!`,
-                onConfirm: undefined,
+                text2: `Utilizador ${
+                  targetUser.active ? "desativado" : "ativado"
+                } com sucesso!`,
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
             } catch {
-              setPopup({
-                visible: true,
+              Toast.hide();
+              Toast.show({
+                topOffset: 10,
                 type: "error",
-                title: "Erro",
-                message: "Erro ao alterar status do utilizador.",
-                onConfirm: undefined,
+                text2: "Erro ao alterar status do utilizador.",
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
             }
           },
@@ -340,22 +358,28 @@ export default function ProfileScreen() {
       const res = await userService.update(userData._id, updatedData);
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: "Alteração guardada com sucesso!",
-          onConfirm: undefined,
+          text2: "Alteração guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
       fetchUserData();
     } catch (err: any) {
-      setPopup({
-        visible: true,
-        type: "error",
-        title: "Erro",
-        message: `Ocorreu um erro ao guardar a alteração: ${err.response?.data?.message || err.message || err}.`,
-        onConfirm: undefined,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "success",
+        text2: `Ocorreu um erro ao guardar a alteração: ${
+          err.response?.data?.message || err.message || err
+        }.`,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
@@ -419,7 +443,13 @@ export default function ProfileScreen() {
     try {
       if (!isAdmin || !user) return;
       const fetched = await userService.getAllAll();
-
+      fetched.sort((a, b) => a.name.localeCompare(b.name));
+      // remover user antes de adicionar no topo se já existir
+      const existingIndex = fetched.findIndex((u) => u._id === user?._id);
+      if (existingIndex !== -1) {
+        fetched.splice(existingIndex, 1);
+      }
+      fetched.unshift(user);
       setUsers(fetched);
     } catch (err) {
       console.error("Erro ao ir buscar users", err);
@@ -435,7 +465,7 @@ export default function ProfileScreen() {
       }
       if (users.length > 0) {
         const filtered = users.filter(
-          (u) => (u.role === "PT" || u.role === "Admin") && u.active,
+          (u) => (u.role === "PT" || u.role === "Admin") && u.active
         );
         setPtsAndAdmins(filtered);
         return;
@@ -490,32 +520,38 @@ export default function ProfileScreen() {
       const res = await measuresService.update(goalMeasures._id, data);
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: "Alteração guardada com sucesso!",
-          onConfirm: undefined,
+          text2: "Alteração guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       } else {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "error",
-          title: "Erro",
-          message:
+          text2:
             "Ocorreu um erro ao guardar a alteração, verifique os dados e tente novamente.",
-          onConfirm: undefined,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
 
       fetchMeasures();
     } catch {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não foi possível guardar o objetivo.",
-        onConfirm: undefined,
+        text2: "Não foi possível guardar o objetivo.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
@@ -529,17 +565,29 @@ export default function ProfileScreen() {
   };
 
   const handleNotificationToggle = (
-    setting: keyof typeof notificationSettings,
+    setting: keyof typeof notificationSettings
   ) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [setting]: !prev[setting],
-    }));
+    try {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [setting]: !prev[setting],
+      }));
 
-    settingsService.update(user._id, {
-      ...notificationSettings,
-      [setting]: !notificationSettings[setting],
-    });
+      settingsService.update(user._id, {
+        ...notificationSettings,
+        [setting]: !notificationSettings[setting],
+      });
+    } catch (err) {
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
+        type: "error",
+        text2: "Erro ao atualizar definições de notificação:" + err,
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
+      });
+    }
   };
 
   const [copiedId, setCopiedId] = useState<string>("");
@@ -556,35 +604,40 @@ export default function ProfileScreen() {
     if (!roleChangeTarget) return;
     //passar esta confirmação para o backend
     if (roleChangeTarget._id === user._id) {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não podes alterar a tua própria role.",
-        onConfirm: undefined,
+        text2: "Não podes alterar a tua própria role.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
       return;
     }
     if (roleChangeTarget) {
       try {
         await userService.update(roleChangeTarget._id, { role: newRole });
-
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
-          onConfirm: undefined,
+          text2: `O utilizador ${roleChangeTarget.name} agora é ${newRole}.`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
 
         fetchUsers();
       } catch {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "error",
-          title: "Erro",
-          message: "Não foi possível alterar o role do utilizador.",
-          onConfirm: undefined,
+          text2: "Não foi possível alterar o role do utilizador.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
     }
@@ -598,22 +651,26 @@ export default function ProfileScreen() {
         await userService.update(relationTarget.user._id, {
           coach: selectedPts,
         });
-
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
-          onConfirm: undefined,
+          text2: `Os PTs do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
+
         fetchUsers();
       } catch {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "error",
-          title: "Erro",
-          message: "Não foi possível alterar os PTs do utilizador.",
-          onConfirm: undefined,
+          text2: "Não foi possível alterar os PTs do utilizador.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
     }
@@ -626,21 +683,26 @@ export default function ProfileScreen() {
         await userService.update(relationTarget.user._id, {
           atheletes: selectedAthleteIds,
         });
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
-          onConfirm: undefined,
+          text2: `Os atletas do utilizador ${relationTarget.user.name} foram alterados com sucesso.`,
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
+
         fetchUsers();
       } catch {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "error",
-          title: "Erro",
-          message: "Não foi possível alterar os atletas do utilizador.",
-          onConfirm: undefined,
+          text2: "Não foi possível alterar os atletas do utilizador.",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
       }
     }
@@ -671,7 +733,7 @@ export default function ProfileScreen() {
   };
 
   const addTimeRange = (
-    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
+    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">
   ) => {
     setAvailability((prev) => ({
       ...prev,
@@ -684,7 +746,7 @@ export default function ProfileScreen() {
 
   const removeTimeRange = (
     day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
-    index: number,
+    index: number
   ) => {
     setAvailability((prev) => ({
       ...prev,
@@ -699,7 +761,7 @@ export default function ProfileScreen() {
     day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
     index: number,
     field: "start" | "end",
-    value: string,
+    value: string
   ) => {
     // Formata o input automaticamente
     const formattedValue = formatTimeInput(value);
@@ -715,7 +777,7 @@ export default function ProfileScreen() {
   };
 
   const toggleWorkingDay = (
-    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">,
+    day: keyof Omit<Availability, "_id" | "PT" | "maxAthletesPerHour">
   ) => {
     setAvailability((prev) => ({
       ...prev,
@@ -737,12 +799,14 @@ export default function ProfileScreen() {
         if (availability[day].working) {
           for (const range of availability[day].intervals) {
             if (range.start >= range.end) {
-              setPopup({
-                visible: true,
+              Toast.hide();
+              Toast.show({
+                topOffset: 10,
                 type: "error",
-                title: "Erro",
-                message: `O horário de início não pode ser igual ou superior ao horário de término.`,
-                onConfirm: undefined,
+                text2: `O horário de início não pode ser igual ou superior ao horário de término.`,
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
               return;
             }
@@ -761,13 +825,16 @@ export default function ProfileScreen() {
               !validateTimeFormat(range.start) ||
               !validateTimeFormat(range.end)
             ) {
-              setPopup({
-                visible: true,
+              Toast.hide();
+              Toast.show({
+                topOffset: 10,
                 type: "error",
-                title: "Erro",
-                message: `Formato de hora inválido. Use HH:MM.`,
-                onConfirm: undefined,
+                text2: `Formato de hora inválido. Use HH:MM.`,
+                position: "top",
+                visibilityTime: 2500,
+                autoHide: true,
               });
+
               return;
             }
           }
@@ -780,30 +847,53 @@ export default function ProfileScreen() {
       const res = await availabilityService.update(dataToSave);
 
       if (res && res._id) {
-        setPopup({
-          visible: true,
+        Toast.hide();
+        Toast.show({
+          topOffset: 10,
           type: "success",
-          title: "Sucesso",
-          message: "Disponibilidade guardada com sucesso!",
-          onConfirm: undefined,
+          text2: "Disponibilidade guardada com sucesso!",
+          position: "top",
+          visibilityTime: 2500,
+          autoHide: true,
         });
         fetchAvailability();
       } else {
         throw new Error("Falha ao guardar");
       }
     } catch {
-      setPopup({
-        visible: true,
+      Toast.hide();
+      Toast.show({
+        topOffset: 10,
         type: "error",
-        title: "Erro",
-        message: "Não foi possível guardar a disponibilidade.",
-        onConfirm: undefined,
+        text2: "Não foi possível guardar a disponibilidade.",
+        position: "top",
+        visibilityTime: 2500,
+        autoHide: true,
       });
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchNotificationSettings();
+    await fetchAvailability();
+    await fetchMeasures();
+    await fetchUserData();
+    await fetchUsers();
+    await fetchPtsAndAdmins();
+    setRefreshing(false);
+  };
+
+  //const { toggleTheme, isDarkMode } = useThemeContext();
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Perfil</Text>
       </View>
@@ -816,7 +906,11 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Ações */}
+      {/* Ações 
+              <Button mode="contained" onPress={toggleTheme}>
+      Mudar para {isDarkMode ? "modo claro ☀️" : "modo escuro 🌙"}
+    </Button>
+    */}
       {actions.map((action, index) => (
         <View key={index} style={styles.actionContainer}>
           <TouchableOpacity
@@ -1001,13 +1095,17 @@ export default function ProfileScreen() {
                       key: "trainingCanceled",
                       label: "Quando um treino é cancelado",
                     },
+                    {
+                      key: "trainingUpdated",
+                      label: "Quando um treino é alterado",
+                    },
                   ].map((notification) => (
                     <TouchableOpacity
                       key={notification.key}
                       style={styles.notificationItem}
                       onPress={() =>
                         handleNotificationToggle(
-                          notification.key as keyof typeof notificationSettings,
+                          notification.key as keyof typeof notificationSettings
                         )
                       }
                     >
@@ -1043,24 +1141,6 @@ export default function ProfileScreen() {
               <View style={styles.expandedContainer}>
                 <View style={styles.formContainer}>
                   <ScrollView showsVerticalScrollIndicator={false}>
-                    {/* Máximo de atletas por hora */}
-                    <View style={styles.inputGroup}>
-                      <Text style={styles.label}>
-                        Máximo de atletas por hora
-                      </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        style={styles.input}
-                        value={availability.maxAthletesPerHour.toString()}
-                        onChangeText={(val) =>
-                          setAvailability((prev) => ({
-                            ...prev,
-                            maxAthletesPerHour: parseInt(val) || 1,
-                          }))
-                        }
-                      />
-                    </View>
-
                     {/* Dias da semana */}
                     {(
                       [
@@ -1092,16 +1172,16 @@ export default function ProfileScreen() {
                             {day === "Monday"
                               ? "Segunda"
                               : day === "Tuesday"
-                                ? "Terça"
-                                : day === "Wednesday"
-                                  ? "Quarta"
-                                  : day === "Thursday"
-                                    ? "Quinta"
-                                    : day === "Friday"
-                                      ? "Sexta"
-                                      : day === "Saturday"
-                                        ? "Sábado"
-                                        : "Domingo"}
+                              ? "Terça"
+                              : day === "Wednesday"
+                              ? "Quarta"
+                              : day === "Thursday"
+                              ? "Quinta"
+                              : day === "Friday"
+                              ? "Sexta"
+                              : day === "Saturday"
+                              ? "Sábado"
+                              : "Domingo"}
                           </Text>
 
                           <TouchableOpacity
@@ -1473,7 +1553,7 @@ export default function ProfileScreen() {
           relationTarget.user &&
           Array.isArray(relationTarget.user.coach)
             ? relationTarget.user.coach.map((c) =>
-                typeof c === "string" ? c : c._id,
+                typeof c === "string" ? c : c._id
               )
             : []
         }

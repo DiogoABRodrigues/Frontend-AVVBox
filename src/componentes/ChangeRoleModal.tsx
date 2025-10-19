@@ -16,7 +16,7 @@ export default function ChangeRoleModal({
   currentRole,
 }: Props) {
   const [selectedRole, setSelectedRole] = useState<"atleta" | "PT" | "Admin">(
-    currentRole,
+    currentRole
   );
 
   useEffect(() => {
