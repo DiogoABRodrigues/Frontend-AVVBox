@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { styles } from "./styles/Modal.styles";
+import { modalStyles } from "./styles/Modal.styles";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface Props {
   visible: boolean;
@@ -18,6 +19,9 @@ export default function ChangeRoleModal({
   const [selectedRole, setSelectedRole] = useState<"atleta" | "PT" | "Admin">(
     currentRole
   );
+
+    const { colors } = useThemeContext();
+    const styles = modalStyles(colors);
 
   useEffect(() => {
     if (visible) {

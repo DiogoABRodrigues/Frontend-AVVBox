@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { styles } from "./styles/NotificationsModal.styles";
+import { notificationModalStyles } from "./styles/NotificationsModal.styles";
 import { userService } from "../services/usersService";
 import { useAuth } from "../context/AuthContext";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface User {
   id: string;
@@ -37,6 +38,9 @@ export default function NotificationModal({
   recipientOption,
   setRecipientOption,
 }: Props) {
+    const { colors } = useThemeContext();
+    const styles = notificationModalStyles(colors);
+  
   const [users, setUsers] = useState<User[]>([]);
   const { user } = useAuth();
 

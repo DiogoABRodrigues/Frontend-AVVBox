@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet } from "react-native";
 
-export const exerciseStyles = (colors: any) =>
+export const popupStyles = (colors: any) =>
   StyleSheet.create({
   overlay: {
     flex: 1,

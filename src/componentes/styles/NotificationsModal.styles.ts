@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-export const styles = StyleSheet.create({
+export const notificationModalStyles = (colors: any) =>
+  StyleSheet.create({
   // Modal Overlay
   modalOverlay: {
     flex: 1,

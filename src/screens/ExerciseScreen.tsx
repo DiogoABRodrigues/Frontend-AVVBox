@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { styles } from "./styles/ExerciseScreen.styles";
+import { exerciseStyles } from "./styles/ExerciseScreen.styles";
 import { useAuth } from "../context/AuthContext";
 import { User } from "../models/User";
 import { userService } from "../services/usersService";
@@ -18,6 +18,7 @@ import { Weights, Exercise } from "../models/Exercise";
 import { exerciseService } from "../services/exerciseService";
 import Popup from "../componentes/Popup";
 import Toast from "react-native-toast-message";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface LocalMuscleGroup {
   key: string;
@@ -25,6 +26,8 @@ interface LocalMuscleGroup {
 }
 
 export default function ExerciseScreen() {
+    const { colors } = useThemeContext();
+    const styles = exerciseStyles(colors);
   const emptyUser: User = {
     _id: "",
     name: "",

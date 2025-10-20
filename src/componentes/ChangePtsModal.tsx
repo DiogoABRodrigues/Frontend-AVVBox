@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { User } from "../models/User";
-import { styles } from "./styles/Modal.styles";
+import { modalStyles } from "./styles/Modal.styles";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface Props {
   visible: boolean;
@@ -19,6 +20,8 @@ export default function ChangePtsModal({
   users,
   selected,
 }: Props) {
+    const { colors } = useThemeContext();
+    const styles = modalStyles(colors);
   const [selectedPt, setSelectedPt] = useState<string | null>(
     selected[0] || null
   ); // apenas 1 coach

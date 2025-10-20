@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/context/ThemeContext";
 import React from "react";
 import { View, Text } from "react-native";
 import { BaseToastProps, ToastConfig } from "react-native-toast-message";
@@ -6,6 +7,8 @@ interface CustomToastProps extends BaseToastProps {
   text1?: string;
   text2?: string;
 }
+
+  const { colors } = useThemeContext();
 
 const toastConfig: ToastConfig = {
   error: ({ text1, text2 }: CustomToastProps) => (

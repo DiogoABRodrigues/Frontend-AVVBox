@@ -17,7 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userService } from "../services/usersService";
-import { styles } from "./styles/LoginScreen.styles";
+import { loginStyles } from "./styles/LoginScreen.styles";
 import Popup from "../componentes/Popup";
 // @ts-expect-error not a real error
 import avvbLogo from "../../assets/avvb.png";
@@ -26,6 +26,7 @@ import api from "../../api";
 import * as Notifications from "expo-notifications";
 import { registerIndieID } from "native-notify";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface PopupState {
   visible: boolean;
@@ -36,6 +37,8 @@ interface PopupState {
 }
 
 export default function LoginScreen() {
+    const { colors } = useThemeContext();
+    const styles = loginStyles(colors);
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

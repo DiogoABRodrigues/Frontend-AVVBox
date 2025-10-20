@@ -8,7 +8,8 @@ import {
   Modal,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { styles } from "../componentes/styles/EditTrainingModal.styles";
+import { trainingStyles } from "../componentes/styles/EditTrainingModal.styles";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface TimeSlot {
   time: string;
@@ -48,6 +49,8 @@ export const EditTrainingModal: React.FC<EditTrainingModalProps> = ({
   handleEditTraining,
   renderTimeSlotEditing,
 }) => {
+    const { colors } = useThemeContext();
+    const styles = trainingStyles(colors);
   return (
     <Modal visible={visible} transparent animationType="none">
       <View style={styles.modalOverlay}>

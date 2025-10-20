@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, ViewStyle } from "react-native";
-import { styles } from "./styles/Popup.styles";
+import { popupStyles } from "./styles/Popup.styles";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface PopupProps {
   visible: boolean;
@@ -12,6 +13,10 @@ interface PopupProps {
   onClose?: () => void; // usado para success/error
   style?: ViewStyle; // novo prop opcional para customizar o container
 }
+
+  const { colors } = useThemeContext();
+  const styles = popupStyles(colors);
+
 
 export default function Popup({
   visible,
