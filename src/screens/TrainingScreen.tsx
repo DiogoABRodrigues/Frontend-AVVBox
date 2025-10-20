@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { ScrollView, RefreshControl } from "react-native-gesture-handler";
 import { Calendar, LocaleConfig } from "react-native-calendars";
-import { styles } from "./styles/TrainingScreen.styles";
 import { Availability, DayAvailability } from "../models/Availability";
 import { availabilityService } from "../services/availabilityService";
 import { Training, TrainingRequest } from "../models/Training";
@@ -27,6 +26,8 @@ interface TimeSlot {
   time: string;
   formattedTime: string;
 }
+import { useThemeContext } from "../context/ThemeContext";
+import { trainingStyles } from "@/componentes/styles/EditTrainingModal.styles";
 
 // Configurar o calendário para português
 LocaleConfig.locales["pt"] = {
@@ -73,6 +74,8 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function TrainingScreen() {
+  const { colors } = useThemeContext();
+  const styles = trainingStyles(colors);
   const emptyUser: User = {
     _id: "",
     name: "",
@@ -561,7 +564,7 @@ export default function TrainingScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color=colors.blue />
+        <ActivityIndicator size="large" color={colors.blue} />
       </View>
     );
   }
@@ -1048,7 +1051,7 @@ export default function TrainingScreen() {
                                 : "chevron-down-outline"
                             }
                             size={18}
-                            color=colors.dark
+                            color={colors.dark}
                           />
                         </TouchableOpacity>
 
@@ -1148,7 +1151,7 @@ export default function TrainingScreen() {
                               : "chevron-down-outline"
                           }
                           size={18}
-                          color=colors.dark
+                          color={colors.dark}
                         />
                       </TouchableOpacity>
 
@@ -1186,7 +1189,7 @@ export default function TrainingScreen() {
                             <Ionicons
                               name="create-outline"
                               size={18}
-                              color=colors.header
+                              color={colors.header}
                             />
                           </TouchableOpacity>
                           <TouchableOpacity
@@ -1196,7 +1199,7 @@ export default function TrainingScreen() {
                             <Ionicons
                               name="trash-outline"
                               size={18}
-                              color=colors.red
+                              color={colors.red}
                             />
                           </TouchableOpacity>
                         </View>
@@ -1262,7 +1265,7 @@ export default function TrainingScreen() {
                                 : "chevron-down-outline"
                             }
                             size={18}
-                            color=colors.dark
+                            color={colors.dark}
                           />
                         </TouchableOpacity>
 
@@ -1300,7 +1303,7 @@ export default function TrainingScreen() {
                               <Ionicons
                                 name="create-outline"
                                 size={18}
-                                color=colors.header
+                                color={colors.header}
                               />
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -1310,7 +1313,7 @@ export default function TrainingScreen() {
                               <Ionicons
                                 name="trash-outline"
                                 size={18}
-                                color=colors.red
+                                color={colors.red}
                               />
                             </TouchableOpacity>
                           </View>
