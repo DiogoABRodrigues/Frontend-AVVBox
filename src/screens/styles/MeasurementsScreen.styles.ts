@@ -5,12 +5,10 @@ export const measuresStyles = (colors: any) =>
   StyleSheet.create({
   // Container Principal
   container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingBottom: 40,
+    flexGrow: 1,
+    paddingHorizontal: 8,
     backgroundColor: colors.background,
   },
-
   // Header
   header: {
     flexDirection: "row",

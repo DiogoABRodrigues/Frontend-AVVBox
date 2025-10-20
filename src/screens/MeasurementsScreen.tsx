@@ -461,7 +461,6 @@ export default function MeasurementsScreen() {
   };
 
   return (
-    <>
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
@@ -796,10 +795,7 @@ export default function MeasurementsScreen() {
             </View>
           </View>
         )}
-      </ScrollView>
-
-      {/* POPUP */}
-      <Popup
+              <Popup
         visible={popup.visible}
         type={popup.type as any}
         title={popup.title}
@@ -808,6 +804,6 @@ export default function MeasurementsScreen() {
         onCancel={() => setPopup((p) => ({ ...p, visible: false }))}
         onClose={() => setPopup((p) => ({ ...p, visible: false }))}
       />
-    </>
+      </ScrollView>
   );
 }

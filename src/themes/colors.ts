@@ -37,5 +37,37 @@ export const lightColors = {
 
 
 export const darkColors = {
-
+  background: "#0f172a",         
+  header: "#e2e8f0",
+  description: "#94a3b8",
+  white: "#1e293b",
+  black: "#ffffff",
+  greyLight: "#334155",
+  greyMidLight: "#475569",
+  greyMedium: "#64748b",
+  greyDark: "#94a3b8",
+  blueLight: "#1e40af",
+  blueMedium: "#3b82f6",
+  redLight: "#7f1d1d",
+  redMedium: "#ef4444",
+  darkGrey: "#1e293b",
+  blue: "#3b82f6",
+  darkBlue: "#1e3a8a",
+  blueSuperLight: "#1e293b",
+  greenLight: "#064e3b",
+  red: "#f87171",
+  placeHolder: "#94a3b8",
+  green: "#10b981",
+  darkgreen: "#34d399",
+  superLightGreen: "#064e3b",
+  dark: "#e5e7eb",
+  closeBlack: "#f9fafb",
+  tabItemBlue: "#1e40af",
+  yellow: "#facc15",
+  redSuperLight: "#7f1d1d",
+  superMegaLightGreen: "#064e3b",
+  torrado: "#f59e0b",
+  lightYellow: "#78350f",
+  gold: "#fbbf24",
+  orange: "#fb923c"
 };
