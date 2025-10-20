@@ -898,7 +898,7 @@ export default function ProfileScreen() {
         <Text style={styles.headerTitle}>Perfil</Text>
       </View>
       <View style={styles.profileHeader}>
-        <Ionicons name="person-circle-outline" size={100} color=colors.header />
+        <Ionicons name="person-circle-outline" size={100} color={colors.header} />
         <View style={styles.userInfo}>
           <Text style={styles.name}>{userData?.name}</Text>
           <Text style={styles.email}>{userData?.phoneNumber}</Text>
@@ -949,7 +949,7 @@ export default function ProfileScreen() {
                     : "chevron-down-outline"
                 }
                 size={20}
-                color=colors.greyMedium
+                color={colors.greyMedium}
               />
             )}
           </TouchableOpacity>
@@ -1341,7 +1341,7 @@ export default function ProfileScreen() {
                 <View style={styles.formContainer}>
                   {ptsAndAdmins.length === 0 ? (
                     <View style={styles.emptyContactsContainer}>
-                      <Ionicons name="call-outline" size={48} color=colors.greyMedium />
+                      <Ionicons name="call-outline" size={48} color={colors.greyMedium} />
                       <Text style={styles.emptyContactsText}>
                         Nenhum PT ou Admin disponível no momento.
                       </Text>
@@ -1374,7 +1374,7 @@ export default function ProfileScreen() {
                               <Ionicons
                                 name="copy-outline"
                                 size={24}
-                                color=colors.header
+                                color={colors.header}
                               />
                               <Text style={styles.copyDescription}>
                                 {copiedId === contact._id
@@ -1461,7 +1461,7 @@ export default function ProfileScreen() {
                         <Ionicons
                           name="people-outline"
                           size={48}
-                          color=colors.greyMedium
+                          color={colors.greyMedium}
                         />
                         <Text style={styles.emptyUsersText}>
                           Nenhum utilizador encontrado com os filtros
@@ -1510,7 +1510,7 @@ export default function ProfileScreen() {
                               <Ionicons
                                 name="ellipsis-vertical"
                                 size={20}
-                                color=colors.description
+                                color={colors.description}
                               />
                             </TouchableOpacity>
 
