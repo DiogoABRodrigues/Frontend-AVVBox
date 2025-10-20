@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { styles } from "./styles/MeasuresModal.styles";
+import { measuresModalStyles } from "./styles/MeasuresModal.styles";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface Measures {
   weight: number;
@@ -41,7 +42,9 @@ export default function MeasuresModal({
     visceralFat: "",
     type: "atual",
   });
-
+      const { colors } = useThemeContext();
+      const styles = measuresModalStyles(colors);
+      
   const resetMeasures = () => {
     setMeasuresInput({
       weight: "",

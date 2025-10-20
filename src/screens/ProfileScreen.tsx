@@ -25,7 +25,7 @@ import ChangeRoleModal from "../componentes/ChangeRoleModal";
 import { availabilityService } from "../services/availabilityService";
 import { Availability } from "../models/Availability";
 import Toast from "react-native-toast-message";
-//import { Button } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { useThemeContext } from "../context/ThemeContext";
 
 export default function ProfileScreen() {
@@ -884,7 +884,7 @@ export default function ProfileScreen() {
     setRefreshing(false);
   };
 
-  //const { toggleTheme, isDarkMode } = useThemeContext();
+  const { toggleTheme, isDarkMode } = useThemeContext();
 
   return (
     <ScrollView
@@ -906,11 +906,11 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Ações 
+
               <Button mode="contained" onPress={toggleTheme}>
       Mudar para {isDarkMode ? "modo claro ☀️" : "modo escuro 🌙"}
     </Button>
-    */}
+
       {actions.map((action, index) => (
         <View key={index} style={styles.actionContainer}>
           <TouchableOpacity

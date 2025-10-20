@@ -35,11 +35,11 @@ function AppNavigator() {
 // 🔹 Este componente vai usar o tema atual do contexto
 function ThemedApp() {
   const { theme, isDarkMode } = useThemeContext();
-
+const { colors } = useThemeContext();
   return (
     <PaperProvider theme={theme}>
       <StatusBar
-        backgroundColor={isDarkMode ? "colors.black000" : colors.background}
+        backgroundColor={isDarkMode ? colors.black : colors.background}
         barStyle={isDarkMode ? "light-content" : "dark-content"}
       />
       <AuthProvider>

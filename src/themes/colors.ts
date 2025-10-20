@@ -12,7 +12,7 @@ export const lightColors = {
   blueLight: "#dbeafe",
   blueMedium: "#93c5fd",
   redLight: "#fef2f2",
-  redMedium: "#afecaca",
+  redMedium: "#fecaca",
   darkGrey: "#374151",
   blue: "#2563eb",
   darkBlue: "#1e40af",

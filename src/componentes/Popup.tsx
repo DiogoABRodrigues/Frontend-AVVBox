@@ -14,8 +14,7 @@ interface PopupProps {
   style?: ViewStyle; // novo prop opcional para customizar o container
 }
 
-  const { colors } = useThemeContext();
-  const styles = popupStyles(colors);
+
 
 
 export default function Popup({
@@ -28,6 +27,8 @@ export default function Popup({
   onClose,
   style,
 }: PopupProps) {
+    const { colors } = useThemeContext();
+  const styles = popupStyles(colors);
   return (
     <Modal visible={visible} transparent>
       <View style={styles.overlay}>

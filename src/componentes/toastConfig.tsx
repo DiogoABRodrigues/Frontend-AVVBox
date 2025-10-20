@@ -8,10 +8,12 @@ interface CustomToastProps extends BaseToastProps {
   text2?: string;
 }
 
-  const { colors } = useThemeContext();
-
 const toastConfig: ToastConfig = {
-  error: ({ text1, text2 }: CustomToastProps) => (
+  error: ({ text1, text2 }: CustomToastProps) => {
+    const { colors } = useThemeContext();
+
+    return (
+
     <View
       style={{
         flexDirection: "row",
@@ -43,9 +45,13 @@ const toastConfig: ToastConfig = {
         </Text>
       )}
     </View>
-  ),
+  )},
 
-  success: ({ text1, text2 }: CustomToastProps) => (
+  success: ({ text1, text2 }: CustomToastProps) => {
+    const { colors } = useThemeContext();
+
+    return (
+
     <View
       style={{
         flexDirection: "row",
@@ -70,9 +76,13 @@ const toastConfig: ToastConfig = {
         </Text>
       )}
     </View>
-  ),
+  )},
 
-  delete: ({ text1, text2 }: CustomToastProps) => (
+  delete: ({ text1, text2 }: CustomToastProps) => {
+    const { colors } = useThemeContext();
+
+    return (
+
     <View
       style={{
         flexDirection: "row",
@@ -102,7 +112,7 @@ const toastConfig: ToastConfig = {
         <Text style={{ color: colors.red, flexWrap: "wrap" }}>{text2}</Text>
       )}
     </View>
-  ),
+  )},
 };
 
 export default toastConfig;
