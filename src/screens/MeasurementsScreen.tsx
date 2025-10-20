@@ -13,13 +13,14 @@ import { useAuth } from "../context/AuthContext";
 import { userService } from "../services/usersService";
 import { measuresService } from "../services/measuresService";
 import { formatMeasurements } from "../utils/measureUtils";
-import { styles } from "./styles/MeasurementsScreen.styles";
+import { measuresStyles } from "./styles/MeasurementsScreen.styles";
 import { Measures } from "../models/Measures";
 import { LineChart } from "react-native-chart-kit";
 import MeasuresModal from "../componentes/MeasuresModal";
 import Popup from "../componentes/Popup";
 import Toast from "react-native-toast-message";
 import { LayoutAnimation, UIManager, Platform } from "react-native";
+import { useThemeContext } from "@/context/ThemeContext";
 
 interface Athlete {
   id: string;
@@ -33,6 +34,8 @@ interface AthleteData {
 }
 
 export default function MeasurementsScreen() {
+        const { colors } = useThemeContext();
+        const styles = measuresStyles(colors);
   if (
     Platform.OS === "android" &&
     UIManager.setLayoutAnimationEnabledExperimental
@@ -532,7 +535,7 @@ export default function MeasurementsScreen() {
               style={styles.actionButton}
               onPress={() => setShowMeasuresModal(true)}
             >
-              <Ionicons name="add" size={24} color=colors.white />
+              <Ionicons name="add" size={24} color={colors.white} />
             </TouchableOpacity>
 
             <MeasuresModal
@@ -624,7 +627,7 @@ export default function MeasurementsScreen() {
                         <Ionicons
                           name="trash-outline"
                           size={22}
-                          color=colors.red
+                          color={colors.red}
                         />
                       </TouchableOpacity>
                     )}

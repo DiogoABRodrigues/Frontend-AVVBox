@@ -8,14 +8,16 @@ import MeasuresScreen from "./MeasurementsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import ProfileScreen from "./ProfileScreen";
 
-import { styles } from "./styles/Navigator.styles";
+import { navigatoreStyles } from "./styles/Navigator.styles";
 import { useNotifications } from "../context/NotificationsContext";
+import { useThemeContext } from "@/context/ThemeContext";
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function AthleteTabs() {
   const { notifications } = useNotifications();
-
+      const { colors } = useThemeContext();
+      const styles = navigatoreStyles(colors);
   // Badge: quantidade de notificações não lidas
   const unreadCount = notifications.filter((n) => !n.read).length;
 

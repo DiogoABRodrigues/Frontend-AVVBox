@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions } from "react-native";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { StyleSheet } from "react-native";
 
-const { height } = Dimensions.get("window");
-
-export const styles = StyleSheet.create({
+export const navigatoreStyles = (colors: any) =>
+  StyleSheet.create({
   tabBar: {
     height: 80, // Mudança: altura fixa em vez de porcentagem
     backgroundColor: colors.white,
@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 8, // Mudança: padding consistente
     borderRadius: 12, // Mudança: border radius consistente
     borderWidth: 1, // Mudança: borda sutil
-    borderColor: colors.tabItemBlue
+    borderColor: colors.tabItemBlue,
     shadowColor: colors.white, // Mudança: sombra colorida
     shadowOpacity: 0.2,
     shadowRadius: 3,

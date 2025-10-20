@@ -13,9 +13,10 @@ import NotificationModal from "../componentes/NotificationsModal";
 import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationsContext";
 import { notificationService } from "../services/notificationService";
-import { styles } from "./styles/NotificationsScreen.styles";
+import { notificationStyles } from "./styles/NotificationsScreen.styles";
 import { User } from "../models/User";
 import Toast from "react-native-toast-message";
+import { useThemeContext } from "../context/ThemeContext";
 
 interface Notification {
   id: string;
@@ -27,6 +28,8 @@ interface Notification {
 }
 
 export default function NotificationsScreen() {
+    const { colors } = useThemeContext();
+    const styles = notificationStyles(colors);
   const emptyUser: User = {
     _id: "",
     name: "",
@@ -201,7 +204,7 @@ export default function NotificationsScreen() {
         <View style={styles.separator} />
         {notifications.length === 0 ? (
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="notifications-off-outline" size={64} color=colors.placeHolder />
+            <Ionicons name="notifications-off-outline" size={64} color={colors.placeHolder} />
             <Text style={styles.emptyStateTitle}>Sem notificações</Text>
             <Text style={styles.emptyStateText}>
               Não tem notificações por ler.
