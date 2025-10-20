@@ -25,12 +25,12 @@ export const profileStyles = (colors: any) =>
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 32,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -42,7 +42,7 @@ export const profileStyles = (colors: any) =>
     borderRadius: 40,
     marginRight: 16,
     borderWidth: 3,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
   userInfo: { flex: 1 },
   name: {
@@ -53,13 +53,13 @@ export const profileStyles = (colors: any) =>
   },
   email: {
     fontSize: 16,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
     marginBottom: 4,
   },
   details: {
     fontSize: 14,
-    color: "#94a3b8",
+    color: colors.greyMedium,
   },
 
   actionContainer: {
@@ -72,9 +72,9 @@ export const profileStyles = (colors: any) =>
     padding: 18,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    backgroundColor: "#ffffff",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -83,8 +83,8 @@ export const profileStyles = (colors: any) =>
   actionBoxExpanded: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderBottomColor: "#cbd5e1",
-    backgroundColor: "#f8fafc",
+    borderBottomColor: colors.greyLight,
+    backgroundColor: colors.background,
   },
   actionLeft: {
     flexDirection: "row",
@@ -96,21 +96,21 @@ export const profileStyles = (colors: any) =>
   },
   actionText: {
     fontSize: 16,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "600",
   },
   logoutBox: {
-    borderColor: "#fecaca",
-    backgroundColor: "#fef2f2",
+    borderColor: colors.redMedium,
+    backgroundColor: colors.redLight,
   },
 
   // Expanded Container Styles
   expandedContainer: {
-    backgroundColor: "#ffffff",
-    borderColor: "#e2e8f0",
+    backgroundColor: colors.white,
+    borderColor: colors.greyLight,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -135,18 +135,18 @@ export const profileStyles = (colors: any) =>
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: colors.darkGrey,
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    backgroundColor: "#ffffff",
-    color: "#374151",
-    shadowColor: "#000",
+    backgroundColor: colors.white,
+    color: colors.darkGrey,
+    shadowColor: colors.black,
     shadowOpacity: 0.04,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
@@ -162,41 +162,41 @@ export const profileStyles = (colors: any) =>
   },
 
   saveButton: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
     alignItems: "center",
     flex: 1,
-    shadowColor: "#2563eb",
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
   saveButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
     fontSize: 16,
   },
 
   cancelButton: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     flex: 1,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.04,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
     elevation: 1,
   },
   cancelButtonText: {
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
     fontSize: 16,
   },
@@ -205,16 +205,16 @@ export const profileStyles = (colors: any) =>
   objectivesPlaceholder: {
     alignItems: "center",
     paddingVertical: 40,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 12,
     borderWidth: 2,
     borderStyle: "dashed",
-    borderColor: "#cbd5e1",
+    borderColor: colors.greyLight,
     marginBottom: 20,
   },
   placeholderText: {
     fontSize: 16,
-    color: "#6b7280",
+    color: colors.greyMedium,
     marginTop: 12,
     textAlign: "center",
   },
@@ -227,7 +227,7 @@ export const profileStyles = (colors: any) =>
   filterContainer: {
     flexDirection: "row",
     marginBottom: 20,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: colors.blueSuperLight,
     borderRadius: 12,
     padding: 4,
     gap: 4,
@@ -243,8 +243,8 @@ export const profileStyles = (colors: any) =>
   },
 
   filterButtonActive: {
-    backgroundColor: "#2563eb",
-    shadowColor: "#2563eb",
+    backgroundColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -254,11 +254,11 @@ export const profileStyles = (colors: any) =>
   filterButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#64748b",
+    color: colors.description,
   },
 
   filterButtonTextActive: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
   },
 
@@ -274,9 +274,9 @@ export const profileStyles = (colors: any) =>
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    backgroundColor: "#ffffff",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOpacity: 0.04,
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
@@ -284,20 +284,20 @@ export const profileStyles = (colors: any) =>
   },
 
   roleFilterButtonActive: {
-    backgroundColor: "#2563eb",
-    borderColor: "#2563eb",
-    shadowColor: "#2563eb",
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
   },
 
   roleFilterText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#64748b",
+    color: colors.description,
   },
 
   roleFilterTextActive: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
   },
 
@@ -311,11 +311,11 @@ export const profileStyles = (colors: any) =>
     justifyContent: "space-between",
     padding: 16,
     marginBottom: 8,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -324,7 +324,7 @@ export const profileStyles = (colors: any) =>
 
   userItemInactive: {
     opacity: 0.6,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
   },
 
   userName: {
@@ -336,7 +336,7 @@ export const profileStyles = (colors: any) =>
 
   userRole: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
     marginBottom: 2,
   },
@@ -347,19 +347,19 @@ export const profileStyles = (colors: any) =>
   },
 
   userStatusActive: {
-    color: "#059669",
+    color: colors.darkgreen,
   },
 
   userStatusInactive: {
-    color: "#dc2626",
+    color: colors.red,
   },
 
   menuButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
 
   menuContainer: {
@@ -372,11 +372,11 @@ export const profileStyles = (colors: any) =>
     position: "absolute",
     top: 40, // Posiciona abaixo do botão
     right: 0, // Alinha à direita
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.25,
     shadowRadius: 15,
     shadowOffset: { width: 0, height: 8 },
@@ -388,7 +388,7 @@ export const profileStyles = (colors: any) =>
   menuOption: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: colors.blueSuperLight,
   },
 
   menuOptionLast: {
@@ -397,12 +397,12 @@ export const profileStyles = (colors: any) =>
 
   menuOptionText: {
     fontSize: 14,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
   },
 
   menuOptionDanger: {
-    color: "#dc2626",
+    color: colors.red,
     fontWeight: "600",
   },
 
@@ -414,7 +414,7 @@ export const profileStyles = (colors: any) =>
 
   emptyUsersText: {
     fontSize: 16,
-    color: "#94a3b8",
+    color: colors.greyMedium,
     fontStyle: "italic",
     textAlign: "center",
     marginTop: 12,
@@ -424,7 +424,7 @@ export const profileStyles = (colors: any) =>
   // Notification Styles
   notificationDescription: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     textAlign: "center",
     marginBottom: 24,
     lineHeight: 20,
@@ -444,12 +444,12 @@ export const profileStyles = (colors: any) =>
     paddingVertical: 16,
     paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: colors.blueSuperLight,
   },
 
   notificationLabel: {
     fontSize: 16,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
     marginRight: 10,
@@ -459,21 +459,21 @@ export const profileStyles = (colors: any) =>
     width: 52,
     height: 28,
     borderRadius: 14,
-    backgroundColor: "#e2e8f0",
+    backgroundColor: colors.greyLight,
     padding: 2,
     justifyContent: "center",
   },
 
   switchActive: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
   },
 
   switchThumb: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#ffffff",
-    shadowColor: "#000",
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOpacity: 0.2,
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
@@ -495,11 +495,11 @@ export const profileStyles = (colors: any) =>
     justifyContent: "space-between",
     padding: 16,
     marginBottom: 8,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -519,7 +519,7 @@ export const profileStyles = (colors: any) =>
 
   contactRole: {
     fontSize: 12,
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "600",
     textTransform: "uppercase",
     marginBottom: 4,
@@ -527,7 +527,7 @@ export const profileStyles = (colors: any) =>
 
   contactPhone: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
 
@@ -545,7 +545,7 @@ export const profileStyles = (colors: any) =>
 
   emptyContactsText: {
     fontSize: 16,
-    color: "#94a3b8",
+    color: colors.greyMedium,
     fontStyle: "italic",
     textAlign: "center",
     marginTop: 12,
@@ -562,11 +562,11 @@ export const profileStyles = (colors: any) =>
   },
   dayContainer: {
     marginBottom: 20,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
 
   dayHeader: {
@@ -586,19 +586,19 @@ export const profileStyles = (colors: any) =>
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
 
   workingDayText: {
     fontSize: 12,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
 
   workingDayTextActive: {
-    color: "#059669",
+    color: colors.darkgreen,
     fontWeight: "600",
   },
 
@@ -615,27 +615,27 @@ export const profileStyles = (colors: any) =>
 
   timeInput: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 8,
     padding: 8,
     fontSize: 14,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     textAlign: "center",
     minWidth: 60,
   },
 
   timeSeparator: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
 
   removeTimeButton: {
     padding: 8,
     borderRadius: 6,
-    backgroundColor: "#fef2f2",
+    backgroundColor: colors.redLight,
     borderWidth: 1,
-    borderColor: "#fecaca",
+    borderColor: colors.redMedium,
   },
 
   addTimeButton: {
@@ -644,9 +644,9 @@ export const profileStyles = (colors: any) =>
     justifyContent: "center",
     padding: 12,
     borderRadius: 8,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#cbd5e1",
+    borderColor: colors.greyLight,
     borderStyle: "dashed",
     gap: 6,
     marginTop: 8,
@@ -654,21 +654,21 @@ export const profileStyles = (colors: any) =>
 
   addTimeButtonText: {
     fontSize: 14,
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "500",
   },
   dayContainerDisabled: {
     opacity: 1,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: colors.blueSuperLight,
   },
 
   dayTitleDisabled: {
-    color: "#9ca3af",
+    color: colors.greyMedium,
   },
 
   workingDayToggleActive: {
-    backgroundColor: "#dbeafe",
-    borderColor: "#93c5fd",
+    backgroundColor: colors.blueLight,
+    borderColor:colors.blueMedium,
   },
 
   timeRangesContainerDisabled: {
@@ -680,32 +680,32 @@ export const profileStyles = (colors: any) =>
   },
 
   timeInputDisabled: {
-    backgroundColor: "#f3f4f6",
-    color: "#9ca3af",
-    borderColor: "#d1d5db",
+    backgroundColor: colors.blueSuperLight,
+    color: colors.greyMedium,
+    borderColor: colors.greyMidLight,
   },
 
   timeSeparatorDisabled: {
-    color: "#9ca3af",
+    color: colors.greyMedium,
   },
 
   removeTimeButtonDisabled: {
-    backgroundColor: "#f9fafb",
-    borderColor: "#e5e7eb",
+    backgroundColor: colors.background,
+    borderColor: colors.greyLight,
     opacity: 0.5,
   },
 
   addTimeButtonDisabled: {
-    backgroundColor: "#f9fafb",
-    borderColor: "#e5e7eb",
+    backgroundColor: colors.background,
+    borderColor: colors.greyLight,
     opacity: 0.6,
   },
 
   addTimeButtonTextDisabled: {
-    color: "#9ca3af",
+    color: colors.greyMedium,
   },
   timeInputError: {
-    borderColor: "#dc2626",
+    borderColor: colors.red,
     borderWidth: 1,
   },
 });

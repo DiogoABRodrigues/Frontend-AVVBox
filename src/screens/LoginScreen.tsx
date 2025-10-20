@@ -396,7 +396,7 @@ export default function LoginScreen() {
     <SafeAreaView style={styles.safeArea}>
       {/* Transição de login */}
       <LinearGradient
-        colors={["#1a1a1a", "#2d2d2d", "#1a1a1a"]}
+        colors={[colors.closeBlack, colors.dark, colors.closeBlack]}
         style={styles.gradient}
       >
         <KeyboardAvoidingView
@@ -447,12 +447,12 @@ export default function LoginScreen() {
                         <Ionicons
                           name="person-outline"
                           size={20}
-                          color="#666"
+                          color={colors.placeHolder}
                           style={styles.inputIcon}
                         />
                         <TextInput
                           placeholder="Nome completo"
-                          placeholderTextColor="#999"
+                          placeholderTextColor={colors.placeHolder}
                           value={name}
                           onChangeText={setName}
                           style={styles.input}
@@ -464,12 +464,12 @@ export default function LoginScreen() {
                         <Ionicons
                           name="call-outline"
                           size={20}
-                          color="#666"
+                          color={colors.placeHolder}
                           style={styles.inputIcon}
                         />
                         <TextInput
                           placeholder="Número de Telemóvel"
-                          placeholderTextColor="#999"
+                          placeholderTextColor={colors.placeHolder}
                           value={phoneNumber}
                           onChangeText={setPhone}
                           style={styles.input}
@@ -487,12 +487,12 @@ export default function LoginScreen() {
                     <Ionicons
                       name="mail-outline"
                       size={20}
-                      color="#666"
+                      color={colors.placeHolder}
                       style={styles.inputIcon}
                     />
                     <TextInput
                       placeholder="Email"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colors.placeHolder}
                       value={email}
                       onChangeText={setEmail}
                       style={styles.input}
@@ -508,12 +508,12 @@ export default function LoginScreen() {
                     <Ionicons
                       name="lock-closed-outline"
                       size={20}
-                      color="#666"
+                      color={colors.placeHolder}
                       style={styles.inputIcon}
                     />
                     <TextInput
                       placeholder="Senha"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colors.placeHolder}
                       value={password}
                       onChangeText={setPassword}
                       secureTextEntry={!showPassword}
@@ -526,7 +526,7 @@ export default function LoginScreen() {
                       <Ionicons
                         name={showPassword ? "eye-outline" : "eye-off-outline"}
                         size={20}
-                        color="#666"
+                        color={colors.placeHolder}
                       />
                     </TouchableOpacity>
                   </View>
@@ -539,12 +539,12 @@ export default function LoginScreen() {
                       <Ionicons
                         name="lock-closed-outline"
                         size={20}
-                        color="#666"
+                        color={colors.placeHolder}
                         style={styles.inputIcon}
                       />
                       <TextInput
                         placeholder="Confirmar senha"
-                        placeholderTextColor="#999"
+                        placeholderTextColor={colors.placeHolder}
                         value={confirmPassword}
                         onChangeText={setConfirmPassword}
                         secureTextEntry={!showConfirmPassword}
@@ -563,7 +563,7 @@ export default function LoginScreen() {
                               : "eye-off-outline"
                           }
                           size={20}
-                          color="#666"
+                          color={colors.placeHolder}
                         />
                       </TouchableOpacity>
                     </View>
@@ -580,7 +580,7 @@ export default function LoginScreen() {
                   disabled={loading}
                 >
                   {loading ? (
-                    <ActivityIndicator color="#1a1a1a" size="small" />
+                    <ActivityIndicator color={colors.closeBlack} size="small" />
                   ) : (
                     <Text style={styles.loginButtonText}>
                       {isRegistering ? "Criar Conta" : "Entrar"}
@@ -603,7 +603,7 @@ export default function LoginScreen() {
                           <Ionicons
                             name="checkmark"
                             size={12}
-                            color="#1a1a1a"
+                            color={colors.closeBlack}
                           />
                         )}
                       </View>
@@ -633,12 +633,12 @@ export default function LoginScreen() {
                     <Ionicons
                       name="mail-outline"
                       size={20}
-                      color="#666"
+                      color={colors.placeHolder}
                       style={styles.inputIcon}
                     />
                     <TextInput
                       placeholder="Email"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colors.placeHolder}
                       value={resetEmail}
                       onChangeText={setResetEmail}
                       style={styles.input}
@@ -656,7 +656,7 @@ export default function LoginScreen() {
                   disabled={loading}
                 >
                   {loading ? (
-                    <ActivityIndicator color="#1a1a1a" size="small" />
+                    <ActivityIndicator color={colors.closeBlack} size="small" />
                   ) : (
                     <Text style={styles.loginButtonText}>Enviar Código</Text>
                   )}
@@ -678,12 +678,12 @@ export default function LoginScreen() {
                     <Ionicons
                       name="key-outline"
                       size={20}
-                      color="#666"
+                      color={colors.placeHolder}
                       style={styles.inputIcon}
                     />
                     <TextInput
                       placeholder="Código recebido"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colors.placeHolder}
                       value={code}
                       onChangeText={setCode}
                       style={styles.input}
@@ -695,12 +695,12 @@ export default function LoginScreen() {
                     <Ionicons
                       name="lock-closed-outline"
                       size={20}
-                      color="#666"
+                      color={colors.placeHolder}
                       style={styles.inputIcon}
                     />
                     <TextInput
                       placeholder="Nova Senha"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colors.placeHolder}
                       value={newPassword}
                       onChangeText={setNewPassword}
                       secureTextEntry
@@ -713,12 +713,12 @@ export default function LoginScreen() {
                     <Ionicons
                       name="lock-closed-outline"
                       size={20}
-                      color="#666"
+                      color={colors.placeHolder}
                       style={styles.inputIcon}
                     />
                     <TextInput
                       placeholder="Confirmar Nova Senha"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colors.placeHolder}
                       value={confirmNewPassword}
                       onChangeText={setConfirmNewPassword}
                       secureTextEntry
@@ -735,7 +735,7 @@ export default function LoginScreen() {
                   disabled={loading}
                 >
                   {loading ? (
-                    <ActivityIndicator color="#1a1a1a" size="small" />
+                    <ActivityIndicator color={colors.closeBlack} size="small" />
                   ) : (
                     <Text style={styles.loginButtonText}>Alterar Senha</Text>
                   )}

@@ -12,7 +12,7 @@ export const measuresModalStyles = (colors: any) =>
   },
   modalContainer: {
     width: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     padding: 16,
     maxHeight: "90%",
@@ -30,7 +30,7 @@ export const measuresModalStyles = (colors: any) =>
   },
   modalInput: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.placeHolder,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -40,17 +40,17 @@ export const measuresModalStyles = (colors: any) =>
     flex: 1,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.placeHolder,
     borderRadius: 8,
     alignItems: "center",
     marginHorizontal: 4,
   },
   radioSelected: {
-    backgroundColor: "#2563eb",
-    borderColor: "#2563eb",
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
   },
   radioTextSelected: {
-    color: "#fff",
+    color: colors.white,
     fontWeight: "bold",
   },
   actionRow: {
@@ -60,7 +60,7 @@ export const measuresModalStyles = (colors: any) =>
   },
   actionButton: {
     flex: 1,
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -70,13 +70,13 @@ export const measuresModalStyles = (colors: any) =>
     marginRight: 8,
   },
   actionButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontWeight: "bold",
     fontSize: 16,
   },
   clearButton: {
     flex: 1,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.greyLight,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -85,7 +85,7 @@ export const measuresModalStyles = (colors: any) =>
     marginLeft: 8,
   },
   clearButtonText: {
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "bold",
     fontSize: 16,
   },
@@ -103,22 +103,22 @@ export const measuresModalStyles = (colors: any) =>
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#999",
+    borderColor: colors.placeHolder,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 8,
   },
   radioOuterSelected: {
-    borderColor: "#2563eb",
+    borderColor: colors.blue,
   },
   radioInner: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
   },
   radioLabel: {
     fontSize: 16,
-    color: "#333",
+    color: colors.dark,
   },
 });

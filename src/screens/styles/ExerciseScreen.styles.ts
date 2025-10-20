@@ -43,7 +43,7 @@ export const exerciseStyles = (colors: any) =>
 
   sectionDescription: {
     fontSize: 16,
-    color: "#64748b",
+    color: colors.description,
     textAlign: "center",
     marginBottom: 24,
     lineHeight: 22,
@@ -62,9 +62,9 @@ export const exerciseStyles = (colors: any) =>
     padding: 18,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    backgroundColor: "#ffffff",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -74,8 +74,8 @@ export const exerciseStyles = (colors: any) =>
   muscleGroupHeaderExpanded: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderBottomColor: "#cbd5e1",
-    backgroundColor: "#f8fafc",
+    borderBottomColor: colors.greyLight,
+    backgroundColor: colors.background,
   },
 
   muscleGroupLeft: {
@@ -102,20 +102,20 @@ export const exerciseStyles = (colors: any) =>
 
   exerciseCount: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
 
   // Expanded Container
   expandedContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderBottomWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -136,10 +136,10 @@ export const exerciseStyles = (colors: any) =>
     alignItems: "center",
     justifyContent: "space-between",
     padding: 16,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
 
   exerciseDetails: {
@@ -155,7 +155,7 @@ export const exerciseStyles = (colors: any) =>
 
   exerciseStats: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
 
@@ -168,27 +168,27 @@ export const exerciseStyles = (colors: any) =>
   editButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#dbeafe",
+    backgroundColor: colors.blueLight,
     borderWidth: 1,
-    borderColor: "#93c5fd",
+    borderColor: colors.blueMedium,
   },
 
   deleteButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#fef2f2",
+    backgroundColor: colors.redLight,
     borderWidth: 1,
-    borderColor: "#fecaca",
+    borderColor: colors.redMedium,
   },
 
   // Edit Mode Styles
   editExerciseContainer: {
     padding: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#cbd5e1",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -213,19 +213,19 @@ export const exerciseStyles = (colors: any) =>
   editLabel: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: colors.darkGrey,
     marginBottom: 6,
   },
 
   editInput: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: "#ffffff",
-    color: "#374151",
-    shadowColor: "#000",
+    backgroundColor: colors.white,
+    color: colors.darkGrey,
+    shadowColor: colors.black,
     shadowOpacity: 0.04,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
@@ -234,14 +234,14 @@ export const exerciseStyles = (colors: any) =>
 
   editInputSmall: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: "#ffffff",
-    color: "#374151",
+    backgroundColor: colors.white,
+    color: colors.darkGrey,
     textAlign: "center",
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.04,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
@@ -255,15 +255,15 @@ export const exerciseStyles = (colors: any) =>
   },
 
   cancelEditButton: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     flex: 1,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.04,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
@@ -271,19 +271,19 @@ export const exerciseStyles = (colors: any) =>
   },
 
   cancelEditButtonText: {
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
     fontSize: 14,
   },
 
   saveEditButton: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: "center",
     flex: 1,
-    shadowColor: "#2563eb",
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -291,7 +291,7 @@ export const exerciseStyles = (colors: any) =>
   },
 
   saveEditButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
     fontSize: 14,
   },
@@ -303,9 +303,9 @@ export const exerciseStyles = (colors: any) =>
     justifyContent: "center",
     padding: 16,
     borderRadius: 12,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#cbd5e1",
+    borderColor: colors.greyLight,
     borderStyle: "dashed",
     gap: 8,
     marginTop: 8,
@@ -313,7 +313,7 @@ export const exerciseStyles = (colors: any) =>
 
   addExerciseButtonText: {
     fontSize: 16,
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "600",
   },
 
@@ -327,12 +327,12 @@ export const exerciseStyles = (colors: any) =>
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#059669",
+    backgroundColor: colors.darkgreen,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
     gap: 8,
-    shadowColor: "#059669",
+    shadowColor: colors.darkgreen,
     shadowOpacity: 0.3,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
@@ -340,7 +340,7 @@ export const exerciseStyles = (colors: any) =>
   },
 
   globalSaveButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
     fontSize: 18,
   },
@@ -355,13 +355,13 @@ export const exerciseStyles = (colors: any) =>
 
   statCard: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     padding: 16,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -374,13 +374,13 @@ export const exerciseStyles = (colors: any) =>
   statNumber: {
     fontSize: 24,
     fontWeight: "700",
-    color: "#2563eb",
+    color: colors.blue,
     marginBottom: 4,
   },
 
   statLabel: {
     fontSize: 12,
-    color: "#6b7280",
+    color: colors.greyMedium,
     textAlign: "center",
     fontWeight: "500",
   },
@@ -394,7 +394,7 @@ export const exerciseStyles = (colors: any) =>
 
   emptyExercisesText: {
     fontSize: 16,
-    color: "#94a3b8",
+    color: colors.greyMedium,
     fontStyle: "italic",
     textAlign: "center",
     marginTop: 12,
@@ -404,7 +404,7 @@ export const exerciseStyles = (colors: any) =>
   dropdownLabel: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#475569",
+    color: colors.greyDark,
     marginBottom: 8,
     zIndex: 1001,
     elevation: 1001,
@@ -414,13 +414,13 @@ export const exerciseStyles = (colors: any) =>
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 16,
-    shadowColor: "#64748b",
+    shadowColor: colors.description,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -429,23 +429,23 @@ export const exerciseStyles = (colors: any) =>
 
   dropdownButtonText: {
     fontSize: 15,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
   },
 
   dropdownArrow: {
     fontSize: 12,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
   },
 
   dropdownList: {
     position: "absolute",
     top: "100%", // aparece logo abaixo do botão
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     shadowColor: colors.header,
     shadowOpacity: 0.15,
@@ -466,27 +466,27 @@ export const exerciseStyles = (colors: any) =>
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: colors.blueSuperLight,
   },
 
   dropdownItemSelected: {
-    backgroundColor: "#eff6ff",
+    backgroundColor: colors.blueSuperLight,
   },
 
   dropdownItemText: {
     fontSize: 15,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
   },
 
   dropdownItemTextSelected: {
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "600",
   },
   checkmark: {
     fontSize: 14,
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "700",
   },
   textArea: {
@@ -495,7 +495,7 @@ export const exerciseStyles = (colors: any) =>
   },
   exerciseDetailsText: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     marginTop: 4,
     lineHeight: 18,
   },
@@ -510,9 +510,9 @@ export const exerciseStyles = (colors: any) =>
   },
 
   dropdownListContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     shadowColor: colors.header,
     shadowOpacity: 0.25,

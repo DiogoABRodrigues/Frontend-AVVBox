@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "#1a1a1a",
+    backgroundColor: colors.closeBlack,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 9999,
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   mainText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 28,
     fontWeight: "800",
     letterSpacing: 2,
@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
   divider: {
     width: 80,
     height: 2,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     marginVertical: 12,
   },
   subText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 16,
     fontWeight: "400",
     letterSpacing: 1.5,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     top: -60,
     width: 200,
     height: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     opacity: 0.6,
   },
   bottomLine: {
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     bottom: -60,
     width: 200,
     height: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     opacity: 0.6,
   },
 });

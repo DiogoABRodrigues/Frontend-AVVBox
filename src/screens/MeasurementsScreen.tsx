@@ -183,17 +183,17 @@ export default function MeasurementsScreen() {
   const renderIcon = (measurement) => {
     const iconColor =
       measurement.color === "green"
-        ? "#22c55e"
+        ? colors.green
         : measurement.color === "red"
-        ? "#ef4444"
-        : "#6b7280";
+        ? colors.red
+        : colors.greyMedium;
 
     if (measurement.reachedGoal) {
       return (
         <Ionicons
           name="star"
           size={20}
-          color="#fbbf24" // dourado
+          color={colors.gold} // dourado
           style={{ marginLeft: 4 }}
         />
       );
@@ -318,7 +318,7 @@ export default function MeasurementsScreen() {
             ? value
             : 0;
         }),
-        color: () => "#2563eb",
+        color: () => colors.blue,
         strokeWidth: 3,
       },
     ],
@@ -532,7 +532,7 @@ export default function MeasurementsScreen() {
               style={styles.actionButton}
               onPress={() => setShowMeasuresModal(true)}
             >
-              <Ionicons name="add" size={24} color="#ffffff" />
+              <Ionicons name="add" size={24} color=colors.white />
             </TouchableOpacity>
 
             <MeasuresModal
@@ -572,10 +572,10 @@ export default function MeasurementsScreen() {
                       {
                         color:
                           m.color === "green"
-                            ? "#22c55e"
+                            ? colors.green
                             : m.color === "red"
-                            ? "#ef4444"
-                            : "#6b7280",
+                            ? colors.red
+                            : colors.greyMedium,
                       },
                     ]}
                   >
@@ -592,7 +592,7 @@ export default function MeasurementsScreen() {
         <View style={styles.historyBox}>
           {!historyDates || historyDates.length === 0 ? (
             <View style={{ alignItems: "center", padding: 16 }}>
-              <Text style={{ color: "#6b7280", fontStyle: "italic" }}>
+              <Text style={{ color: colors.greyMedium, fontStyle: "italic" }}>
                 Não existem registos de medidas
               </Text>
             </View>
@@ -624,7 +624,7 @@ export default function MeasurementsScreen() {
                         <Ionicons
                           name="trash-outline"
                           size={22}
-                          color="#ef4444"
+                          color=colors.red
                         />
                       </TouchableOpacity>
                     )}
@@ -764,9 +764,9 @@ export default function MeasurementsScreen() {
               width={screenWidth - 32}
               height={220}
               chartConfig={{
-                backgroundColor: "#fff",
-                backgroundGradientFrom: "#fff",
-                backgroundGradientTo: "#fff",
+                backgroundColor: colors.white,
+                backgroundGradientFrom: colors.white,
+                backgroundGradientTo: colors.white,
                 decimalPlaces: selectedMetric === "height" ? 0 : 1,
                 color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
                 labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
@@ -774,7 +774,7 @@ export default function MeasurementsScreen() {
                 propsForDots: {
                   r: "4",
                   strokeWidth: "2",
-                  stroke: "#2563eb",
+                  stroke: colors.blue,
                 },
               }}
               style={{ borderRadius: 16 }}

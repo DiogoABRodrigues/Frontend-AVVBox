@@ -929,13 +929,13 @@ export default function ProfileScreen() {
               <Ionicons
                 name={action.icon as any}
                 size={24}
-                color={action.isLogout ? "#ff4d4d" : colors.header}
+                color={action.isLogout ? colors.red : colors.header}
                 style={styles.actionIcon}
               />
               <Text
                 style={[
                   styles.actionText,
-                  action.isLogout && { color: "#ff4d4d" },
+                  action.isLogout && { color: colors.red },
                 ]}
               >
                 {action.title}
@@ -949,7 +949,7 @@ export default function ProfileScreen() {
                     : "chevron-down-outline"
                 }
                 size={20}
-                color="#6b7280"
+                color=colors.greyMedium
               />
             )}
           </TouchableOpacity>
@@ -1272,8 +1272,8 @@ export default function ProfileScreen() {
                                   size={16}
                                   color={
                                     !availability[day].working
-                                      ? "#9ca3af"
-                                      : "#dc2626"
+                                      ? colors.greyMedium
+                                      : colors.red
                                   }
                                 />
                               </TouchableOpacity>
@@ -1294,8 +1294,8 @@ export default function ProfileScreen() {
                               size={16}
                               color={
                                 !availability[day].working
-                                  ? "#9ca3af"
-                                  : "#2563eb"
+                                  ? colors.greyMedium
+                                  : colors.blue
                               }
                             />
                             <Text
@@ -1341,7 +1341,7 @@ export default function ProfileScreen() {
                 <View style={styles.formContainer}>
                   {ptsAndAdmins.length === 0 ? (
                     <View style={styles.emptyContactsContainer}>
-                      <Ionicons name="call-outline" size={48} color="#94a3b8" />
+                      <Ionicons name="call-outline" size={48} color=colors.greyMedium />
                       <Text style={styles.emptyContactsText}>
                         Nenhum PT ou Admin disponível no momento.
                       </Text>
@@ -1461,7 +1461,7 @@ export default function ProfileScreen() {
                         <Ionicons
                           name="people-outline"
                           size={48}
-                          color="#94a3b8"
+                          color=colors.greyMedium
                         />
                         <Text style={styles.emptyUsersText}>
                           Nenhum utilizador encontrado com os filtros
@@ -1510,7 +1510,7 @@ export default function ProfileScreen() {
                               <Ionicons
                                 name="ellipsis-vertical"
                                 size={20}
-                                color="#64748b"
+                                color=colors.description
                               />
                             </TouchableOpacity>
 

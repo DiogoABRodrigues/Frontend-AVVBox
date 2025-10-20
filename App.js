@@ -39,7 +39,7 @@ function ThemedApp() {
   return (
     <PaperProvider theme={theme}>
       <StatusBar
-        backgroundColor={isDarkMode ? "#000000" : "#f8fafc"}
+        backgroundColor={isDarkMode ? "colors.black000" : colors.background}
         barStyle={isDarkMode ? "light-content" : "dark-content"}
       />
       <AuthProvider>

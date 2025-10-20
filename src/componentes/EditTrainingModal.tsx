@@ -65,13 +65,13 @@ export const EditTrainingModal: React.FC<EditTrainingModalProps> = ({
               markedDates={{
                 [editingDay || ""]: {
                   selected: true,
-                  selectedColor: "#2563eb",
-                  selectedTextColor: "#fff",
+                  selectedColor: colors.blue,
+                  selectedTextColor: colors.white,
                 },
               }}
               theme={{
-                todayTextColor: "#2563eb",
-                arrowColor: "#2563eb",
+                todayTextColor: colors.blue,
+                arrowColor: colors.blue,
               }}
               style={styles.calendar}
             />
@@ -122,7 +122,7 @@ export const EditTrainingModal: React.FC<EditTrainingModalProps> = ({
                 <TextInput
                   style={styles.detailsInput}
                   placeholder="Plano de treino, objetivos, etc."
-                  placeholderTextColor={"#9ca3af"}
+                  placeholderTextColor={colors.greyMedium}
                   multiline
                   numberOfLines={5}
                   value={editingDetails || ""}

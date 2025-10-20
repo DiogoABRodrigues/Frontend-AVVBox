@@ -8,7 +8,7 @@ export const measuresStyles = (colors: any) =>
     flex: 1,
     paddingHorizontal: 16,
     paddingBottom: 40,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
   },
 
   // Header
@@ -44,12 +44,12 @@ export const measuresStyles = (colors: any) =>
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 16,
     overflow: "hidden",
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
@@ -57,13 +57,13 @@ export const measuresStyles = (colors: any) =>
   },
   dropdownUsersWrapper: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     overflow: "hidden",
     marginBottom: 8,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -88,7 +88,7 @@ export const measuresStyles = (colors: any) =>
 
   // Action Button Melhorado
   actionButton: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
     borderRadius: 16,
     width: 51,
     height: 51,
@@ -111,7 +111,7 @@ export const measuresStyles = (colors: any) =>
   chipRowLabel: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: colors.darkGrey,
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -124,7 +124,7 @@ export const measuresStyles = (colors: any) =>
     marginBottom: 4,
   },
   chip: {
-    backgroundColor: "#ffffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -132,16 +132,16 @@ export const measuresStyles = (colors: any) =>
     marginBottom: 8,
     borderWidth: 1.5,
     borderColor: "transparent",
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   chipActive: {
-    backgroundColor: "#2563eb",
-    borderColor: "#1d4ed8",
-    shadowColor: "#2563eb",
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
@@ -150,10 +150,10 @@ export const measuresStyles = (colors: any) =>
   chipText: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#29528bff",
+    color: colors.darkBlue,
   },
   chipTextActive: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "600",
   },
 
@@ -167,13 +167,13 @@ export const measuresStyles = (colors: any) =>
   },
   measureItem: {
     width: "48%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -182,7 +182,7 @@ export const measuresStyles = (colors: any) =>
   },
   measureLabel: {
     fontSize: 13,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
     textTransform: "uppercase",
     letterSpacing: 0.5,
@@ -216,30 +216,30 @@ export const measuresStyles = (colors: any) =>
   // Histórico Box
   historyBox: {
     maxHeight: 300,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     padding: 16,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
   historyItem: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
   historyDate: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#374151",
+    color: colors.darkGrey,
   },
   historyDetails: {
     marginTop: 12,
@@ -253,12 +253,12 @@ export const measuresStyles = (colors: any) =>
   },
   historyDetailLabel: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
   historyDetailValue: {
     fontSize: 14,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "600",
   },
 
@@ -269,7 +269,7 @@ export const measuresStyles = (colors: any) =>
     paddingHorizontal: 20,
   },
   emptyStateText: {
-    color: "#94a3b8",
+    color: colors.greyMedium,
     fontSize: 16,
     fontStyle: "italic",
     textAlign: "center",
@@ -278,12 +278,12 @@ export const measuresStyles = (colors: any) =>
 
   // Estilos para o gráfico container
   chartContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -296,7 +296,7 @@ export const measuresStyles = (colors: any) =>
   },
   chartInfoText: {
     fontSize: 12,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
   },
 
@@ -306,7 +306,7 @@ export const measuresStyles = (colors: any) =>
     flexWrap: "wrap",
     justifyContent: "center",
     marginVertical: 16,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: colors.blueSuperLight,
     borderRadius: 12,
     padding: 8,
   },
@@ -318,27 +318,27 @@ export const measuresStyles = (colors: any) =>
     margin: 4,
   },
   metricButtonActive: {
-    backgroundColor: "#2563eb",
-    shadowColor: "#2563eb",
+    backgroundColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   metricText: {
-    color: "#64748b",
+    color: colors.description,
     fontSize: 14,
     fontWeight: "600",
   },
   metricTextActive: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
   },
 
   // Filtros de Tempo (não usado no código atual, mas incluído)
   filterContainer: {
     flexDirection: "row",
-    backgroundColor: "#f1f5f9",
+    backgroundColor: colors.blueSuperLight,
     borderRadius: 12,
     overflow: "hidden",
     marginVertical: 16,
@@ -352,20 +352,20 @@ export const measuresStyles = (colors: any) =>
     borderRadius: 8,
   },
   filterButtonActive: {
-    backgroundColor: "#2563eb",
-    shadowColor: "#2563eb",
+    backgroundColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOpacity: 0.2,
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
     elevation: 2,
   },
   filterText: {
-    color: "#64748b",
+    color: colors.description,
     fontSize: 14,
     fontWeight: "600",
   },
   filterTextActive: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
   },
 
@@ -374,27 +374,27 @@ export const measuresStyles = (colors: any) =>
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     marginRight: 8,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   athleteSelected: {
-    borderColor: "#2563eb",
-    backgroundColor: "#dbeafe",
+    borderColor: colors.blue,
+    backgroundColor: colors.blueLight,
   },
   athleteButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#64748b",
+    color: colors.description,
   },
   athleteSelectedText: {
-    color: "#1e40af",
+    color: colors.darkBlue,
     fontWeight: "700",
   },
 
@@ -406,7 +406,7 @@ export const measuresStyles = (colors: any) =>
     paddingVertical: 12,
     paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: colors.blueSuperLight,
   },
   historyActionLeft: {
     flex: 1,
@@ -419,17 +419,17 @@ export const measuresStyles = (colors: any) =>
   deleteButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#fef2f2",
+    backgroundColor: colors.redLight,
   },
 
   // Detalhes expandidos do histórico
   expandedHistoryContainer: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 12,
     padding: 16,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.greyLight,
   },
   dropdownSection: {
     flex: 1,
@@ -442,7 +442,7 @@ export const measuresStyles = (colors: any) =>
   dropdownLabel: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#475569",
+    color: colors.greyDark,
     marginBottom: 8,
   },
 
@@ -450,13 +450,13 @@ export const measuresStyles = (colors: any) =>
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 16,
-    shadowColor: "#64748b",
+    shadowColor: colors.description,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -465,23 +465,23 @@ export const measuresStyles = (colors: any) =>
 
   dropdownButtonText: {
     fontSize: 15,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
   },
 
   dropdownArrow: {
     fontSize: 12,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
   },
 
   dropdownList: {
     position: "absolute",
     top: "100%", // aparece logo abaixo do botão
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     shadowColor: colors.header,
     shadowOpacity: 0.15,
@@ -496,10 +496,10 @@ export const measuresStyles = (colors: any) =>
   },
 
   dropdownListContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     top: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     shadowColor: colors.header,
     shadowOpacity: 0.15,
@@ -519,27 +519,27 @@ export const measuresStyles = (colors: any) =>
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: colors.blueSuperLight,
   },
 
   dropdownItemSelected: {
-    backgroundColor: "#eff6ff",
+    backgroundColor: colors.blueSuperLight,
   },
 
   dropdownItemText: {
     fontSize: 15,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
   },
 
   dropdownItemTextSelected: {
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "600",
   },
   checkmark: {
     fontSize: 14,
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "700",
   },
 

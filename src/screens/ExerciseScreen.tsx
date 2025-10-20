@@ -631,7 +631,7 @@ export default function ExerciseScreen() {
                                 <Ionicons
                                   name="create-outline"
                                   size={18}
-                                  color="#2563eb"
+                                  color={colors.blue}
                                 />
                               </TouchableOpacity>
 
@@ -644,7 +644,7 @@ export default function ExerciseScreen() {
                                 <Ionicons
                                   name="trash-outline"
                                   size={18}
-                                  color="#dc2626"
+                                  color={colors.red}
                                 />
                               </TouchableOpacity>
                             </View>
@@ -674,7 +674,7 @@ export default function ExerciseScreen() {
                                 <Ionicons
                                   name="create-outline"
                                   size={18}
-                                  color="#2563eb"
+                                  color={colors.blue}
                                 />
                               </TouchableOpacity>
 
@@ -687,7 +687,7 @@ export default function ExerciseScreen() {
                                 <Ionicons
                                   name="trash-outline"
                                   size={18}
-                                  color="#dc2626"
+                                  color={colors.red}
                                 />
                               </TouchableOpacity>
                             </View>
@@ -703,7 +703,7 @@ export default function ExerciseScreen() {
                       style={styles.addExerciseButton}
                       onPress={() => addExercise(group.key)}
                     >
-                      <Ionicons name="add" size={20} color="#2563eb" />
+                      <Ionicons name="add" size={20} color={colors.blue} />
                       <Text style={styles.addExerciseButtonText}>
                         Adicionar Exercício
                       </Text>

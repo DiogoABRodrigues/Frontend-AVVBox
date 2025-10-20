@@ -38,7 +38,7 @@ export const loginStyles = (colors: any) =>
   title: {
     fontSize: 32,
     fontWeight: "700",
-    color: "#ffffff",
+    color: colors.white,
     marginBottom: 8,
     textAlign: "center",
   },
@@ -62,7 +62,7 @@ export const loginStyles = (colors: any) =>
     borderRadius: 12,
     paddingHorizontal: 16,
     minHeight: 56,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -75,7 +75,7 @@ export const loginStyles = (colors: any) =>
   input: {
     flex: 1,
     fontSize: 16,
-    color: "#333333",
+    color: colors.dark,
     paddingVertical: 0,
   },
   inputIcon: {
@@ -89,7 +89,7 @@ export const loginStyles = (colors: any) =>
     paddingHorizontal: 16,
     minHeight: 56,
     marginBottom: 16,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -122,8 +122,8 @@ export const loginStyles = (colors: any) =>
     alignItems: "center",
   },
   checkboxSelected: {
-    backgroundColor: "#ffffff",
-    borderColor: "#ffffff",
+    backgroundColor: colors.white,
+    borderColor: colors.white,
   },
   rememberMeText: {
     color: "rgba(255, 255, 255, 0.9)",
@@ -131,13 +131,13 @@ export const loginStyles = (colors: any) =>
     fontWeight: "500",
   },
   loginButton: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: "center",
     justifyContent: "center",
     minHeight: 56,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -151,7 +151,7 @@ export const loginStyles = (colors: any) =>
     opacity: 0.7,
   },
   loginButtonText: {
-    color: "#1a1a1a",
+    color: colors.closeBlack,
     fontSize: 18,
     fontWeight: "700",
   },

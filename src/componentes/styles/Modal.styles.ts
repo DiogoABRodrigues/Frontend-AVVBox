@@ -13,10 +13,10 @@ export const modalStyles = (colors: any) =>
   container: {
     width: "100%",
     maxWidth: 400,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     padding: 24,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.25,
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 10 },
@@ -36,12 +36,12 @@ export const modalStyles = (colors: any) =>
     alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.greyLight,
   },
   optionText: {
     marginLeft: 10,
     fontSize: 16,
-    color: "#374151",
+    color: colors.darkGrey,
   },
   scrollList: {
     maxHeight: 300,
@@ -63,20 +63,20 @@ export const modalStyles = (colors: any) =>
     justifyContent: "center",
   },
   confirmButton: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
   },
   confirmText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 16,
     fontWeight: "600",
   },
   cancelButton: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderWidth: 2,
-    borderColor: "#d1d5db",
+    borderColor: colors.greyMidLight,
   },
   cancelText: {
-    color: "#6b7280",
+    color: colors.greyMedium,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -102,27 +102,27 @@ export const modalStyles = (colors: any) =>
     gap: 8,
   },
   actionButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "600",
     fontSize: 14,
   },
   clearButton: {
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderColor: "#ef4444",
+    backgroundColor: colors.white,
+    borderColor: colors.red,
     borderWidth: 2,
     borderRadius: 10,
     minWidth: 100,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   clearButtonText: {
-    color: "#ef4444",
+    color: colors.red,
     fontWeight: "600",
     fontSize: 14,
   },
@@ -130,7 +130,7 @@ export const modalStyles = (colors: any) =>
   // Separador
   separator: {
     height: 1,
-    backgroundColor: "#e2e8f0",
+    backgroundColor: colors.greyLight,
     marginVertical: 16,
   },
 
@@ -141,23 +141,23 @@ export const modalStyles = (colors: any) =>
   notificationItem: {
     flexDirection: "row",
     alignItems: "flex-start",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   notificationUnread: {
-    backgroundColor: "#f0f9ff",
-    borderColor: "#3b82f6",
+    backgroundColor: colors.background,
+    borderColor: colors.blue,
     borderLeftWidth: 4,
-    borderLeftColor: "#3b82f6",
+    borderLeftColor: colors.blue,
   },
   notificationContent: {
     flex: 1,
@@ -166,7 +166,7 @@ export const modalStyles = (colors: any) =>
   notificationTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#64748b",
+    color: colors.description,
     marginBottom: 4,
   },
   notificationTitleUnread: {
@@ -175,13 +175,13 @@ export const modalStyles = (colors: any) =>
   },
   notificationBody: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     lineHeight: 20,
     marginBottom: 8,
   },
   notificationDate: {
     fontSize: 12,
-    color: "#94a3b8",
+    color: colors.greyMedium,
     fontWeight: "500",
   },
 
@@ -196,14 +196,14 @@ export const modalStyles = (colors: any) =>
   emptyStateTitle: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#64748b",
+    color: colors.description,
     marginTop: 16,
     marginBottom: 8,
     textAlign: "center",
   },
   emptyStateText: {
     fontSize: 16,
-    color: "#94a3b8",
+    color: colors.greyMedium,
     textAlign: "center",
     lineHeight: 22,
   },
@@ -219,10 +219,10 @@ export const modalStyles = (colors: any) =>
   modalContainer: {
     width: "100%",
     maxWidth: 400,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     padding: 24,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.25,
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 10 },
@@ -241,17 +241,17 @@ export const modalStyles = (colors: any) =>
     marginBottom: 8,
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: colors.darkGrey,
   },
   modalInput: {
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.greyMidLight,
     borderRadius: 10,
     padding: 14,
     marginBottom: 16,
     fontSize: 16,
-    backgroundColor: "#f9fafb",
-    color: "#374151",
+    backgroundColor: colors.background,
+    color: colors.darkGrey,
   },
   bodyInput: {
     height: 100,
@@ -271,22 +271,22 @@ export const modalStyles = (colors: any) =>
     minWidth: 80,
     padding: 12,
     borderWidth: 2,
-    borderColor: "#d1d5db",
+    borderColor: colors.greyMidLight,
     borderRadius: 10,
     alignItems: "center",
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.background,
   },
   recipientSelected: {
-    backgroundColor: "#dbeafe",
-    borderColor: "#3b82f6",
+    backgroundColor: colors.blueLight,
+    borderColor: colors.blue,
   },
   recipientButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#6b7280",
+    color: colors.greyMedium,
   },
   recipientButtonTextSelected: {
-    color: "#1e40af",
+    color: colors.blue,
   },
 
   // User List
@@ -295,14 +295,14 @@ export const modalStyles = (colors: any) =>
     marginTop: 12,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.greyLight,
     borderRadius: 10,
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.background,
   },
   userItem: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.greyLight,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -310,11 +310,11 @@ export const modalStyles = (colors: any) =>
     borderBottomWidth: 0,
   },
   userItemSelected: {
-    backgroundColor: "#dbeafe",
+    backgroundColor: colors.blueLight,
   },
   userItemText: {
     fontSize: 14,
-    color: "#374151",
+    color: colors.darkGrey,
     marginLeft: 8,
   },
   actionLeft: {
@@ -330,27 +330,27 @@ export const modalStyles = (colors: any) =>
     justifyContent: "center",
   },
   modalPrimaryButton: {
-    backgroundColor: "#2563eb",
-    shadowColor: "#2563eb",
+    backgroundColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOpacity: 0.3,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
   modalSecondaryButton: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderWidth: 2,
-    borderColor: "#d1d5db",
+    borderColor: colors.greyMidLight,
   },
   modalButtonText: {
     fontSize: 16,
     fontWeight: "600",
   },
   modalPrimaryButtonText: {
-    color: "#ffffff",
+    color: colors.white,
   },
   modalSecondaryButtonText: {
-    color: "#6b7280",
+    color: colors.greyMedium,
   },
 
   // Swipe Actions
@@ -361,7 +361,7 @@ export const modalStyles = (colors: any) =>
     marginBottom: 12,
   },
   deleteAction: {
-    backgroundColor: "#ef4444",
+    backgroundColor: colors.red,
     borderRadius: 12,
     minWidth: 80,
     height: "100%",
@@ -373,7 +373,7 @@ export const modalStyles = (colors: any) =>
     alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.greyLight,
   },
   radioCircle: {
     height: 20,
@@ -393,14 +393,14 @@ export const modalStyles = (colors: any) =>
   radioText: {
     marginLeft: 10,
     fontSize: 16,
-    color: "#374151",
+    color: colors.darkGrey,
   },
   checkboxOption: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.greyLight,
   },
   checkboxBox: {
     height: 20,
@@ -412,11 +412,11 @@ export const modalStyles = (colors: any) =>
     justifyContent: "center",
   },
   checkboxSelected: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
   },
   checkboxText: {
     marginLeft: 10,
     fontSize: 16,
-    color: "#374151",
+    color: colors.darkGrey,
   },
 });

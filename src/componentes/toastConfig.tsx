@@ -16,21 +16,21 @@ const toastConfig: ToastConfig = {
         justifyContent: "center",
         width: "90%",
         borderWidth: 1,
-        borderColor: "#D92D20",
-        backgroundColor: "#FEF3F2",
+        borderColor: colors.red,
+        backgroundColor: colors.redSuperLight,
         padding: 12,
         borderRadius: 8,
       }}
     >
       {text1 && (
-        <Text style={{ color: "#D92D20", fontSize: 13, fontWeight: "600" }}>
+        <Text style={{ color: colors.red, fontSize: 13, fontWeight: "600" }}>
           {text1}
         </Text>
       )}
       {text2 && (
         <Text
           style={{
-            color: "#D92D20",
+            color: colors.red,
             fontSize: 13,
             flexWrap: "wrap",
             fontWeight: "600",
@@ -50,19 +50,19 @@ const toastConfig: ToastConfig = {
         justifyContent: "center",
         width: "90%",
         borderWidth: 1,
-        borderColor: "#ABEFC6",
-        backgroundColor: "#f2faf6ff",
+        borderColor: colors.green,
+        backgroundColor: colors.superMegaLightGreen,
         padding: 12,
         borderRadius: 8,
       }}
     >
       {text1 && (
-        <Text style={{ color: "#067647", fontSize: 14, fontWeight: "600" }}>
+        <Text style={{ color: colors.darkgreen, fontSize: 14, fontWeight: "600" }}>
           {text1}
         </Text>
       )}
       {text2 && (
-        <Text style={{ color: "#067647", flexWrap: "wrap", fontWeight: "600" }}>
+        <Text style={{ color: colors.darkgreen, flexWrap: "wrap", fontWeight: "600" }}>
           {text2}
         </Text>
       )}
@@ -77,8 +77,8 @@ const toastConfig: ToastConfig = {
         justifyContent: "center",
         width: "90%",
         borderWidth: 1,
-        borderColor: "#D92D20",
-        backgroundColor: "#FEF3F2",
+        borderColor: colors.red,
+        backgroundColor: colors.redSuperLight,
         padding: 12,
         borderRadius: 8,
       }}
@@ -86,7 +86,7 @@ const toastConfig: ToastConfig = {
       {text1 && (
         <Text
           style={{
-            color: "#D92D20",
+            color: colors.red,
             fontSize: 13,
             fontWeight: "600",
             flexWrap: "wrap",
@@ -96,7 +96,7 @@ const toastConfig: ToastConfig = {
         </Text>
       )}
       {text2 && (
-        <Text style={{ color: "#D92D20", flexWrap: "wrap" }}>{text2}</Text>
+        <Text style={{ color: colors.red, flexWrap: "wrap" }}>{text2}</Text>
       )}
     </View>
   ),

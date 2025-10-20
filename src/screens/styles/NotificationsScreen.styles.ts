@@ -5,7 +5,7 @@ export const notificationStyles = (colors: any) =>
   StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc", // Mudança: cor de fundo mais suave
+    backgroundColor: colors.background, // Mudança: cor de fundo mais suave
     paddingHorizontal: 16,
   },
 
@@ -36,22 +36,22 @@ export const notificationStyles = (colors: any) =>
   // Separador visual - removido ou simplificado
   separator: {
     height: 1,
-    backgroundColor: "#e2e8f0", // Mudança: cor mais suave
+    backgroundColor: colors.greyLight, // Mudança: cor mais suave
     marginBottom: 24, // Mudança: mais espaçamento
   },
 
   actionButton: {
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
     paddingHorizontal: 16, // Mudança: padding mais generoso
     paddingVertical: 12, // Mudança: padding vertical maior
-    backgroundColor: "#ffffffff", // Mudança: cor primária azul
+    backgroundColor: colors.white, // Mudança: cor primária azul
   },
   actionButtonText: {
     color: colors.header, // Mudança: texto branco
@@ -61,18 +61,18 @@ export const notificationStyles = (colors: any) =>
   clearButton: {
     paddingHorizontal: 16, // Mudança: padding consistente
     paddingVertical: 12,
-    backgroundColor: "#ffffff", // Mudança: fundo branco
+    backgroundColor: colors.white, // Mudança: fundo branco
     borderWidth: 1,
     borderRadius: 16, // Mudança: border radius maior
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
-    borderColor: "#fecaca",
+    borderColor: colors.redMedium,
   },
   clearButtonText: {
-    color: "#ef4444", // Mudança: vermelho mais moderno
+    color: colors.red, // Mudança: vermelho mais moderno
     fontWeight: "600", // Mudança: peso mais específico
     fontSize: 14,
   },
@@ -90,13 +90,13 @@ export const notificationStyles = (colors: any) =>
   emptyStateTitle: {
     fontSize: 20,
     fontWeight: "700", // Mudança: peso mais específico
-    color: "#374151", // Mudança: cor mais consistente
+    color: colors.darkGrey, // Mudança: cor mais consistente
     marginTop: 16,
     marginBottom: 8,
   },
   emptyStateText: {
     fontSize: 16,
-    color: "#94a3b8", // Mudança: cor mais suave e consistente
+    color: colors.greyMedium, // Mudança: cor mais suave e consistente
     fontStyle: "italic",
     textAlign: "center",
     lineHeight: 22,
@@ -107,20 +107,20 @@ export const notificationStyles = (colors: any) =>
     padding: 16, // Mudança: padding maior
     marginBottom: 12,
     borderRadius: 16, // Mudança: border radius maior
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     alignItems: "flex-start",
     gap: 12,
     borderWidth: 1, // Mudança: borda sutil sempre presente
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08, // Mudança: sombra mais suave
     shadowRadius: 6, // Mudança: sombra mais difusa
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
   notificationUnread: {
-    backgroundColor: "#dbeafe", // Mudança: azul suave para não lidas
-    borderColor: "#2563eb", // Mudança: borda azul para destacar
+    backgroundColor: colors.blueLight, // Mudança: azul suave para não lidas
+    borderColor: colors.blue, // Mudança: borda azul para destacar
     borderWidth: 2, // Mudança: borda mais espessa
   },
   notificationContent: {
@@ -129,20 +129,20 @@ export const notificationStyles = (colors: any) =>
   notificationTitle: {
     fontSize: 16,
     fontWeight: "500", // Mudança: peso médio
-    color: "#374151", // Mudança: cor mais consistente
+    color: colors.darkGrey, // Mudança: cor mais consistente
   },
   notificationTitleUnread: {
     fontWeight: "700", // Mudança: peso mais específico
     color: colors.header, // Mudança: cor mais escura para não lidas
   },
   notificationBody: {
-    color: "#64748b", // Mudança: cor mais suave
+    color: colors.description, // Mudança: cor mais suave
     fontSize: 14, // Mudança: tamanho especificado
     marginTop: 4, // Mudança: espaçamento ajustado
     lineHeight: 20, // Mudança: line height ajustado
   },
   notificationDate: {
-    color: "#94a3b8", // Mudança: cor mais suave
+    color: colors.greyMedium, // Mudança: cor mais suave
     fontSize: 12,
     fontWeight: "500", // Mudança: peso especificado
     marginTop: 6, // Mudança: espaçamento ajustado
@@ -157,11 +157,11 @@ export const notificationStyles = (colors: any) =>
   },
   modalContainer: {
     width: "90%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16, // Mudança: border radius maior
     padding: 24, // Mudança: padding maior
     maxHeight: "80%",
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.15,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
@@ -175,13 +175,13 @@ export const notificationStyles = (colors: any) =>
   },
   modalInput: {
     borderWidth: 1,
-    borderColor: "#e2e8f0", // Mudança: cor de borda mais suave
+    borderColor: colors.greyLight, // Mudança: cor de borda mais suave
     borderRadius: 12, // Mudança: border radius maior
     padding: 12, // Mudança: padding maior
     marginBottom: 16, // Mudança: espaçamento maior
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     fontSize: 16,
-    color: "#374151", // Mudança: cor do texto
+    color: colors.darkGrey, // Mudança: cor do texto
   },
   recipientButtons: {
     flexDirection: "row",
@@ -193,27 +193,27 @@ export const notificationStyles = (colors: any) =>
     flex: 1, // Mudança: distribuição igual
     padding: 12, // Mudança: padding maior
     borderWidth: 1,
-    borderColor: "#e2e8f0", // Mudança: cor de borda mais suave
+    borderColor: colors.greyLight, // Mudança: cor de borda mais suave
     borderRadius: 12, // Mudança: border radius maior
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   recipientSelected: {
-    borderColor: "#2563eb", // Mudança: azul consistente
-    backgroundColor: "#dbeafe", // Mudança: fundo azul suave
+    borderColor: colors.blue, // Mudança: azul consistente
+    backgroundColor: colors.blueLight, // Mudança: fundo azul suave
   },
   recipientButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#64748b",
+    color: colors.description,
   },
   recipientSelectedText: {
-    color: "#1e40af",
+    color: colors.darkBlue, 
     fontWeight: "700",
   },
 });

@@ -96,7 +96,7 @@ export default function NotificationModal({
 
           <TextInput
             placeholder="Título"
-            placeholderTextColor="#999"
+            placeholderTextColor={colors.placeHolder}
             value={notification.title}
             onChangeText={(text) =>
               setNotification((prev) => ({ ...prev, title: text }))
@@ -105,7 +105,7 @@ export default function NotificationModal({
           />
           <TextInput
             placeholder="Corpo"
-            placeholderTextColor="#999"
+            placeholderTextColor={colors.placeHolder}
             value={notification.body}
             onChangeText={(text) =>
               setNotification((prev) => ({ ...prev, body: text }))

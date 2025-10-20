@@ -201,7 +201,7 @@ export default function NotificationsScreen() {
         <View style={styles.separator} />
         {notifications.length === 0 ? (
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="notifications-off-outline" size={64} color="#ccc" />
+            <Ionicons name="notifications-off-outline" size={64} color=colors.placeHolder />
             <Text style={styles.emptyStateTitle}>Sem notificações</Text>
             <Text style={styles.emptyStateText}>
               Não tem notificações por ler.

@@ -7,7 +7,7 @@ export const trainingStyles = (colors: any) =>
     flexGrow: 1,
     paddingHorizontal: 16,
     paddingBottom: 24,
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
   },
 
   header: {
@@ -33,9 +33,9 @@ export const trainingStyles = (colors: any) =>
   // Calendar Styles
   calendar: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     shadowColor: colors.header,
     shadowOpacity: 0.12,
     shadowRadius: 12,
@@ -48,11 +48,11 @@ export const trainingStyles = (colors: any) =>
   // Hours Selection Styles
   hoursContainer: {
     marginVertical: 24,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 24,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     shadowColor: colors.header,
     shadowOpacity: 0.1,
     shadowRadius: 16,
@@ -69,7 +69,7 @@ export const trainingStyles = (colors: any) =>
   timeSectionHeader: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#475569",
+    color: colors.greyDark,
     marginBottom: 12,
     textTransform: "uppercase",
     letterSpacing: 0.5,
@@ -85,15 +85,15 @@ export const trainingStyles = (colors: any) =>
     paddingHorizontal: 20,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
-    backgroundColor: "#ffffff",
+    borderColor: colors.greyLight,
+    backgroundColor: colors.white,
     marginRight: 12,
     marginLeft: 3,
     marginBottom: 8,
     minWidth: 85,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#64748b",
+    shadowColor: colors.description,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -101,26 +101,26 @@ export const trainingStyles = (colors: any) =>
   },
 
   hourBoxSelected: {
-    backgroundColor: "#2563eb",
-    borderColor: "#1d4ed8",
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
     elevation: 8,
     transform: [{ scale: 1.02 }],
   },
 
   hourText: {
     fontSize: 15,
-    color: "#475569",
+    color: colors.greyDark,
     fontWeight: "600",
   },
 
   hourTextSelected: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
   },
 
   // Action Button Styles
   actionButton: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
     paddingVertical: 18,
     paddingHorizontal: 32,
     borderRadius: 16,
@@ -129,7 +129,7 @@ export const trainingStyles = (colors: any) =>
     elevation: 12,
   },
   actionButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
     fontSize: 17,
     letterSpacing: 0.3,
@@ -138,16 +138,16 @@ export const trainingStyles = (colors: any) =>
   // No Availability Text
   noAvailabilityText: {
     textAlign: "center",
-    color: "#64748b",
+    color: colors.description,
     fontSize: 16,
     marginVertical: 24,
     fontStyle: "italic",
     padding: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -159,21 +159,21 @@ export const trainingStyles = (colors: any) =>
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
   },
 
   noTrainerText: {
     textAlign: "center",
     fontSize: 18,
-    color: "#64748b",
+    color: colors.description,
     marginTop: 40,
     padding: 24,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     marginHorizontal: 20,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -183,16 +183,16 @@ export const trainingStyles = (colors: any) =>
 
   noTrainingText: {
     fontSize: 16,
-    color: "#94a3b8",
+    color: colors.greyMedium,
     fontStyle: "italic",
     textAlign: "center",
     paddingVertical: 32,
     paddingHorizontal: 24,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -211,12 +211,12 @@ export const trainingStyles = (colors: any) =>
 
   statBox: {
     width: "47%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 24,
     borderRadius: 20,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     shadowColor: colors.header,
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -227,13 +227,13 @@ export const trainingStyles = (colors: any) =>
   statValue: {
     fontSize: 28,
     fontWeight: "800",
-    color: "#2563eb",
+    color: colors.blue,
     marginBottom: 6,
   },
 
   statLabel: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
     textAlign: "center",
     lineHeight: 20,
@@ -241,11 +241,11 @@ export const trainingStyles = (colors: any) =>
 
   // Additional utility styles
   otherTrainingsContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -255,14 +255,14 @@ export const trainingStyles = (colors: any) =>
   },
 
   trainingCard: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     padding: 20,
     borderRadius: 16,
     marginVertical: 6,
     marginHorizontal: 8,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#64748b",
+    borderColor: colors.greyLight,
+    shadowColor: colors.description,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -270,15 +270,15 @@ export const trainingStyles = (colors: any) =>
   },
 
   secondaryButton: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     marginTop: 12,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -286,19 +286,19 @@ export const trainingStyles = (colors: any) =>
   },
 
   secondaryButtonText: {
-    color: "#475569",
+    color: colors.greyDark,
     fontWeight: "600",
     fontSize: 16,
   },
 
   trainerInfo: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     marginBottom: 24,
-    shadowColor: "#000",
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -307,7 +307,7 @@ export const trainingStyles = (colors: any) =>
 
   trainerLabel: {
     fontSize: 14,
-    color: "#64748b",
+    color: colors.description,
     marginBottom: 6,
     fontWeight: "500",
   },
@@ -331,7 +331,7 @@ export const trainingStyles = (colors: any) =>
   dropdownLabel: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#475569",
+    color: colors.greyDark,
     marginBottom: 8,
     zIndex: 1001,
     elevation: 1001,
@@ -341,13 +341,13 @@ export const trainingStyles = (colors: any) =>
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 16,
-    shadowColor: "#64748b",
+    shadowColor: colors.description,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -356,21 +356,21 @@ export const trainingStyles = (colors: any) =>
 
   dropdownButtonText: {
     fontSize: 15,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
   },
 
   dropdownArrow: {
     fontSize: 12,
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "600",
   },
 
   dropdownList: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     marginTop: 4,
     shadowColor: colors.header,
@@ -389,55 +389,55 @@ export const trainingStyles = (colors: any) =>
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: colors.blueSuperLight,
   },
 
   dropdownItemSelected: {
-    backgroundColor: "#eff6ff",
+    backgroundColor: colors.blueSuperLight,
   },
 
   dropdownItemText: {
     fontSize: 15,
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "500",
     flex: 1,
   },
 
   dropdownItemTextSelected: {
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "600",
   },
 
   checkmark: {
     fontSize: 14,
-    color: "#2563eb",
+    color: colors.blue,
     fontWeight: "700",
   },
   deleteButton: {
     marginTop: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: "#ef4444", // vermelho
+    backgroundColor: colors.red, // vermelho
     borderRadius: 5,
     alignSelf: "flex-start",
   },
   deleteButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontWeight: "600",
   },
   emptyStateText: {
     fontSize: 16,
-    color: "#94a3b8", // Mudança: cor mais suave e consistente
+    color: colors.greyMedium, // Mudança: cor mais suave e consistente
     fontStyle: "italic",
     textAlign: "center",
     lineHeight: 22,
   },
 
   actionNeededContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     padding: 16,
     marginBottom: 20,
     shadowColor: colors.header,
@@ -448,15 +448,15 @@ export const trainingStyles = (colors: any) =>
   },
 
   actionNeededCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 20,
     borderRadius: 16,
     borderLeftWidth: 4,
-    borderLeftColor: "#f59e0b", // Apenas uma linha amarela à esquerda
+    borderLeftColor: colors.torrado, // Apenas uma linha amarela à esquerda
     borderWidth: 1,
-    borderColor: "#f1f5f9",
+    borderColor: colors.blueSuperLight,
     marginBottom: 12,
-    shadowColor: "#64748b",
+    shadowColor: colors.description,
     shadowOpacity: 0.06,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -466,10 +466,10 @@ export const trainingStyles = (colors: any) =>
 
   // Confirmed Section - Clean e moderno
   confirmedContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     padding: 16,
     marginBottom: 20,
     shadowColor: colors.header,
@@ -480,15 +480,15 @@ export const trainingStyles = (colors: any) =>
   },
 
   confirmedCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 20,
     borderRadius: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#f1f5f9",
+    borderColor: colors.blueSuperLight,
     borderLeftWidth: 4,
-    borderLeftColor: "#10b981", // Linha verde à esquerda
-    shadowColor: "#64748b",
+    borderLeftColor: colors.green, // Linha verde à esquerda
+    shadowColor: colors.description,
     shadowOpacity: 0.04,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -497,15 +497,15 @@ export const trainingStyles = (colors: any) =>
   },
 
   canceledCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 20,
     borderRadius: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#f1f5f9",
+    borderColor: colors.blueSuperLight,
     borderLeftWidth: 4,
-    borderLeftColor: "#2e2e2eff", // Linha cinza à esquerda
-    shadowColor: "#64748b",
+    borderLeftColor: colors.header, // Linha cinza à esquerda
+    shadowColor: colors.description,
     shadowOpacity: 0.04,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -515,10 +515,10 @@ export const trainingStyles = (colors: any) =>
 
   // Pending Section - Consistente com o resto
   pendingContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     padding: 16,
     marginBottom: 20,
     shadowColor: colors.header,
@@ -529,15 +529,15 @@ export const trainingStyles = (colors: any) =>
   },
 
   pendingCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     padding: 20,
     borderRadius: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#f1f5f9",
+    borderColor: colors.blueSuperLight,
     borderLeftWidth: 4,
-    borderLeftColor: "#64748b", // Linha cinza à esquerda
-    shadowColor: "#64748b",
+    borderLeftColor: colors.description, // Linha cinza à esquerda
+    shadowColor: colors.description,
     shadowOpacity: 0.04,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -546,45 +546,45 @@ export const trainingStyles = (colors: any) =>
 
   // Badges mais subtis e modernos
   confirmedBadge: {
-    color: "#10b981",
+    color: colors.green,
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#d1fae5",
+    borderColor: colors.superLightGreen,
     alignSelf: "flex-start",
     marginTop: 8,
     fontSize: 11,
     fontWeight: "700",
     textTransform: "uppercase",
     letterSpacing: 0.8,
-    backgroundColor: "#ecfdf5",
+    backgroundColor: colors.greenLight,
   },
 
   canceledBadge: {
-    color: "#2e2e2eff",
+    color: colors.header,
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#d1d1d1ff",
+    borderColor: colors.greyLight,
     alignSelf: "flex-start",
     marginTop: 8,
     fontSize: 11,
     fontWeight: "700",
     textTransform: "uppercase",
     letterSpacing: 0.8,
-    backgroundColor: "#ecfdf5",
+    backgroundColor: colors.greenLight,
   },
 
   pendingBadge: {
-    backgroundColor: "#f8fafc",
-    color: "#64748b",
+    backgroundColor: colors.background,
+    color: colors.description,
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     alignSelf: "flex-start",
     marginTop: 8,
     fontSize: 11,
@@ -595,13 +595,13 @@ export const trainingStyles = (colors: any) =>
 
   // Badge para treinos que precisam de ação
   actionNeededBadge: {
-    backgroundColor: "#fef3c7",
-    color: "#92400e",
+    backgroundColor: colors.background,
+    color: colors.orange,
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#fde68a",
+    borderColor: colors.yellow,
     alignSelf: "flex-start",
     marginTop: 8,
     fontSize: 11,
@@ -628,7 +628,7 @@ export const trainingStyles = (colors: any) =>
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
+    borderTopColor: colors.blueSuperLight,
   },
 
   canceledCardFooter: {
@@ -637,17 +637,17 @@ export const trainingStyles = (colors: any) =>
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
+    borderTopColor: colors.blueSuperLight,
   },
 
   // Botão de delete mais integrado
   deleteButtonContainer: {
     padding: 8,
     borderRadius: 12,
-    backgroundColor: "#fef2f2",
+    backgroundColor: colors.redLight,
     borderWidth: 1,
-    borderColor: "#fecaca",
-    shadowColor: "#ef4444",
+    borderColor: colors.redMedium,
+    shadowColor: colors.red,
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -660,7 +660,7 @@ export const trainingStyles = (colors: any) =>
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.header,
-    shadowColor: "#ffffffff",
+    shadowColor: colors.white,
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
@@ -669,12 +669,12 @@ export const trainingStyles = (colors: any) =>
 
   // Botões de ação mais modernos
   acceptButton: {
-    backgroundColor: "#10b981",
+    backgroundColor: colors.green,
     padding: 16,
     borderRadius: 14,
     flex: 0.6,
     alignItems: "center",
-    shadowColor: "#10b981",
+    shadowColor: colors.green,
     shadowOpacity: 0.25,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 3 },
@@ -688,19 +688,19 @@ export const trainingStyles = (colors: any) =>
     flex: 0.4,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
   },
 
   // Texto dos botões
   buttonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
     fontSize: 14,
     letterSpacing: 0.3,
   },
 
   rejectButtonText: {
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "700",
     fontSize: 14,
     letterSpacing: 0.3,
@@ -713,7 +713,7 @@ export const trainingStyles = (colors: any) =>
     marginTop: 20,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
+    borderTopColor: colors.blueSuperLight,
     gap: 12,
   },
   sectionHeader: {
@@ -723,7 +723,7 @@ export const trainingStyles = (colors: any) =>
 
   switchContainer: {
     flexDirection: "row",
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.blueSuperLight,
     borderRadius: 8,
     padding: 2,
     minWidth: 120,
@@ -739,8 +739,8 @@ export const trainingStyles = (colors: any) =>
   },
 
   switchOptionActive: {
-    backgroundColor: "#ffffff",
-    shadowColor: "#000",
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -753,16 +753,16 @@ export const trainingStyles = (colors: any) =>
   switchText: {
     fontSize: 12,
     fontWeight: "500",
-    color: "#6b7280",
+    color: colors.greyMedium,
   },
 
   switchTextActive: {
-    color: "#374151",
+    color: colors.darkGrey,
     fontWeight: "600",
   },
   mainSwitchContainer: {
     flexDirection: "row",
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 12,
     padding: 4,
     marginHorizontal: 16,
@@ -781,8 +781,8 @@ export const trainingStyles = (colors: any) =>
   },
 
   mainSwitchOptionActive: {
-    backgroundColor: "#ffffff",
-    shadowColor: "#000",
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -795,11 +795,11 @@ export const trainingStyles = (colors: any) =>
   mainSwitchText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#6b7280",
+    color: colors.greyMedium,
   },
 
   mainSwitchTextActive: {
-    color: "#2563eb",
+    color: colors.blue,
   },
 
   // Estilos para a tab de exercícios
@@ -816,13 +816,13 @@ export const trainingStyles = (colors: any) =>
 
   muscleGroupCard: {
     width: "47%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     padding: 20,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e5e7eb",
-    shadowColor: "#000",
+    borderColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -835,20 +835,20 @@ export const trainingStyles = (colors: any) =>
   muscleGroupText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#374151",
+    color: colors.darkGrey,
   },
 
   lastWorkoutCard: {
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.background,
     borderRadius: 12,
     padding: 20,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.greyLight,
   },
 
   lastWorkoutText: {
     fontSize: 14,
-    color: "#6b7280",
+    color: colors.greyMedium,
     textAlign: "center",
     fontStyle: "italic",
   },
@@ -862,10 +862,10 @@ export const trainingStyles = (colors: any) =>
   },
 
   dropdownListContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     top: 20,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     borderRadius: 12,
     shadowColor: colors.header,
     shadowOpacity: 0.15,
@@ -879,12 +879,12 @@ export const trainingStyles = (colors: any) =>
 
   detailsSection: {
     marginTop: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     padding: 16,
-    shadowColor: "#64748b",
+    shadowColor: colors.description,
     shadowOpacity: 0.08,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -894,16 +894,16 @@ export const trainingStyles = (colors: any) =>
   detailsLabel: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#475569",
+    color: colors.greyDark,
     marginBottom: 8,
     marginTop: 35,
   },
 
   detailsInput: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: colors.background,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.greyLight,
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontSize: 15,
@@ -922,10 +922,10 @@ export const trainingStyles = (colors: any) =>
 
   modalContainer: {
     width: "90%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 12,
-    shadowColor: "#ffffffff",
+    shadowColor: colors.white,
     shadowOpacity: 0.08,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
@@ -950,7 +950,7 @@ export const trainingStyles = (colors: any) =>
   },
 
   cancelButton: {
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.blueSuperLight,
     paddingVertical: 18,
     borderRadius: 16,
     alignItems: "center",
@@ -959,7 +959,7 @@ export const trainingStyles = (colors: any) =>
   },
 
   cancelButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontWeight: "700",
     fontSize: 17,
     letterSpacing: 0.3,
@@ -967,7 +967,7 @@ export const trainingStyles = (colors: any) =>
 
   noAvailabilityText2: {
     textAlign: "center",
-    color: "#64748b",
+    color: colors.description,
     fontSize: 16,
     fontStyle: "italic",
     elevation: 4,

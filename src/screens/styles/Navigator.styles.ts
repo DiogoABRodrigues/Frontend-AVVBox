@@ -5,13 +5,13 @@ const { height } = Dimensions.get("window");
 export const styles = StyleSheet.create({
   tabBar: {
     height: 80, // Mudança: altura fixa em vez de porcentagem
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
     borderTopWidth: 1,
-    borderTopColor: "#e2e8f0",
-    shadowColor: "#000",
+    borderTopColor: colors.greyLight,
+    shadowColor: colors.black,
     shadowOpacity: 0.08,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: -2 },
@@ -24,13 +24,13 @@ export const styles = StyleSheet.create({
     minWidth: 80, // Mudança: largura mínima para consistência
   },
   tabItemFocused: {
-    backgroundColor: "#dbeafe", // Mudança: azul suave consistente
+    backgroundColor: colors.blueLight, // Mudança: azul suave consistente
     paddingHorizontal: 0,
     paddingVertical: 8, // Mudança: padding consistente
     borderRadius: 12, // Mudança: border radius consistente
     borderWidth: 1, // Mudança: borda sutil
-    borderColor: "#bfdbfe",
-    shadowColor: "#ffffffff", // Mudança: sombra colorida
+    borderColor: colors.tabItemBlue
+    shadowColor: colors.white, // Mudança: sombra colorida
     shadowOpacity: 0.2,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
   tabLabel: {
     fontSize: 13, // menor que 12
     marginTop: 2, // diminui o espaço do topo
-    color: "#64748b",
+    color: colors.description,
     fontWeight: "500",
     textAlign: "center", // importante
   },
@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     right: 22, // Mudança: posicionamento ajustado
     top: -3, // Mudança: posicionamento ajustado
-    backgroundColor: "#ef4444", // Mudança: vermelho mais moderno
+    backgroundColor: colors.red, // Mudança: vermelho mais moderno
     borderRadius: 10,
     minWidth: 20, // Mudança: ligeiramente maior
     height: 20, // Mudança: ligeiramente maior
@@ -61,15 +61,15 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 6, // Mudança: padding ajustado
     borderWidth: 1, // Mudança: borda branca para destaque
-    borderColor: "#ffffff",
-    shadowColor: "#000", // Mudança: sombra para destaque
+    borderColor: colors.white,
+    shadowColor: colors.black, // Mudança: sombra para destaque
     shadowOpacity: 0.15,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
     elevation: 3,
   },
   badgeText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 11, // Mudança: fonte ligeiramente maior
     fontWeight: "700", // Mudança: peso mais específico
     textAlign: "center", // Mudança: alinhamento central

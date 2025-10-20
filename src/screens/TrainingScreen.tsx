@@ -561,7 +561,7 @@ export default function TrainingScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" color=colors.blue />
       </View>
     );
   }
@@ -749,7 +749,7 @@ export default function TrainingScreen() {
         <Ionicons
           name="calendar-outline"
           size={20}
-          color={activeTab === "schedule" ? "#2563eb" : "#6b7280"}
+          color={activeTab === "schedule" ? colors.blue : colors.greyMedium}
         />
         <Text
           style={[
@@ -771,7 +771,7 @@ export default function TrainingScreen() {
         <Ionicons
           name="barbell-outline"
           size={20}
-          color={activeTab === "exercises" ? "#2563eb" : "#6b7280"}
+          color={activeTab === "exercises" ? colors.blue : colors.greyMedium}
         />
         <Text
           style={[
@@ -842,17 +842,17 @@ export default function TrainingScreen() {
                     ? {
                         [selectedDay]: {
                           selected: true,
-                          selectedColor: "#2563eb",
-                          selectedTextColor: "#ffffff",
+                          selectedColor: colors.blue,
+                          selectedTextColor: colors.white,
                         },
                       }
                     : {}
                 }
                 theme={{
-                  todayTextColor: "#2563eb",
-                  arrowColor: "#2563eb",
-                  selectedDayBackgroundColor: "#2563eb",
-                  selectedDayTextColor: "#ffffff",
+                  todayTextColor: colors.blue,
+                  arrowColor: colors.blue,
+                  selectedDayBackgroundColor: colors.blue,
+                  selectedDayTextColor: colors.white,
                   monthTextColor: colors.header,
                   textDayFontWeight: "500",
                   textMonthFontWeight: "700",
@@ -967,7 +967,7 @@ export default function TrainingScreen() {
                         <TextInput
                           style={styles.detailsInput}
                           placeholder="Plano de treino, objetivos, etc."
-                          placeholderTextColor={"#9ca3af"}
+                          placeholderTextColor={colors.greyMedium}
                           multiline
                           numberOfLines={5}
                           value={details || ""}
@@ -1032,7 +1032,7 @@ export default function TrainingScreen() {
                         >
                           <Text
                             style={{
-                              color: "#313131ff",
+                              color: colors.dark,
                               fontSize: 14,
                               marginRight: 4,
                             }}
@@ -1048,14 +1048,14 @@ export default function TrainingScreen() {
                                 : "chevron-down-outline"
                             }
                             size={18}
-                            color="#313131ff"
+                            color=colors.dark
                           />
                         </TouchableOpacity>
 
                         {expandedTraining === training._id && (
                           <View
                             style={{
-                              backgroundColor: "#f8fafc",
+                              backgroundColor: colors.background,
                               padding: 12,
                               borderRadius: 8,
                               marginTop: 4,
@@ -1063,7 +1063,7 @@ export default function TrainingScreen() {
                           >
                             <Text
                               style={{
-                                color: "#475569",
+                                color: colors.greyDark,
                                 fontSize: 14,
                               }}
                             >
@@ -1132,7 +1132,7 @@ export default function TrainingScreen() {
                       >
                         <Text
                           style={{
-                            color: "#313131ff",
+                            color: colors.dark,
                             fontSize: 14,
                             marginRight: 4,
                           }}
@@ -1148,14 +1148,14 @@ export default function TrainingScreen() {
                               : "chevron-down-outline"
                           }
                           size={18}
-                          color="#313131ff"
+                          color=colors.dark
                         />
                       </TouchableOpacity>
 
                       {expandedTraining === training._id && (
                         <View
                           style={{
-                            backgroundColor: "#f8fafc",
+                            backgroundColor: colors.background,
                             padding: 12,
                             borderRadius: 8,
                             marginTop: 4,
@@ -1163,7 +1163,7 @@ export default function TrainingScreen() {
                         >
                           <Text
                             style={{
-                              color: "#475569",
+                              color: colors.greyDark,
                               fontSize: 14,
                               lineHeight: 22,
                             }}
@@ -1196,7 +1196,7 @@ export default function TrainingScreen() {
                             <Ionicons
                               name="trash-outline"
                               size={18}
-                              color="#ef4444"
+                              color=colors.red
                             />
                           </TouchableOpacity>
                         </View>
@@ -1246,7 +1246,7 @@ export default function TrainingScreen() {
                         >
                           <Text
                             style={{
-                              color: "#313131ff",
+                              color: colors.dark,
                               fontSize: 14,
                               marginRight: 4,
                             }}
@@ -1262,14 +1262,14 @@ export default function TrainingScreen() {
                                 : "chevron-down-outline"
                             }
                             size={18}
-                            color="#313131ff"
+                            color=colors.dark
                           />
                         </TouchableOpacity>
 
                         {expandedTraining === training._id && (
                           <View
                             style={{
-                              backgroundColor: "#f8fafc",
+                              backgroundColor: colors.background,
                               padding: 12,
                               borderRadius: 8,
                               marginTop: 4,
@@ -1277,7 +1277,7 @@ export default function TrainingScreen() {
                           >
                             <Text
                               style={{
-                                color: "#475569",
+                                color: colors.greyDark,
                                 fontSize: 14,
                                 lineHeight: 22,
                               }}
@@ -1310,7 +1310,7 @@ export default function TrainingScreen() {
                               <Ionicons
                                 name="trash-outline"
                                 size={18}
-                                color="#ef4444"
+                                color=colors.red
                               />
                             </TouchableOpacity>
                           </View>

@@ -11,7 +11,7 @@ export const exerciseStyles = (colors: any) =>
   },
   container: {
     width: "80%",
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     padding: 20,
     alignItems: "center",
@@ -32,24 +32,24 @@ export const exerciseStyles = (colors: any) =>
     width: "100%",
   },
   confirmBtn: {
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.blue,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
     marginHorizontal: 5,
   },
   confirmText: {
-    color: "#fff",
+    color: colors.white,
     fontWeight: "bold",
   },
   cancelBtn: {
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.greyLight,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
     marginHorizontal: 5,
   },
   cancelText: {
-    color: "#374151",
+    color: colors.darkGrey,
   },
 });
